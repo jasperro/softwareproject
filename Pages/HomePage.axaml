@@ -3,8 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="using:SoftwareProject.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+             xmlns:avalonia="http://oxyplot.org/avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SoftwareProject.Pages.HomePage">
     <Design.DataContext>
@@ -18,8 +18,7 @@
         <Button Content="Apply algorithm" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithmOpen}" />
         <CheckBox Content="Follow stock ticker" IsChecked="{Binding FollowTicker}" />
 
-        <lvc:CartesianChart Height="500" ZoomMode="X" PointerWheelChanged="InputElement_OnPointerWheelChanged"
-                            Series="{Binding Series}" XAxes="{Binding XAxes}" />
+        <avalonia:Plot Series="{Binding Series}"></avalonia:Plot>
 
         <StackPanel>
             <DatePicker SelectedDate="{Binding SelectedDate}" />

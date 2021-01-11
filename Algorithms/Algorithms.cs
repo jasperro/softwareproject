@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Collections;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.SkiaSharpView.Painting;
+using OxyPlot.Series;
 using ReactiveUI.Fody.Helpers;
 using SkiaSharp;
 using SoftwareProject.Types;
@@ -16,20 +15,21 @@ namespace SoftwareProject.Algorithms
     {
         public string AlgorithmId { get; }
         public string AlgorithmName { get; }
-        public IStock Apply(string shortName) => Apply(GetStock(shortName));
-        public IStock Apply(IStock stock);
+        public Stock Apply(string shortName) => Apply(GetStock(shortName));
+        public Stock Apply(Stock stock);
     }
+
     public class AverageClosingPrice : IAlgorithm
     {
         public string AlgorithmId => "avgclosing";
         public string AlgorithmName => "Average Closing Price";
 
-        public IStock Apply(string shortName)
+        public Stock Apply(string shortName)
         {
             return GetStock(shortName);
         }
 
-        public IStock Apply(IStock stock)
+        public Stock Apply(Stock stock)
         {
             return Apply(stock.ShortName);
         }
@@ -51,28 +51,23 @@ namespace SoftwareProject.Algorithms
             return (double)_rnd.Next((int)(FirstBetween * 100), (int)(SecondBetween * 100)) / 100;
         }
 
-        public IStock Apply(IStock stock)
+        public Stock Apply(Stock stock)
         {
-             Stock predictedStock = new($"{stock.ShortName} (prediction)")
-             {
-                 Values = new ObservableCollection<FinancialPoint>(),
-                 UpFill = new SolidColorPaint { Color = SKColors.Blue },
-                 DownFill = new SolidColorPaint { Color = SKColors.Orange },
-                 UpStroke = new SolidColorPaint { Color = SKColors.Blue },
-                 DownStroke = new SolidColorPaint { Color = SKColors.Orange }
-             };
+            Stock predictedStock = new($"{stock.ShortName} (prediction)")
+            {
+            };
 
-             DateTime date = stock.LastUpdate;
- 
-             for (int i = 0; i < 100; i++)
-             {
-                 predictedStock.Values = predictedStock.Values.Append(new FinancialPoint(date, generateRndNum(),
-                     generateRndNum(),
-                     generateRndNum(), generateRndNum()));
-                 date = date.AddHours(4);
-             }
+            DateTime date = stock.LastUpdate;
 
-             return predictedStock;
+            for (int i = 0; i < 100; i++)
+            {
+                /*predictedStock.ItemsSource = predictedStock.Items.Append(new FinancialPoint(date, generateRndNum(),
+                    generateRndNum(),
+                    generateRndNum(), generateRndNum()));
+                date = date.AddHours(4);*/
+            }
+
+            return predictedStock;
         }
 
         private readonly System.Random _rnd = new();
@@ -83,16 +78,16 @@ namespace SoftwareProject.Algorithms
         /// <returns>
         /// Average closing price of a StockPoints collection
         /// </returns>
-        public static double AverageClosingPrice(IEnumerable<FinancialPoint> stockPoints)
+        public static double AverageClosingPrice(HighLowSeries stockPoints)
         {
             double sum = 0;
             double average;
-            foreach (StockPoint stockPoint in stockPoints)
+            foreach (HighLowItem stockPoint in stockPoints.Items)
             {
                 sum += stockPoint.Close;
             }
 
-            average = sum / stockPoints.Count();
+            average = sum / stockPoints.Items.Count;
             return average;
         }
 

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-using LiveChartsCore;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.SkiaSharpView;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Algorithms;
@@ -13,37 +12,54 @@ using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Types
 {
-    public class StockPoint : FinancialPoint
+    public class StockPoint : HighLowItem
     {
         public StockPoint(DateTime date, double high, double open, double close, double low, int volume = 0) : base(
-            date, high, open, close, low)
+            DateTimeAxis.ToDouble(date), high, open, close, low)
         {
             Volume = volume;
         }
 
         public int Volume { get; set; }
+        public DateTime Date => DateTimeAxis.ToDateTime(X);
     }
 
-    public class Stock : CandlesticksSeries<FinancialPoint>, IStock
+    public class StockStickSeries : CandleStickSeries
     {
-        [Reactive] public ObservableCollection<FinancialPoint> AllValues { get; set; }
+        protected new IEnumerable<StockPoint> Items
+        {
+            get;
+            private set;
+        }
+        
+        
+        protected new IEnumerable<StockPoint> ItemsSource
+        {
+            set => Items = value;
+        }
+
+    }
+
+    public class Stock : StockStickSeries
+    {
+        [Reactive] public Collection<StockPoint> AllValues { get; set; }
 
         public string LongName { get; set; } = "Abcd efghi";
 
         public string ShortName
         {
-            get => Name!;
-            set => Name = value;
+            get => Title!;
+            set => Title = value;
         }
 
-        public DateTime LastUpdate => Values != null ? Values.Last().Date : DateTime.Now;
+        public DateTime LastUpdate => Items != null ? Items.Last().Date : DateTime.Now;
 
         public double TrendPercentage => 0;
 
-        public Stock(string shortName = "ABCD", ObservableCollection<FinancialPoint>? defaultData = null)
+        public Stock(string shortName = "ABCD", Collection<StockPoint>? defaultData = null)
         {
             // Set default values if stock has no data yet.
-            AllValues = defaultData ?? new ObservableCollection<FinancialPoint>();
+            AllValues = defaultData ?? new Collection<StockPoint>();
 
             ShortName = shortName;
 
@@ -53,7 +69,7 @@ namespace SoftwareProject.Types
                     financialPoint.Date.CompareTo(MainWindowViewModel.Timekeeping.CurrentTime.DateTime) < 0);
                 if (valuesBeforeDate.Any())
                 {
-                    Values = valuesBeforeDate;
+                    ItemsSource = valuesBeforeDate;
                 }
             });
         }
@@ -65,7 +81,7 @@ namespace SoftwareProject.Types
     }
 
 
-    public interface IStock : ISeries<FinancialPoint>
+    public interface IStock
     {
         public string ShortName { get; set; }
         public string LongName { get; set; }

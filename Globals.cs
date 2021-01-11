@@ -8,7 +8,7 @@ namespace SoftwareProject
     {
         public static Database CurrentDatabase = new();
         
-        public static ObservableCollection<Stock> CachedStocks { get; } = new();
+        public static Collection<Stock> CachedStocks { get; } = new();
 
         public static Stock GetStock(string shortName)
         {

@@ -5,9 +5,6 @@ using System.Globalization;
 using System.Linq;
 using Avalonia;
 using DynamicData.Binding;
-using LiveChartsCore;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Models;
@@ -50,13 +47,6 @@ namespace SoftwareProject.ViewModels
             s => $"Your {s.Value.StockAmt} stocks have changed with {s.Value.AvgPortfolioTrend}% since yesterday");
 
         public InvestmentPortfolio Investments { get; } = MainWindowViewModel.User.UserInvestmentPortfolio;
-
-        public ObservableCollection<ISeries> SharePieChart { get; } = new()
-        {
-            new PieSeries<ObservableValue> { Values = new[] { new ObservableValue(3) }, Name = "AAPL" },
-            new PieSeries<ObservableValue> { Values = new[] { new ObservableValue(4) }, Name = "IBM" },
-            new PieSeries<ObservableValue> { Values = new[] { new ObservableValue(2) }, Name = "GOOGL" }
-        };
 
         public string StockToInvest { get; set; } = "AAPL";
 

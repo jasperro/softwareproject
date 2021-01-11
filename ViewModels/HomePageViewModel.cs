@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
@@ -17,36 +16,19 @@ namespace SoftwareProject.ViewModels
     public class HomePageViewModel : ViewModelBase
     {
         /// <summary>Stocks that are followed</summary>
-        public ObservableCollection<Stock> Stocks { get; }
+        public Collection<Stock> Stocks { get; }
 
         /// <summary>Stocks that are visible in the chart</summary>
-        public ObservableCollection<Stock> Series { get; set; }
+        public Collection<Stock> Series { get; set; }
 
         public HomePageViewModel()
         {
-            Stocks = new ObservableCollection<Stock> { new() };
+            Stocks = new Collection<Stock> { new() };
 
-            Series = new ObservableCollection<Stock>();
-
-            Timekeeping.ObservableTimer.Subscribe(_ =>
-            {
-                if (FollowTicker) (XAxes[0].MinLimit, XAxes[0].MaxLimit) = (null, null);
-            });
+            Series = new Collection<Stock>();
         }
 
         [Reactive] public string NewStockName { get; set; } = "";
-
-        public Axis[] XAxes { get; set; } =
-        {
-            new()
-            {
-                LabelsRotation = 15,
-                Labeler = value => new DateTime((long)value).ToString("yyyy MMM dd"),
-                UnitWidth = TimeSpan.FromDays(1).Ticks,
-                MinLimit = null,
-                MaxLimit = null
-            }
-        };
 
         public IObservable<string> CurrentDateString =>
             Timekeeping.WhenAny(x => x.CurrentTime, _ => Timekeeping.CurrentTime.Date.ToLongDateString());

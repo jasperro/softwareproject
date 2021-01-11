@@ -39,7 +39,7 @@ namespace SoftwareProject.Types
         public double MoneyInvested { get; set; }
         public double MoneyReturn { get; set; }
     }
-    public class InvestmentPortfolio : ObservableCollection<Investment>
+    public class InvestmentPortfolio : Collection<Investment>
     {
         public int StockAmt => Count;
 

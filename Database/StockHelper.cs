@@ -1,7 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
-using LiveChartsCore.Defaults;
 using Microsoft.Data.Sqlite;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using SoftwareProject.Types;
 using SoftwareProject.ViewModels;
 
@@ -31,7 +32,7 @@ namespace SoftwareProject
         public Stock GetStockFromDb(string shortname)
         {
             var command = DatabaseConnection.CreateCommand();
-            ObservableCollection<FinancialPoint> stockPoints = new();
+            Collection<StockPoint> stockPoints = new();
             command.CommandText = @"
 			    SELECT * FROM StockData WHERE StockShortName = $shortname;	
 				";
