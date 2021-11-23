@@ -3,15 +3,27 @@
         xmlns:vm="using:SoftwareProject.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="clr-namespace:SoftwareProject.Pages"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SoftwareProject.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="SoftwareProject">
 
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Panel>
+        <TabControl x:Name="TabControl" Classes="sidebar">
+            <TabItem Header="Hoofdscherm">
+                <pages:DashboardPage/>
+            </TabItem>
+            <TabItem Header="Aandelen">
+                <pages:AandelenPage/>
+            </TabItem>
+            <TabItem Header="Voorspellingen" />
+            <TabItem Header="Aanraders" />
+        </TabControl>
+    </Panel>
 
 </Window>

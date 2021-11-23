@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SoftwareProject.Pages.AandelenPage">
+    <StackPanel Background="Transparent"
+                Spacing="10">
+        <StackPanel.Styles>
+            <Style Selector="TextBlock.header">
+                <Setter Property="FontSize" Value="40" />
+            </Style>
+        </StackPanel.Styles>
+        <TextBlock Classes="header"
+                   Text="Buttons" />
+        <Button Content="Enabled button" />
+        <Button
+            Content="Disabled button"
+            IsEnabled="False" />
+        <ToggleButton
+            Content="Toggle button"
+            IsChecked="True" />
+
+        <TextBlock Text="Checkbox" Classes="header" />
+        <CheckBox Content="Unchecked" />
+        <CheckBox
+            Content="Checked"
+            IsChecked="True" />
+        <CheckBox
+            Content="Third state"
+            IsChecked="{x:Null}"
+            IsThreeState="True" />
+        <CheckBox
+            Content="Disabled"
+            IsChecked="True"
+            IsEnabled="False" />
+
+        <TextBlock
+            Text="Date picker" Classes="header" Margin="0 0 0 20" />
+
+        <DatePicker />
+
+        <TextBlock
+            Text="Time picker"
+            Classes="header" />
+
+        <TimePicker />
+
+        <TextBlock
+            Text="Calendar"
+            Classes="header" />
+        <Calendar />
+    </StackPanel>
+</UserControl>
