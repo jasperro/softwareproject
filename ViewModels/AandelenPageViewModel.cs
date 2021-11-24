@@ -5,11 +5,14 @@ using System.Text;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 
 namespace SoftwareProject.ViewModels
 {
     public class AandelenPageViewModel : ViewModelBase
     {
+        public string Banaan => "hallo! Banaan!";
                // we have to let the chart know that the X axis in days.
         public Axis[] XAxes { get; set; } = new[]
         {
@@ -28,6 +31,13 @@ namespace SoftwareProject.ViewModels
         {
             new CandlesticksSeries<FinancialPoint>
             {
+                
+                
+                        UpFill = new SolidColorPaint(SKColors.Blue), // mark
+        UpStroke = new SolidColorPaint(SKColors.CornflowerBlue) { StrokeThickness = 5 }, // mark
+        DownFill = new SolidColorPaint(SKColors.Red), // mark
+        DownStroke = new SolidColorPaint(SKColors.Orange) { StrokeThickness = 5 }, // mark
+        
                 Values = new ObservableCollection<FinancialPoint>
                 {
                     //                                 date, high, open, close, low

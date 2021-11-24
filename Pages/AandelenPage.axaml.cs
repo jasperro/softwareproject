@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
+using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Pages
 {
@@ -20,6 +21,8 @@ namespace SoftwareProject.Pages
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+
+            DataContext = new AandelenPageViewModel();
         }
     }
 }
