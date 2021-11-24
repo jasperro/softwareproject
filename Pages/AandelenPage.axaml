@@ -1,9 +1,14 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SoftwareProject.ViewModels" 
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SoftwareProject.Pages.AandelenPage">
+    <Design.DataContext>
+        <vm:AandelenPageViewModel/>
+    </Design.DataContext> 
     <StackPanel Background="Transparent"
                 Spacing="10">
         <StackPanel.Styles>
@@ -50,5 +55,12 @@
             Text="Calendar"
             Classes="header" />
         <Calendar />
+        
+        <Grid Width="1200" Height="500">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <lvc:CartesianChart ZoomMode="Both" Series="{Binding Series}" XAxes="{Binding XAxes}"></lvc:CartesianChart>
+        </Grid>
     </StackPanel>
 </UserControl>
