@@ -1,19 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using LiveChartsCore;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.SkiaSharpView;
+using SoftwareProject.Models;
 using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Pages
 {
-    public class AandelenPage : UserControl
+    public class SettingsPage : UserControl
     {
-        public AandelenPage()
+        public SettingsPage()
         {
             InitializeComponent();
         }
@@ -21,8 +18,6 @@ namespace SoftwareProject.Pages
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-
-            DataContext = new AandelenPageViewModel();
         }
     }
 }

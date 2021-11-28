@@ -5,9 +5,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SoftwareProject.Pages.AandelenPage">
+             x:Class="SoftwareProject.Pages.HomePage">
     <Design.DataContext>
-        <vm:AandelenPageViewModel/>
+        <vm:HomePageViewModel/>
     </Design.DataContext> 
     <StackPanel Background="Transparent"
                 Spacing="10">

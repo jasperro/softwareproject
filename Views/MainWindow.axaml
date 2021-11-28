@@ -16,13 +16,14 @@
     <Panel>
         <TabControl x:Name="TabControl" Classes="sidebar">
             <TabItem Header="Hoofdscherm">
-                <pages:DashboardPage/>
+                <pages:HomePage/>
             </TabItem>
-            <TabItem Header="Aandelen">
-                <pages:AandelenPage/>
+            <TabItem Header="Portfolio">
+                <pages:PortfolioPage/>
             </TabItem>
-            <TabItem Header="Voorspellingen" />
-            <TabItem Header="Aanraders" />
+            <TabItem Header="Instellingen">
+                <pages:SettingsPage/>
+            </TabItem>
         </TabControl>
     </Panel>
 

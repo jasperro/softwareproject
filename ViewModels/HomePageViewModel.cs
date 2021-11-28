@@ -10,9 +10,8 @@ using SkiaSharp;
 
 namespace SoftwareProject.ViewModels
 {
-    public class AandelenPageViewModel : ViewModelBase
+    public class HomePageViewModel : ViewModelBase
     {
-        public string Banaan => "hallo! Banaan!";
                // we have to let the chart know that the X axis in days.
         public Axis[] XAxes { get; set; } = new[]
         {

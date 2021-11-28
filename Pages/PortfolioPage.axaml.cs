@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace SoftwareProject.Pages
 {
-    public class DashboardPage : UserControl
+    public class PortfolioPage : UserControl
     {
-        public DashboardPage()
+        public PortfolioPage()
         {
             InitializeComponent();
         }
