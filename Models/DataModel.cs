@@ -21,12 +21,14 @@ namespace SoftwareProject.Models
 
         public class Stock : IStock
         {
+            private readonly ObservableCollection<FinancialPoint> _observableValues;
             public string ShortName { get; set; } = "AAPL";
             public string FullName { get; set; } = "Apple";
-            public ISeries<FinancialPoint> StockPoints { get; set; } = new CandlesticksSeries<FinancialPoint>
+
+            public Stock()
             {
-                Values = new ObservableCollection<FinancialPoint>
-                    {                     
+                _observableValues = new ObservableCollection<FinancialPoint>
+                {
                     new StockPoint(new DateTime(2021, 1, 1), 523, 500, 450, 400),
                     new StockPoint(new DateTime(2021, 1, 2), 500, 450, 425, 400),
                     new StockPoint(new DateTime(2021, 1, 3), 490, 425, 400, 380),
@@ -47,9 +49,16 @@ namespace SoftwareProject.Models
                     new StockPoint(new DateTime(2021, 1, 18), 680, 630, 650, 600),
                     new StockPoint(new DateTime(2021, 1, 19), 670, 650, 600, 570),
                     new StockPoint(new DateTime(2021, 1, 20), 640, 600, 610, 560),
-                    new StockPoint(new DateTime(2021, 1, 21), 630, 610, 630, 590), 
-                    }
-            };
+                    new StockPoint(new DateTime(2021, 1, 21), 630, 610, 630, 590),
+                };
+                
+                StockPoints = new CandlesticksSeries<FinancialPoint>
+                                          {
+                                              Values = _observableValues
+                                          };
+            }
+
+            public ISeries<FinancialPoint> StockPoints { get; set; }
         }
         public interface IStock
         {
