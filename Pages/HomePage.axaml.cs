@@ -16,7 +16,8 @@ namespace SoftwareProject.Pages
 {
     public class HomePage : UserControl
     {
-        private HomePageViewModel _viewmodel = new HomePageViewModel();
+        private HomePageViewModel _viewmodel = new();
+
         public HomePage()
         {
             InitializeComponent();
@@ -29,10 +30,21 @@ namespace SoftwareProject.Pages
             DataContext = _viewmodel;
         }
 
+        private int _testdaycounter = 0;
+
         private void AddPointButton_OnClick(object? sender, RoutedEventArgs e)
         {
-            HomePageViewModel.Series1.Values = HomePageViewModel.Series1.Values.Append(new DataModel.StockPoint(new DateTime(2021, 1, 22), 630, 610, 630,
-                590));
+            Random rnd = new Random();
+            _viewmodel.Series.Last().Values = _viewmodel.Series.Last().Values?.Append(new DataModel.StockPoint(
+                new DateTime(2021, 1, 1).AddDays(_testdaycounter), rnd.Next(100, 1000), rnd.Next(100, 1000), rnd.Next(100, 1000),
+                rnd.Next(100, 1000)));
+            _testdaycounter++;
+        }
+
+        private void AddStockButton_OnClick(object? sender, RoutedEventArgs e)
+        {
+            _viewmodel.Stocks.Add(new DataModel.Stock());
+            _viewmodel.Series.Add(_viewmodel.Stocks.Last());
         }
     }
 }

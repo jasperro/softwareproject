@@ -10,7 +10,7 @@
     </Design.DataContext>
 
     <StackPanel DataContext="{Binding SettingsPage}">
-        <TextBlock Text="{Binding Greeting^}"></TextBlock>
-        <TextBox Text="{Binding Username, Mode=TwoWay}" Name="UsernameTextBox"></TextBox>
+        <TextBlock Text="{Binding Greeting^}" />
+        <TextBox Text="{Binding Username, Mode=TwoWay}" Name="UsernameTextBox" />
     </StackPanel>
 </UserControl>

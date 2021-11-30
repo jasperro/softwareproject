@@ -1,14 +1,14 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:vm="using:SoftwareProject.ViewModels" 
+             xmlns:vm="using:SoftwareProject.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-            xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SoftwareProject.Pages.HomePage">
     <Design.DataContext>
-        <vm:HomePageViewModel/>
-    </Design.DataContext> 
+        <vm:HomePageViewModel />
+    </Design.DataContext>
     <StackPanel Background="Transparent"
                 Spacing="10">
         <StackPanel.Styles>
@@ -17,50 +17,18 @@
             </Style>
         </StackPanel.Styles>
         <TextBlock Classes="header"
-                   Text="Buttons" />
+                   Text="Stock Debugging" />
         <Button Content="Add stock point" Name="AddPointButton" Click="AddPointButton_OnClick" />
-        <Button
-            Content="Disabled button"
-            IsEnabled="False" />
-        <ToggleButton
-            Content="Toggle button"
-            IsChecked="True" />
-
-        <TextBlock Text="Checkbox" Classes="header" />
-        <CheckBox Content="Unchecked" />
-        <CheckBox
-            Content="Checked"
-            IsChecked="True" />
-        <CheckBox
-            Content="Third state"
-            IsChecked="{x:Null}"
-            IsThreeState="True" />
-        <CheckBox
-            Content="Disabled"
-            IsChecked="True"
-            IsEnabled="False" />
-
-        <TextBlock
-            Text="Date picker" Classes="header" Margin="0 0 0 20" />
+        <Button Content="Add stock" Name="AddStockButton" Click="AddStockButton_OnClick" />
 
         <DatePicker />
-
-        <TextBlock
-            Text="Time picker"
-            Classes="header" />
-
         <TimePicker />
 
-        <TextBlock
-            Text="Calendar"
-            Classes="header" />
-        <Calendar />
-        
-        <Grid Width="1200" Height="500">
+        <Grid Height="500">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <lvc:CartesianChart ZoomMode="Both" Series="{Binding Series}" XAxes="{Binding XAxes}"></lvc:CartesianChart>
+            <lvc:CartesianChart ZoomMode="Both" Series="{Binding Series}" XAxes="{Binding XAxes}" />
         </Grid>
     </StackPanel>
 </UserControl>

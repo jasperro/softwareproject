@@ -3,11 +3,11 @@
              xmlns:local="using:SoftwareProject"
              x:Class="SoftwareProject.App">
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Styles>
-        <FluentTheme Mode="Dark"/>
+        <FluentTheme Mode="Dark" />
         <StyleInclude Source="/Styles/SideBar.axaml" />
     </Application.Styles>
 </Application>

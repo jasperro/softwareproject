@@ -15,7 +15,7 @@ namespace SoftwareProject.ViewModels
     public class SettingsPageViewModel : ViewModelBase
     {
         private UserModel model = new();
-        
+
         public string Username
         {
             get => model.Username;
