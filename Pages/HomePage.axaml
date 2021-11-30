@@ -18,7 +18,7 @@
         </StackPanel.Styles>
         <TextBlock Classes="header"
                    Text="Buttons" />
-        <Button Content="Enabled button" />
+        <Button Content="Add stock point" Name="AddPointButton" Click="AddPointButton_OnClick" />
         <Button
             Content="Disabled button"
             IsEnabled="False" />

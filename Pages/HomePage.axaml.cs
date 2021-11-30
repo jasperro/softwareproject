@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
@@ -13,6 +14,7 @@ namespace SoftwareProject.Pages
 {
     public class HomePage : UserControl
     {
+        private HomePageViewModel _viewmodel = new HomePageViewModel();
         public HomePage()
         {
             InitializeComponent();
@@ -22,7 +24,12 @@ namespace SoftwareProject.Pages
         {
             AvaloniaXamlLoader.Load(this);
 
-            DataContext = new HomePageViewModel();
+            DataContext = _viewmodel;
+        }
+
+        private void AddPointButton_OnClick(object? sender, RoutedEventArgs e)
+        {
+            HomePageViewModel.Series1.
         }
     }
 }
