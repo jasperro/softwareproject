@@ -24,10 +24,11 @@ namespace SoftwareProject.Models
         public class Stock : CandlesticksSeries<FinancialPoint>, IStock
         {
             private readonly ObservableCollection<FinancialPoint> _observableValues;
-            public string ShortName { get; set; } = "AAPL";
-            public string FullName { get; set; } = "Apple";
 
-            public Stock(ObservableCollection<FinancialPoint>? defaultData = null)
+            public string LongName { get; set; } = "Abcd efghi";
+            public string ShortName { get => Name; set => Name = value; }
+
+            public Stock(string shortName = "ABCD", ObservableCollection<FinancialPoint>? defaultData = null)
             {
                 // Set default values if stock has no data yet.
                 _observableValues = defaultData ?? new ObservableCollection<FinancialPoint>
@@ -35,13 +36,14 @@ namespace SoftwareProject.Models
                 };
 
                 Values = _observableValues;
+                ShortName = shortName;
             }
         }
 
         public interface IStock : ISeries<FinancialPoint>
         {
             public string ShortName { get; set; }
-            public string FullName { get; set; }
+            public string LongName { get; set; }
         }
     }
 }

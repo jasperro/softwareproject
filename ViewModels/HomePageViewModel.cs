@@ -8,21 +8,30 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using ReactiveUI;
 using SoftwareProject.Models;
 
 namespace SoftwareProject.ViewModels
 {
     public class HomePageViewModel : ViewModelBase
     {
+        private string _newstockname;
 
-        public ObservableCollection<DataModel.Stock> Stocks;
-        public ObservableCollection<ISeries<FinancialPoint>> Series { get; set; }
+        /// <summary>Stocks that are followed</summary>
+        public ObservableCollection<DataModel.Stock> Stocks { get; }
 
-        // we have to let the chart know that the X axis in days.
+        /// <summary>Stocks that are visible in the chart</summary>
+        public ObservableCollection<DataModel.Stock> Series { get; set; }
+
         public HomePageViewModel()
         {
-            Stocks = new() { new DataModel.Stock() };
-            Series = new ObservableCollection<ISeries<FinancialPoint>> { };
+            Stocks = new ObservableCollection<DataModel.Stock> {new()};
+            Series = new ObservableCollection<DataModel.Stock> {new()};
+        }
+        public string NewStockName
+        {
+            get => _newstockname;
+            set => this.RaiseAndSetIfChanged(ref _newstockname, value);
         }
 
         public Axis[] XAxes { get; set; } = new[]
@@ -31,13 +40,8 @@ namespace SoftwareProject.ViewModels
             {
                 LabelsRotation = 15,
                 Labeler = value => new DateTime((long) value).ToString("yyyy MMM dd"),
-                // set the unit width of the axis to "days"
-                // since our X axis is of type date time and
-                // the interval between our points is in days
                 UnitWidth = TimeSpan.FromDays(1).Ticks
             }
         };
-
-
     }
 }

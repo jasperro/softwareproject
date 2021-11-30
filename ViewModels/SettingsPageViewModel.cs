@@ -14,12 +14,12 @@ namespace SoftwareProject.ViewModels
 {
     public class SettingsPageViewModel : ViewModelBase
     {
-        private UserModel model = new();
+        private readonly UserModel _model = new();
 
         public string Username
         {
-            get => model.Username;
-            set => this.RaiseAndSetIfChanged(ref model.Username, value);
+            get => _model.Username;
+            set => this.RaiseAndSetIfChanged(ref _model.Username, value);
         }
 
         public IObservable<string> Greeting => this.WhenAny(x => x.Username, s => "Uw naam is: " + s.Value);

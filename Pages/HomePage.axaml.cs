@@ -16,7 +16,7 @@ namespace SoftwareProject.Pages
 {
     public class HomePage : UserControl
     {
-        private HomePageViewModel _viewmodel = new();
+        private readonly HomePageViewModel _viewmodel = new();
 
         public HomePage()
         {
@@ -43,7 +43,8 @@ namespace SoftwareProject.Pages
 
         private void AddStockButton_OnClick(object? sender, RoutedEventArgs e)
         {
-            _viewmodel.Stocks.Add(new DataModel.Stock());
+            _testdaycounter = 0;
+            _viewmodel.Stocks.Add(new DataModel.Stock(_viewmodel.NewStockName));
             _viewmodel.Series.Add(_viewmodel.Stocks.Last());
         }
     }
