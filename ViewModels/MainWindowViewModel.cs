@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SoftwareProject.Models;
 
 namespace SoftwareProject.ViewModels
 {
@@ -12,5 +13,7 @@ namespace SoftwareProject.ViewModels
         // Submodels for the pages
         public HomePageViewModel HomePage { get; } = new();
         public SettingsPageViewModel SettingsPage { get; } = new();
+
+        public DatabaseModel Database { get; } = new();
     }
 }
