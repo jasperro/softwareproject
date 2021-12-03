@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using LiveChartsCore;
-using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using SkiaSharp;
 using ReactiveUI;
 using SoftwareProject.Models;
 
@@ -34,9 +27,8 @@ namespace SoftwareProject.ViewModels
             set => this.RaiseAndSetIfChanged(ref _newstockname, value);
         }
 
-        public Axis[] XAxes { get; set; } = new[]
-        {
-            new Axis
+        public Axis[] XAxes { get; set; } = {
+            new()
             {
                 LabelsRotation = 15,
                 Labeler = value => new DateTime((long) value).ToString("yyyy MMM dd"),

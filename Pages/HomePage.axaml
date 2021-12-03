@@ -29,7 +29,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <lvc:CartesianChart ZoomMode="Both" Series="{Binding Series}" XAxes="{Binding XAxes}" />
+            <lvc:CartesianChart ZoomMode="X" Series="{Binding Series}" XAxes="{Binding XAxes}" />
         </Grid>
     </StackPanel>
 </UserControl>
