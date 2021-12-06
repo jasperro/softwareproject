@@ -1,11 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Views
 {
-    public partial class MainWindow : Window
+    public class MainWindow : Window
     {
+        public static MainWindowViewModel ViewModel { get; } = new();
         public MainWindow()
         {
             InitializeComponent();
@@ -17,6 +19,8 @@ namespace SoftwareProject.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+            
+            DataContext = ViewModel;
         }
     }
 }

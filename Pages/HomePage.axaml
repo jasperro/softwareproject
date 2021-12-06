@@ -7,9 +7,9 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SoftwareProject.Pages.HomePage">
     <Design.DataContext>
-        <vm:HomePageViewModel />
+        <vm:MainWindowViewModel />
     </Design.DataContext>
-    <StackPanel Background="Transparent"
+    <StackPanel DataContext="{Binding HomePage}" Background="Transparent"
                 Spacing="10">
         <StackPanel.Styles>
             <Style Selector="TextBlock.header">

@@ -11,15 +11,15 @@ namespace SoftwareProject.ViewModels
         private string _newstockname;
 
         /// <summary>Stocks that are followed</summary>
-        public ObservableCollection<DataModel.Stock> Stocks { get; }
+        public ObservableCollection<Stock> Stocks { get; }
 
         /// <summary>Stocks that are visible in the chart</summary>
-        public ObservableCollection<DataModel.Stock> Series { get; set; }
+        public ObservableCollection<Stock> Series { get; set; }
 
         public HomePageViewModel()
         {
-            Stocks = new ObservableCollection<DataModel.Stock> {new()};
-            Series = new ObservableCollection<DataModel.Stock> {new()};
+            Stocks = new ObservableCollection<Stock> {new()};
+            Series = new ObservableCollection<Stock> {new()};
         }
         public string NewStockName
         {

@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using DynamicData.Kernel;
+using LiveChartsCore.Defaults;
 using ReactiveUI;
 using Microsoft.Data.Sqlite;
+using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Models
 {
     public class DatabaseModel : ReactiveObject
     {
-        private SqliteConnection DbConnection { get; } = new SqliteConnection($"Data Source=../../../database.sqlite");
+        public SqliteConnection DbConnection { get; } = new("Data Source=../../../database.sqlite");
 
         public void ImportTestData()
         {
@@ -133,6 +136,38 @@ namespace SoftwareProject.Models
 		);
 		";
 
+        private Stock GetStockFromDb(string shortname)
+        {
+            var command = DbConnection.CreateCommand();
+            ObservableCollection<FinancialPoint>? stockPoints = new();
+            command.CommandText = @"
+			    SELECT * FROM StockData WHERE StockShortName = $shortname;	
+				";
+            command.Parameters.AddWithValue("$shortname", shortname);
+            SqliteDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    stockPoints.Add(new StockPoint(
+                        reader.GetDateTime(reader.GetOrdinal("DateTime")),
+                        reader.GetDouble(reader.GetOrdinal("High")),
+                        reader.GetDouble(reader.GetOrdinal("Open")),
+                        reader.GetDouble(reader.GetOrdinal("Close")),
+                        reader.GetDouble(reader.GetOrdinal("Low")
+                        )
+                    ));
+                }
+            }
+            else
+            {
+                Console.WriteLine("No rows found.");
+            }
+
+            reader.Close();
+            return new Stock(shortname, stockPoints);
+        }
+
         public DatabaseModel()
         {
             DbConnection.Open();
@@ -140,6 +175,7 @@ namespace SoftwareProject.Models
             setupCommand.CommandText = SetupQuery;
             setupCommand.ExecuteNonQuery();
             ImportTestData();
+            MainWindowViewModel.HomePage.Series.Add(GetStockFromDb("AAPL"));
         }
     }
 }

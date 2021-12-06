@@ -11,9 +11,9 @@ namespace SoftwareProject.ViewModels
         public string Intro => "Welkom bij het softwareproject!";
 
         // Submodels for the pages
-        public HomePageViewModel HomePage { get; } = new();
-        public SettingsPageViewModel SettingsPage { get; } = new();
+        public static HomePageViewModel HomePage { get; } = new();
+        public static SettingsPageViewModel SettingsPage { get; } = new();
 
-        public DatabaseModel Database { get; } = new();
+        public static DatabaseModel Database { get; } = new();
     }
 }
