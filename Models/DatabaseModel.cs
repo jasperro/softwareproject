@@ -60,34 +60,19 @@ namespace SoftwareProject.Models
         {
             string? line;
             var currentLine = 0;
-            int[] indexes = { 0, 1, 2, 3, 4, 5 };
             while ((line = sr.ReadLine()) != null)
             {
                 string[] csvLine = line.Split(',');
 
-                if (currentLine == 0)
-                {
-                    indexes = csvLine.IndexOfMany(
-                        new[]
-                        {
-                            "time",
-                            "open",
-                            "close",
-                            "high",
-                            "low",
-                            "volume"
-                        }
-                    ).Select((i) => i.Index).ToArray();
-                }
-                else
+                if (currentLine != 0)
                 {
                     AddStockDataToDb(
-                        csvLine[indexes[0]],
-                        double.Parse(csvLine[indexes[1]]),
-                        double.Parse(csvLine[indexes[2]]),
-                        double.Parse(csvLine[indexes[3]]),
-                        double.Parse(csvLine[indexes[4]]),
-                        int.Parse(csvLine[indexes[5]]),
+                        csvLine[0],
+                        double.Parse(csvLine[1]),
+                        double.Parse(csvLine[2]),
+                        double.Parse(csvLine[3]),
+                        double.Parse(csvLine[4]),
+                        int.Parse(csvLine[5]),
                         shortname
                     );
                 }
@@ -108,11 +93,11 @@ namespace SoftwareProject.Models
 
             command.Parameters.AddWithValue("$open", open);
             command.Parameters.AddWithValue("$close", close);
+            command.Parameters.AddWithValue("$volume", volume);
             command.Parameters.AddWithValue("$high", high);
             command.Parameters.AddWithValue("$low", low);
-            command.Parameters.AddWithValue("$time", time);
-            command.Parameters.AddWithValue("$volume", volume);
             command.Parameters.AddWithValue("$shortname", shortname);
+            command.Parameters.AddWithValue("$time", time);
             command.ExecuteNonQuery();
         }
 
@@ -142,7 +127,8 @@ namespace SoftwareProject.Models
 			High                 double     ,
 			Low                  double     ,
 			StockShortName       varchar(100) NOT NULL    ,
-			DateTime             datetime NOT NULL  PRIMARY KEY ,
+			DateTime             datetime NOT NULL ,
+			PRIMARY KEY ( StockShortName, DateTime ),
 			FOREIGN KEY ( StockShortName ) REFERENCES Stocks( ShortName )  
 		);
 		";
