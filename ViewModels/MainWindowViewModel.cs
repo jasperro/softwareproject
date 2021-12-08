@@ -12,7 +12,10 @@ namespace SoftwareProject.ViewModels
 
         // Submodels for the pages
         public static HomePageViewModel HomePage { get; } = new();
+        public static PortfolioPageViewModel PortfolioPage { get; } = new();
         public static SettingsPageViewModel SettingsPage { get; } = new();
+        
+        public static UserModel User { get; }= new();
 
         public static DatabaseModel Database { get; } = new();
     }

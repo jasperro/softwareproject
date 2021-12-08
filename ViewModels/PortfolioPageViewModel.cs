@@ -12,16 +12,25 @@ using SoftwareProject.Models;
 
 namespace SoftwareProject.ViewModels
 {
-    public class SettingsPageViewModel : ViewModelBase
+    public class PortfolioPageViewModel : ViewModelBase
     {
         private UserModel _userModel => MainWindowViewModel.User;
-
         public string Username
         {
             get => _userModel.Username;
-            set => _userModel.Username = value;
+        }
+        public string TimeOfDay
+        {
+            get
+            {
+                if (DateTime.Now.Hour < 12)
+                    return "Morning";
+                if (DateTime.Now.Hour < 18)
+                    return "Afternoon";
+                return "Evening";
+            }
         }
 
-        public IObservable<string> Greeting => _userModel.WhenAny(x => x.Username, s => "Uw naam is: " + s.Value);
+        public IObservable<string> Greeting => _userModel.WhenAny(x => x.Username, s => $"Good {TimeOfDay}, {s.Value}");
     }
 }
