@@ -1,11 +1,15 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using SoftwareProject.Models;
+using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Pages
 {
     public class PortfolioPage : UserControl
     {
+        private readonly PortfolioPageViewModel _viewmodel = MainWindowViewModel.PortfolioPage;
         public PortfolioPage()
         {
             InitializeComponent();
@@ -14,6 +18,11 @@ namespace SoftwareProject.Pages
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        private void AddInvest_OnClick(object? sender, RoutedEventArgs e)
+        {
+            _viewmodel.Investments.Add(new Investment());
         }
     }
 }

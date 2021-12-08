@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
-using LiveChartsCore;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
+using DynamicData.Binding;
 using ReactiveUI;
-using SkiaSharp;
 using SoftwareProject.Models;
 
 namespace SoftwareProject.ViewModels
@@ -15,10 +10,12 @@ namespace SoftwareProject.ViewModels
     public class PortfolioPageViewModel : ViewModelBase
     {
         private UserModel _userModel => MainWindowViewModel.User;
+
         public string Username
         {
             get => _userModel.Username;
         }
+
         public string TimeOfDay
         {
             get
@@ -32,5 +29,7 @@ namespace SoftwareProject.ViewModels
         }
 
         public IObservable<string> Greeting => _userModel.WhenAny(x => x.Username, s => $"Good {TimeOfDay}, {s.Value}");
+
+        public ObservableCollection<Investment> Investments { get; } = new() {new Investment()};
     }
 }

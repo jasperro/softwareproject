@@ -42,6 +42,36 @@ namespace SoftwareProject.Models
         }
     }
 
+    public class Investment
+    {
+        private Stock Stock { get; }
+
+        public Investment(Stock? stock = null, DateTime? startOfInvestment = null)
+        {
+            Stock = stock ?? new Stock(DateTime.Now.ToString());
+            StartOfInvestment = startOfInvestment ?? DateTime.Now;
+        }
+
+        public string ShortName
+        {
+            get => Stock.ShortName;
+            set => Stock.ShortName = value;
+        }
+
+        public DateTime StartOfInvestment { get; }
+        public DateTime LastUpdate { get; set; }
+        public double TrendPercentage { get; set; }
+        public double Profit { get; set; }
+    }
+
+    /*public class Investment
+    {
+        public string ShortName { get => "ABCD"; }
+        public string LastUpdate { get => "ABCD"; }
+        public string Profit { get => "ABCD"; }
+        public string TrendPercentage { get => "ABCD"; }
+    }*/
+
     public interface IStock : ISeries<FinancialPoint>
     {
         public string ShortName { get; set; }

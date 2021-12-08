@@ -1,21 +1,30 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:vm="using:SoftwareProject.ViewModels"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SoftwareProject.Pages.PortfolioPage">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:vm="using:SoftwareProject.ViewModels" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="SoftwareProject.Pages.PortfolioPage">
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
-    <StackPanel DataContext="{Binding PortfolioPage}" Background="Transparent"
-                Spacing="10">
+    <StackPanel DataContext="{Binding PortfolioPage}" Background="Transparent" Spacing="10">
         <StackPanel.Styles>
             <Style Selector="TextBlock.header">
                 <Setter Property="FontSize" Value="40" />
             </Style>
         </StackPanel.Styles>
-        <TextBlock Classes="header"
-                   Text="{Binding Greeting^}" />
+        <TextBlock Classes="header" Text="{Binding Greeting^}" />
+        <Separator Height="10" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <Button Content="Add stock to portfolio" Name="AddInvest" Click="AddInvest_OnClick" />
+            <Button Content="Edit Portfolio" />
+        </StackPanel>
+        <!-- List with current investments, their last update, profit and trend -->
+
+        <DataGrid Name="InvestedGrid" IsReadOnly="True" AutoGenerateColumns="False" Height="600" Items="{Binding Investments}" d:DataContext="{Binding Investments}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Start of investment" Binding="{Binding StartOfInvestment}" />
+                <DataGridTextColumn Header="Stock Name" Binding="{Binding ShortName}" />
+                <DataGridTextColumn Header="Last update" Binding="{Binding LastUpdate}" />
+                <DataGridTextColumn Header="Profit" Binding="{Binding Profit}" />
+                <DataGridTextColumn Header="Trend" Binding="{Binding TrendPercentage}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
     </StackPanel>
 </UserControl>
