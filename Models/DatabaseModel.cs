@@ -168,6 +168,28 @@ namespace SoftwareProject.Models
             return new Stock(shortname, stockPoints);
         }
 
+        public void NewUser(string name)
+        {
+            var command = DbConnection.CreateCommand();
+            command.CommandText = @"INSERT INTO Users (UserName)
+            VALUES($name);";
+            
+            command.Parameters.AddWithValue("$name", name);
+            command.ExecuteNonQuery();
+        }
+
+        public void FollowStock(int id, string stock)
+        {
+            var command = DbConnection.CreateCommand();
+            command.CommandText = @"
+            INSERT INTO FollowedStocks (UserId, ShortName)
+            VALUES ($id, $stock);";
+            
+            command.Parameters.AddWithValue("$id", id);
+            command.Parameters.AddWithValue("$stock", stock);
+            command.ExecuteNonQuery();
+        }
+
         public DatabaseModel()
         {
             DbConnection.Open();
