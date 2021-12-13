@@ -32,6 +32,7 @@ namespace SoftwareProject.ViewModels
         }
 
         public IObservable<string> Greeting => _userModel.WhenAny(x => x.Username, s => $"Good {TimeOfDay}, {s.Value}");
+        public IObservable<string> InvestedStocksSummary => _userModel.WhenAny(x => x.InvestedStocks, s => $"Your {s.Value.StockAmt} stocks have changed with {s.Value.PortfolioTrend}% since yesterday");
 
         public ObservableCollection<Investment> Investments { get; } = new() { new Investment() };
 
