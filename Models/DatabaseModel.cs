@@ -40,10 +40,17 @@ namespace SoftwareProject.Models
                 foreach (var path in stockpaths)
                 {
                     DirectoryInfo d = new(path);
-                    string shortname;
-                    (shortname, longnameParameter.Value) =
-                        d.Name.Split(", ")
-                            switch { var dn => (dn[0], dn[1]) };
+                    var splitdata = d.Name.Split(", ");
+                    string shortname = splitdata[0];
+                    try
+                    {
+                        longnameParameter.Value = splitdata[1];
+                    }
+                    catch
+                    {
+                        longnameParameter.Value = splitdata[0];
+                    }
+                        
                     shortnameParameter.Value = shortname;
                     command.ExecuteNonQuery();
                     FileInfo[] datafiles = d.GetFiles("*.csv");
@@ -121,6 +128,11 @@ namespace SoftwareProject.Models
 			Status               char(1)     ,
 			FOREIGN KEY ( UserId ) REFERENCES Users( UserId )  ,
 			FOREIGN KEY ( ShortName ) REFERENCES Stocks( ShortName )  
+		);
+        
+        CREATE TABLE IF NOT EXISTS UserSettings ( 
+			UserId               integer NOT NULL    ,			
+			FOREIGN KEY ( UserId ) REFERENCES Users( UserId )			  
 		);
 
 		CREATE TABLE IF NOT EXISTS StockData ( 
