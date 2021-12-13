@@ -6,7 +6,7 @@ namespace SoftwareProject.Models
 {
     public class APIModel
     {
-        public void DataImport(string ticker, DateTime date, string interval)
+        public static void DataImport(string ticker, DateTime date, string interval)
         {
             string function, interval1, slice, datatype;
             string apikey = "VRUNKSO09I7IAXN4";
@@ -18,7 +18,7 @@ namespace SoftwareProject.Models
                 function = "TIME_SERIES_DAILY";
                 interval1 = "";
                 slice = "";
-                datatype = "datatype=csv";
+                datatype = "&datatype=csv";
             }
             else if (difference < maxDifference) 
             {
@@ -37,7 +37,7 @@ namespace SoftwareProject.Models
                     }
 
                     datatype = "";
-                    slice = "&slice=" + "year" + year.ToString() + "month" + month.ToString();
+                    slice = "&slice=" + "year" + year + "month" + month;
             }
             else 
             {
@@ -49,19 +49,17 @@ namespace SoftwareProject.Models
             
             String url = "https://www.alphavantage.co/query?function=" + function + "&symbol=" + ticker + interval1 + slice +
                          "&apikey=" + apikey + datatype;
-            string filename = @"softwareproject\TestData\" + ticker + "\\" + ticker + date.Day.ToString() + "-" + date.Month.ToString() + "-" + date.Year.ToString() +
-                              interval;
+            string filename = @"../../../TestData/" + ticker + "/" + ticker + date.Day + "-" + date.Month.ToString() + "-" + date.Year.ToString() +
+                              interval + ".csv";
             MakeDirectory(ticker);
-            WebClient client = new WebClient();
+            WebClient client = new();
             client.DownloadFile(url, filename);
-            
-            
         }
 
-        private void MakeDirectory(string name)
+        private static void MakeDirectory(string name)
         {
-            string path = @"softwareproject\TestData\" + name;
-            if (!(Directory.Exists(path)))
+            string path = @"../../../TestData/" + name;
+            if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
