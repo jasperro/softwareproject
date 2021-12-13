@@ -9,6 +9,8 @@ namespace SoftwareProject.Models
     /// </summary>
     public class ApiModel
     {
+        // Method to import data from api based on given parameters.
+        // String interval must be: daily, 1min, 5min, 15min or 60min.
         public static void DataImport(string ticker, DateTime date, string interval)
         {
             string function, interval1, slice, datatype;
