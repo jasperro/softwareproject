@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SoftwareProject.Models;
+using SoftwareProject.Types;
 using SoftwareProject.ViewModels;
 using SoftwareProject.Views;
 

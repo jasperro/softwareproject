@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 using SoftwareProject.Models;
+using SoftwareProject.Types;
 
 namespace SoftwareProject.ViewModels
 {
@@ -20,6 +21,8 @@ namespace SoftwareProject.ViewModels
         {
             Stocks = new ObservableCollection<Stock> {new()};
             Series = new ObservableCollection<Stock> {new()};
+            
+            Series = MainWindowViewModel.GlobalData.AvailableStocks;
         }
         public string NewStockName
         {

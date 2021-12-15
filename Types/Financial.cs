@@ -3,9 +3,8 @@ using System.Collections.ObjectModel;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
-using ReactiveUI;
 
-namespace SoftwareProject.Models
+namespace SoftwareProject.Types
 {
     public class StockPoint : FinancialPoint
     {
@@ -61,7 +60,9 @@ namespace SoftwareProject.Models
         public DateTime StartOfInvestment { get; }
         public DateTime LastUpdate { get; set; }
         public double TrendPercentage { get; set; }
-        public double Profit { get; set; }
+        public double Profit => MoneyReturn - MoneyInvested;
+        public double MoneyInvested { get; set; }
+        public double MoneyReturn { get; set; }
     }
 
     /*public class Investment
@@ -76,9 +77,5 @@ namespace SoftwareProject.Models
     {
         public string ShortName { get; set; }
         public string LongName { get; set; }
-    }
-
-    public class DataModel : ReactiveObject
-    {
     }
 }

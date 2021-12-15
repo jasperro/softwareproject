@@ -7,6 +7,7 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 using SoftwareProject.Models;
+using SoftwareProject.Types;
 
 namespace SoftwareProject.ViewModels
 {
@@ -42,5 +43,11 @@ namespace SoftwareProject.ViewModels
             new PieSeries<ObservableValue> { Values = new[] { new ObservableValue(4) }, Name = "IBM"},
             new PieSeries<ObservableValue> { Values = new[] { new ObservableValue(2) }, Name = "GOOGL"}
         };
+
+        public string StockToInvest
+        {
+            get;
+            set;
+        } = "AAPL";
     }
 }

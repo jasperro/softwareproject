@@ -4,7 +4,10 @@ using System.Net;
 
 namespace SoftwareProject.Models
 {
-    public class APIModel
+    /// <summary>
+    /// Contains all the methods that can be used to fetch data from the API(s)
+    /// </summary>
+    public class ApiModel
     {
         public static void DataImport(string ticker, DateTime date, string interval)
         {

@@ -1,16 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using DynamicData.Kernel;
 using LiveChartsCore.Defaults;
 using ReactiveUI;
 using Microsoft.Data.Sqlite;
-using SoftwareProject.ViewModels;
+using SoftwareProject.Types;
 
 namespace SoftwareProject.Models
 {
+    /// <summary>
+    /// Stores the database and methods that modify and read data from it
+    /// </summary>
     public class DatabaseModel : ReactiveObject
     {
         public SqliteConnection DbConnection { get; } = new("Data Source=../../../database.sqlite");
@@ -148,10 +148,10 @@ namespace SoftwareProject.Models
 		);
 		";
 
-        private Stock GetStockFromDb(string shortname)
+        public Stock GetStockFromDb(string shortname)
         {
             var command = DbConnection.CreateCommand();
-            ObservableCollection<FinancialPoint>? stockPoints = new();
+            ObservableCollection<FinancialPoint> stockPoints = new();
             command.CommandText = @"
 			    SELECT * FROM StockData WHERE StockShortName = $shortname;	
 				";
@@ -209,7 +209,6 @@ namespace SoftwareProject.Models
             setupCommand.CommandText = SetupQuery;
             setupCommand.ExecuteNonQuery();
             ImportTestData();
-            MainWindowViewModel.HomePage.Series.Add(GetStockFromDb("AAPL"));
         }
     }
 }

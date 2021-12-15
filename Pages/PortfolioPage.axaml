@@ -15,8 +15,8 @@
         <TextBlock Classes="header" Text="{Binding Greeting^}" />
         <Separator Height="10" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <TextBox Text="{Binding StockToInvest, Mode=TwoWay}" Name="UsernameTextBox" />
             <Button Content="Add stock to portfolio" Name="AddInvest" Click="AddInvest_OnClick" />
-            <Button Content="Edit Portfolio" />
         </StackPanel>
         <!-- List with current investments, their last update, profit and trend -->
 

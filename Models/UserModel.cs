@@ -2,9 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ReactiveUI;
+using SoftwareProject.Types;
 
 namespace SoftwareProject.Models
 {
+    /// <summary>
+    /// Stores all the information that only the current user has access to.
+    /// <example>Username, Investments, User settings</example>
+    /// </summary>
     public class UserModel : ReactiveObject
     {
         private string _username = "bananen";

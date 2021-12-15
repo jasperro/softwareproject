@@ -1,8 +1,10 @@
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using SoftwareProject.Models;
+using SoftwareProject.Types;
 using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Pages
@@ -22,7 +24,9 @@ namespace SoftwareProject.Pages
 
         private void AddInvest_OnClick(object? sender, RoutedEventArgs e)
         {
-            _viewmodel.Investments.Add(new Investment());
+            _viewmodel.Investments.Add(new Investment(
+                MainWindowViewModel.GlobalData.AvailableStocks.FirstOrDefault(s =>
+                    s.ShortName == _viewmodel.StockToInvest)));
         }
     }
 }
