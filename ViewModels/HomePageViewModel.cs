@@ -20,7 +20,6 @@ namespace SoftwareProject.ViewModels
         public HomePageViewModel()
         {
             Stocks = new ObservableCollection<Stock> {new()};
-            Series = new ObservableCollection<Stock> {new()};
             
             Series = MainWindowViewModel.GlobalData.AvailableStocks;
         }

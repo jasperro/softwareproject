@@ -7,12 +7,6 @@ namespace SoftwareProject.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        // Constants for main window
-        public MainWindowViewModel()
-        { 
-            GlobalData.AvailableStocks.Add(Database.GetStockFromDb("AAPL"));
-        }
-
         public string Intro => "Welkom bij het softwareproject!";
         
         // Initialize the Models
