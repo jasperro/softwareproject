@@ -19,5 +19,7 @@ namespace SoftwareProject.Pages
         {
             AvaloniaXamlLoader.Load(this);
         }
+        
+        
     }
 }

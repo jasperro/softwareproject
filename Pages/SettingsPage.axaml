@@ -12,5 +12,19 @@
     <StackPanel DataContext="{Binding SettingsPage}">
         <TextBlock Text="{Binding Greeting^}" />
         <TextBox Text="{Binding Username, Mode=TwoWay}" Name="UsernameTextBox" />
+        
+        <TextBlock Text="Import Data from Api using ticker, date and interval" />
+        <TextBox Watermark="Ticker" Name="TickerTextBox" Text="{Binding Ticker, Mode=TwoWay}" />
+        <DatePicker Name="ApiImportDate" SelectedDate="{Binding Date, Mode=TwoWay}"/>
+        <ComboBox Name="ApiInterval" SelectedIndex="0" SelectedItem="{Binding CbbItem, Mode=TwoWay}">
+            <ComboBoxItem>daily</ComboBoxItem>
+            <ComboBoxItem>1min</ComboBoxItem>
+            <ComboBoxItem>5min</ComboBoxItem>
+            <ComboBoxItem>15min</ComboBoxItem>
+            <ComboBoxItem>30min</ComboBoxItem>
+            <ComboBoxItem>60min</ComboBoxItem>
+        </ComboBox>
+        <Button Width="160" Command="{Binding ApiImportButton}">Import Data</Button>
+        
     </StackPanel>
 </UserControl>
