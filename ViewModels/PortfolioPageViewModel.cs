@@ -13,6 +13,8 @@ namespace SoftwareProject.ViewModels
 {
     public class PortfolioPageViewModel : ViewModelBase
     {
+        private Stock? _selectedStock;
+        private double _amountToInvest;
         private UserModel _userModel => MainWindowViewModel.User;
 
         public string Username
@@ -49,5 +51,17 @@ namespace SoftwareProject.ViewModels
             get;
             set;
         } = "AAPL";
+
+        public Stock? SelectedStock
+        {
+            get => _selectedStock;
+            set => this.RaiseAndSetIfChanged(ref _selectedStock, value);
+        }
+
+        public double AmountToInvest
+        {
+            get => _amountToInvest;
+            set => this.RaiseAndSetIfChanged(ref _amountToInvest, value);
+        }
     }
 }

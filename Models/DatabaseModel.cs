@@ -129,6 +129,16 @@ namespace SoftwareProject.Models
 			FOREIGN KEY ( UserId ) REFERENCES Users( UserId )  ,
 			FOREIGN KEY ( ShortName ) REFERENCES Stocks( ShortName )  
 		);
+
+		CREATE TABLE IF NOT EXISTS Investments ( 
+			UserId               integer NOT NULL    ,
+			ShortName            varchar(100) NOT NULL    ,
+			MoneyInvested        double NOT NULL    ,
+			MoneyReturn			 double		,
+			StartOfInvestment	 datetime NOT NULL ,
+			FOREIGN KEY ( UserId ) REFERENCES Users( UserId )  ,
+			FOREIGN KEY ( ShortName ) REFERENCES Stocks( ShortName )  
+		);
         
         CREATE TABLE IF NOT EXISTS UserSettings ( 
 			UserId               integer NOT NULL    ,			

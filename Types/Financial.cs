@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
@@ -29,12 +30,14 @@ namespace SoftwareProject.Types
             set => Name = value;
         }
 
+        public DateTime LastUpdate => _observableValues.Last().Date;
+
+        public double TrendPercentage => 0;
+
         public Stock(string shortName = "ABCD", ObservableCollection<FinancialPoint>? defaultData = null)
         {
             // Set default values if stock has no data yet.
-            _observableValues = defaultData ?? new ObservableCollection<FinancialPoint>
-            {
-            };
+            _observableValues = defaultData ?? new ObservableCollection<FinancialPoint>();
 
             Values = _observableValues;
             ShortName = shortName;
@@ -43,7 +46,7 @@ namespace SoftwareProject.Types
 
     public class Investment
     {
-        private Stock Stock { get; }
+        public Stock Stock { get; }
 
         public Investment(Stock? stock = null, DateTime? startOfInvestment = null)
         {
@@ -58,20 +61,10 @@ namespace SoftwareProject.Types
         }
 
         public DateTime StartOfInvestment { get; }
-        public DateTime LastUpdate { get; set; }
-        public double TrendPercentage { get; set; }
         public double Profit => MoneyReturn - MoneyInvested;
         public double MoneyInvested { get; set; }
         public double MoneyReturn { get; set; }
     }
-
-    /*public class Investment
-    {
-        public string ShortName { get => "ABCD"; }
-        public string LastUpdate { get => "ABCD"; }
-        public string Profit { get => "ABCD"; }
-        public string TrendPercentage { get => "ABCD"; }
-    }*/
 
     public interface IStock : ISeries<FinancialPoint>
     {

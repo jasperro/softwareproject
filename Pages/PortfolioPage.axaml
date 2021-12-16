@@ -15,8 +15,12 @@
         <TextBlock Classes="header" Text="{Binding Greeting^}" />
         <Separator Height="10" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
-            <TextBox Text="{Binding StockToInvest, Mode=TwoWay}" Name="UsernameTextBox" />
-            <Button Content="Add stock to portfolio" Name="AddInvest" Click="AddInvest_OnClick" />
+            <TextBox Text="{Binding StockToInvest, Mode=TwoWay}" />
+            <TextBox Text="{Binding AmountToInvest, Mode=TwoWay}" />
+            <Button Content="Select stock" Name="SelectStock" Click="SelectStock_OnClick" />
+            <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='No stock selected'}"></TextBlock>
+            <TextBlock Text="{Binding FallbackValue='Unknown price'}"></TextBlock>
+            <Button Content="Buy stock in selected share" Name="AddInvest" Click="AddInvest_OnClick" />
         </StackPanel>
         <!-- List with current investments, their last update, profit and trend -->
 
@@ -35,7 +39,7 @@
                                     />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Last update"
-                                    Binding="{Binding LastUpdate}"
+                                    Binding="{Binding Stock.LastUpdate}"
                                     />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Profit"
@@ -43,7 +47,7 @@
                                     />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Trend"
-                                    Binding="{Binding TrendPercentage}"
+                                    Binding="{Binding Stock.TrendPercentage}"
                                     />
                 <DataGridTemplateColumn Header="Action">
                     <DataGridTemplateColumn.CellTemplate>
