@@ -6,6 +6,7 @@ using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Models;
 using SoftwareProject.Types;
 
@@ -13,8 +14,6 @@ namespace SoftwareProject.ViewModels
 {
     public class PortfolioPageViewModel : ViewModelBase
     {
-        private Stock? _selectedStock;
-        private double _amountToInvest;
         private UserModel _userModel => MainWindowViewModel.User;
 
         public string Username
@@ -52,16 +51,19 @@ namespace SoftwareProject.ViewModels
             set;
         } = "AAPL";
 
+        
+        [Reactive]
         public Stock? SelectedStock
         {
-            get => _selectedStock;
-            set => this.RaiseAndSetIfChanged(ref _selectedStock, value);
+            get;
+            set;
         }
 
+        [Reactive]
         public double AmountToInvest
         {
-            get => _amountToInvest;
-            set => this.RaiseAndSetIfChanged(ref _amountToInvest, value);
+            get;
+            set;
         }
     }
 }

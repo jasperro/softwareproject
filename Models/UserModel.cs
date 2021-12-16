@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
 
 namespace SoftwareProject.Models
@@ -12,20 +13,19 @@ namespace SoftwareProject.Models
     /// </summary>
     public class UserModel : ReactiveObject
     {
-        private string _username = "bananen";
-        private InvestmentPortfolio _investedstocks = new();
-        
+        [Reactive]
         public string Username
         {
-            get => _username;
-            set => this.RaiseAndSetIfChanged(ref _username, value);
-        }
+            get;
+            set;
+        } = "";
 
+        [Reactive]
         public InvestmentPortfolio InvestedStocks
         {
-            get => _investedstocks;
-            set => this.RaiseAndSetIfChanged(ref _investedstocks, value);
-        }
+            get;
+            set;
+        } = new();
     }
 
     public class InvestmentPortfolio : ObservableCollection<Investment>
