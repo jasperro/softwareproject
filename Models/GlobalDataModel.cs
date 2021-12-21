@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Timers;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
@@ -13,6 +14,19 @@ namespace SoftwareProject.Models
     /// </summary>
     public class GlobalDataModel : ReactiveObject
     {
+        private Timer _updateTimer = new(1000);
+        public GlobalDataModel()
+        {
+            //_updateTimer.Elapsed += OnUpdateTimerOnElapsed;
+            _updateTimer.Start();
+            this.WhenAnyValue(x => x.UpdateTimeMultiplier).Subscribe(s => _updateTimer.Interval = 1000/s);
+        }
+
+        /*private void OnUpdateTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            Console.WriteLine($"{elapsedEventArgs.SignalTime}, {_updateTimer.Interval}");
+        }*/
+
         public ObservableCollection<Stock> AvailableStocks { get; } = new();
         
         /// <summary>
@@ -23,9 +37,9 @@ namespace SoftwareProject.Models
         public DateTime CurrentTime { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// The speed at which time is moving. 1.0 is normal speed (one second per second)
+        /// The speed at which time is moving (How often is a tick?). 1.0 is normal speed (one second per second)
         /// </summary>
         [Reactive]
-        public double TimeMultiplier { get; set; } = 1.0;
+        public double UpdateTimeMultiplier { get; set; } = 1.0;
     }
 }

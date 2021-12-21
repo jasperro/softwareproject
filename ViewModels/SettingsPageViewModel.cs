@@ -19,6 +19,7 @@ namespace SoftwareProject.ViewModels
         private UserModel _userModel => MainWindowViewModel.User;
         private string ticker;
         private DateTime date;
+        private GlobalDataModel _globalData => MainWindowViewModel.GlobalData;
 
         public string Username
         {
@@ -46,6 +47,12 @@ namespace SoftwareProject.ViewModels
         }
 
         public string? Interval => CbbItem.Content.ToString();
+
+        public double UpdateTimeMultiplier
+        {
+            get => _globalData.UpdateTimeMultiplier;
+            set => _globalData.UpdateTimeMultiplier = value;
+        }
 
         public void ApiImportButton()
         {

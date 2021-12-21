@@ -26,5 +26,7 @@
         </ComboBox>
         <Button Width="160" Command="{Binding ApiImportButton}">Import Data</Button>
         
+        <NumericUpDown Value="{Binding UpdateTimeMultiplier, Mode=TwoWay}"></NumericUpDown>
+        
     </StackPanel>
 </UserControl>
