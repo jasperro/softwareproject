@@ -3,6 +3,7 @@
         xmlns:vm="using:SoftwareProject.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
         xmlns:pages="clr-namespace:SoftwareProject.Pages"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SoftwareProject.Views.MainWindow"
@@ -15,13 +16,31 @@
 
     <Panel>
         <TabControl x:Name="TabControl" Classes="sidebar">
-            <TabItem Header="Hoofdscherm">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <i:Icon Value="mdi-home" />
+                        <TextBlock Text="Hoofdscherm" />
+                    </StackPanel>
+                </TabItem.Header>
                 <pages:HomePage />
             </TabItem>
-            <TabItem Header="Portfolio">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <i:Icon Value="mdi-view-dashboard" />
+                        <TextBlock Text="Portfolio" />
+                    </StackPanel>
+                </TabItem.Header>
                 <pages:PortfolioPage />
             </TabItem>
-            <TabItem Header="Instellingen">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <i:Icon Value="mdi-cog" />
+                        <TextBlock Text="Instellingen" />
+                    </StackPanel>
+                </TabItem.Header>
                 <pages:SettingsPage />
             </TabItem>
         </TabControl>

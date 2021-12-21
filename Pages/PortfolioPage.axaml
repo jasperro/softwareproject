@@ -2,6 +2,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:vm="using:SoftwareProject.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:i="using:Projektanker.Icons.Avalonia"
              d:DesignWidth="800" d:DesignHeight="450" x:Class="SoftwareProject.Pages.PortfolioPage">
     <Design.DataContext>
         <vm:MainWindowViewModel />
@@ -19,7 +20,7 @@
             <TextBox Text="{Binding AmountToInvest, Mode=TwoWay}" />
             <Button Content="Select stock" Name="SelectStock" Click="SelectStock_OnClick" />
             <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='No stock selected'}"></TextBlock>
-            <TextBlock Text="{Binding FallbackValue='Unknown price'}"></TextBlock>
+            <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='Unknown price'}"></TextBlock>
             <Button Content="Buy stock in selected share" Name="AddInvest" Click="AddInvest_OnClick" />
         </StackPanel>
         <!-- List with current investments, their last update, profit and trend -->
@@ -60,7 +61,15 @@
         </DataGrid>
         
         <TextBlock Classes="header" Text="Invested stocks" />
-        <TextBlock Text="{Binding InvestedStocksSummary^}"></TextBlock>
-        <lvc:PieChart Width="300" Height="300" Series="{Binding SharePieChart}"></lvc:PieChart>
+        <TextBlock Text="{Binding InvestedStocksSummary^}"/>
+        <lvc:PieChart Width="300" Height="300" Series="{Binding SharePieChart}"/>
+        
+        <TextBlock Classes="header" Text="Weekly report"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button i:Attached.Icon="mdi-arrow-left" Command="{Binding SelectPreviousWeek}" FontSize="32" Background="transparent"/>
+            <TextBlock Text="{Binding SelectedWeekInfo^}"/>
+            <Button i:Attached.Icon="mdi-arrow-right" Command="{Binding SelectNextWeek}" FontSize="32" Background="transparent"/>
+            <Button i:Attached.Icon="mdi-refresh" Command="{Binding SelectCurrentWeek}" FontSize="32" Background="transparent"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>

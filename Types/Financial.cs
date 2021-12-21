@@ -30,7 +30,7 @@ namespace SoftwareProject.Types
             set => Name = value;
         }
 
-        public DateTime LastUpdate => _observableValues.Last().Date;
+        public DateTime LastUpdate => _observableValues?.Last().Date ?? DateTime.Now;
 
         public double TrendPercentage => 0;
 
