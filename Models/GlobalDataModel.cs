@@ -17,18 +17,33 @@ namespace SoftwareProject.Models
         private Timer _updateTimer = new(1000);
         public GlobalDataModel()
         {
-            //_updateTimer.Elapsed += OnUpdateTimerOnElapsed;
+            _updateTimer.Elapsed += OnUpdateTimerOnElapsed;
             _updateTimer.Start();
-            this.WhenAnyValue(x => x.UpdateTimeMultiplier).Subscribe(s => _updateTimer.Interval = 1000/s);
+            this.WhenAnyValue(x => x.UpdateTimeMultiplier).Subscribe(s => _updateTimer.Interval = 1000 / s);
         }
 
-        /*private void OnUpdateTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        private void OnUpdateTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            Console.WriteLine($"{elapsedEventArgs.SignalTime}, {_updateTimer.Interval}");
-        }*/
+            //Console.WriteLine($"{elapsedEventArgs.SignalTime}, {_updateTimer.Interval}");
+            DoTick(TimeStep.Multiply(UpdateTimeMultiplier));
+        }
+
+        private void DoTick(TimeSpan timeSpan)
+        {
+            // Forward current time with the timespan
+            CurrentTime = CurrentTime.Add(timeSpan);
+
+            // TODO: All code that needs to be updated every tick
+            
+            // Update all Investments returns
+            
+            // Update all stocks last update time
+
+            // Calculate based on algorithms the strategies for the next tick
+        }
 
         public ObservableCollection<Stock> AvailableStocks { get; } = new();
-        
+
         /// <summary>
         /// The current time of the primary simulation,
         /// the point where we can look at profits from historical data
@@ -41,5 +56,11 @@ namespace SoftwareProject.Models
         /// </summary>
         [Reactive]
         public double UpdateTimeMultiplier { get; set; } = 1.0;
+
+        /// <summary>
+        /// How much time in seconds has passed since the last update timer tick
+        /// </summary>
+        [Reactive]
+        public TimeSpan TimeStep { get; set; } = TimeSpan.FromMinutes(10);
     }
 }
