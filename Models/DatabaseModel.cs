@@ -50,7 +50,7 @@ namespace SoftwareProject.Models
                     {
                         longnameParameter.Value = splitdata[0];
                     }
-                        
+
                     shortnameParameter.Value = shortname;
                     command.ExecuteNonQuery();
                     FileInfo[] datafiles = d.GetFiles("*.csv");
@@ -190,12 +190,49 @@ namespace SoftwareProject.Models
             return new Stock(shortname, stockPoints);
         }
 
+        public ObservableCollection<Investment> GetInvestmentsFromDb(int userId, string? shortName = null)
+        {
+            var command = DbConnection.CreateCommand();
+            ObservableCollection<Investment> investments = new();
+            if (shortName != null)
+            {
+                command.CommandText = @"
+			    SELECT * FROM Investments WHERE UserId = $userid AND ShortName = $shortname;	
+				";
+                command.Parameters.AddWithValue("$userid", userId);
+                command.Parameters.AddWithValue("$shortname", shortName);
+            }
+            else
+            {
+                command.CommandText = @"
+			    SELECT * FROM Investments WHERE UserId = $userid;	
+				";
+                command.Parameters.AddWithValue("$userid", userId);
+            }
+
+            SqliteDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    investments.Add(new Investment(
+                            reader.GetString(reader.GetOrdinal("ShortName")),
+                            reader.GetDateTime(reader.GetOrdinal("High"))
+                        )
+                    );
+                }
+            }
+
+            reader.Close();
+            return investments;
+        }
+
         public void NewUser(string name)
         {
             var command = DbConnection.CreateCommand();
             command.CommandText = @"INSERT INTO Users (UserName)
             VALUES($name);";
-            
+
             command.Parameters.AddWithValue("$name", name);
             command.ExecuteNonQuery();
         }
@@ -206,7 +243,7 @@ namespace SoftwareProject.Models
             command.CommandText = @"
             INSERT INTO FollowedStocks (UserId, ShortName)
             VALUES ($id, $stock);";
-            
+
             command.Parameters.AddWithValue("$id", id);
             command.Parameters.AddWithValue("$stock", stock);
             command.ExecuteNonQuery();

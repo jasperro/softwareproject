@@ -4,6 +4,7 @@ using System.Linq;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
+using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Types
 {
@@ -48,9 +49,14 @@ namespace SoftwareProject.Types
     {
         public Stock Stock { get; }
 
-        public Investment(Stock? stock = null, DateTime? startOfInvestment = null)
+        public Investment(Stock stock, DateTime? startOfInvestment = null)
         {
-            Stock = stock ?? new Stock(DateTime.Now.ToString());
+            Stock = stock;
+            StartOfInvestment = startOfInvestment ?? DateTime.Now;
+        }
+        public Investment(string shortName, DateTime? startOfInvestment = null)
+        {
+            Stock = MainWindowViewModel.GlobalData.AvailableStocks.FirstOrDefault(x => x.ShortName == shortName) ?? MainWindowViewModel.Database.GetStockFromDb(shortName);
             StartOfInvestment = startOfInvestment ?? DateTime.Now;
         }
 
