@@ -11,7 +11,7 @@ namespace SoftwareProject.Pages
 {
     public class PortfolioPage : UserControl
     {
-        private readonly PortfolioPageViewModel _viewmodel = MainWindowViewModel.PortfolioPage;
+        private static readonly PortfolioPageViewModel Viewmodel = MainWindowViewModel.PortfolioPage;
         public PortfolioPage()
         {
             InitializeComponent();
@@ -24,14 +24,15 @@ namespace SoftwareProject.Pages
 
         private void AddInvest_OnClick(object? sender, RoutedEventArgs e)
         {
-            _viewmodel.Investments.Add(new Investment(
-                _viewmodel.SelectedStock));
+            Investment newInvestment = new(Viewmodel.SelectedStock);
+            Viewmodel.Investments.Add(newInvestment);
+            Globals.CurrentDatabase.AddInvestmentToDb(MainWindowViewModel.User.UserId, newInvestment);
         }
 
         private void SelectStock_OnClick(object? sender, RoutedEventArgs e)
         {
-            _viewmodel.SelectedStock = MainWindowViewModel.GlobalData.AvailableStocks.FirstOrDefault(s =>
-                s.ShortName == _viewmodel.StockToInvest);
+            Viewmodel.SelectedStock = MainWindowViewModel.GlobalData.AvailableStocks.FirstOrDefault(s =>
+                s.ShortName == Viewmodel.StockToInvest);
         }
     }
 }

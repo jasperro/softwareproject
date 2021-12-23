@@ -10,7 +10,7 @@ namespace SoftwareProject.Pages
 {
     public class HomePage : UserControl
     {
-        private readonly HomePageViewModel _viewmodel = MainWindowViewModel.HomePage;
+        private static readonly HomePageViewModel Viewmodel = MainWindowViewModel.HomePage;
 
         public HomePage()
         {
@@ -27,7 +27,7 @@ namespace SoftwareProject.Pages
         private void AddPointButton_OnClick(object? sender, RoutedEventArgs e)
         {
             Random rnd = new Random();
-            _viewmodel.Series.Last().Values = _viewmodel.Series.Last().Values?.Append(new StockPoint(
+            Viewmodel.Series.Last().Values = Viewmodel.Series.Last().Values?.Append(new StockPoint(
                 new DateTime(2021, 1, 1).AddDays(_testdaycounter), rnd.Next(100, 1000), rnd.Next(100, 1000),
                 rnd.Next(100, 1000),
                 rnd.Next(100, 1000)));
@@ -41,15 +41,15 @@ namespace SoftwareProject.Pages
 
             try
             {
-                newstock = Globals.CurrentDatabase.GetStockFromDb(_viewmodel.NewStockName);
+                newstock = Globals.CurrentDatabase.GetStockFromDb(Viewmodel.NewStockName);
             }
             catch
             {
-                newstock = new Stock(_viewmodel.NewStockName);
+                newstock = new Stock(Viewmodel.NewStockName);
             }
 
-            _viewmodel.Stocks.Add(newstock);
-            _viewmodel.Series.Add(_viewmodel.Stocks.Last());
+            Viewmodel.Stocks.Add(newstock);
+            Viewmodel.Series.Add(Viewmodel.Stocks.Last());
         }
     }
 }
