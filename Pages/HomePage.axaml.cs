@@ -3,11 +3,8 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SoftwareProject.Models;
 using SoftwareProject.Types;
 using SoftwareProject.ViewModels;
-using SoftwareProject.Views;
 
 namespace SoftwareProject.Pages
 {
@@ -44,7 +41,7 @@ namespace SoftwareProject.Pages
 
             try
             {
-                newstock = MainWindowViewModel.Database.GetStockFromDb(_viewmodel.NewStockName);
+                newstock = Globals.CurrentDatabase.GetStockFromDb(_viewmodel.NewStockName);
             }
             catch
             {

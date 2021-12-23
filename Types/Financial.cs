@@ -56,7 +56,7 @@ namespace SoftwareProject.Types
         }
         public Investment(string shortName, DateTime? startOfInvestment = null)
         {
-            Stock = MainWindowViewModel.GlobalData.AvailableStocks.FirstOrDefault(x => x.ShortName == shortName) ?? MainWindowViewModel.Database.GetStockFromDb(shortName);
+            Stock = MainWindowViewModel.GlobalData.AvailableStocks.FirstOrDefault(x => x.ShortName == shortName) ?? Globals.CurrentDatabase.GetStockFromDb(shortName);
             StartOfInvestment = startOfInvestment ?? DateTime.Now;
         }
 
