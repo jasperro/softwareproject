@@ -136,6 +136,7 @@ namespace SoftwareProject
             SqliteCommand setupCommand = DatabaseConnection.CreateCommand();
 	        setupCommand.CommandText = SetupQuery;
             setupCommand.ExecuteNonQuery();
+            CreateTestUser();
             ImportTestData();
         }
     }

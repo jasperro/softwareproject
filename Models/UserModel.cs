@@ -13,6 +13,9 @@ namespace SoftwareProject.Models
     /// </summary>
     public class UserModel : ReactiveObject
     {
+        // Temporary user id is 0 by default
+        public readonly int UserId = 0;
+        
         [Reactive]
         public string Username
         {

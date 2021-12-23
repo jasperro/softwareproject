@@ -13,5 +13,13 @@ namespace SoftwareProject
             command.Parameters.AddWithValue("$name", name);
             command.ExecuteNonQuery();
         }
+
+        public void CreateTestUser()
+        {
+            var command = DatabaseConnection.CreateCommand();
+            command.CommandText = @"INSERT OR IGNORE INTO Users (UserName, UserId)
+            VALUES('TESTUSER', 0);";
+            command.ExecuteNonQuery();
+        }
     }
 }
