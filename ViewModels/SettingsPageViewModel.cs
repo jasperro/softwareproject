@@ -8,6 +8,7 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SkiaSharp;
 using SoftwareProject.Models;
 using SoftwareProject.Pages;
@@ -18,7 +19,7 @@ namespace SoftwareProject.ViewModels
     {
         private UserModel _userModel => MainWindowViewModel.User;
         private string ticker;
-        private DateTime date;
+        
         private GlobalDataModel _globalData => MainWindowViewModel.GlobalData;
 
         public string Username
@@ -35,11 +36,7 @@ namespace SoftwareProject.ViewModels
             get { return ticker; }
         }
         
-        public DateTime Date
-        {
-            set { date = value; }
-            get { return date; }
-        }
+        
         
         public ComboBoxItem CbbItem
         {
@@ -54,9 +51,12 @@ namespace SoftwareProject.ViewModels
             set => _globalData.UpdateTimeMultiplier = value;
         }
 
+        [Reactive]
+        public DateTime ImportDatum { get; set; }
+
         public void ApiImportButton()
         {
-            ApiModel.DataImport(ticker, date, Interval);
+            ApiModel.DataImport(ticker, ImportDatum, Interval);
         }
         
     }

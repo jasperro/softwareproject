@@ -15,7 +15,7 @@
         
         <TextBlock Text="Import Data from Api using ticker, date and interval" />
         <TextBox Watermark="Ticker" Name="TickerTextBox" Text="{Binding Ticker, Mode=TwoWay}" />
-        <DatePicker Name="ApiImportDate" SelectedDate="{Binding Date, Mode=TwoWay}"/>
+        <DatePicker Name="ApiImportDate" SelectedDateChanged="ApiImportDate_OnSelectedDateChanged" />
         <ComboBox Name="ApiInterval" SelectedIndex="0" SelectedItem="{Binding CbbItem, Mode=TwoWay}">
             <ComboBoxItem>daily</ComboBoxItem>
             <ComboBoxItem>1min</ComboBoxItem>
