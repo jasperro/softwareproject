@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Avalonia.Collections;
+using DynamicData;
 using SoftwareProject.Types;
 
 namespace SoftwareProject
@@ -35,6 +36,7 @@ namespace SoftwareProject
         {
             public string AlgorithmId => "avgclosing";
             public string AlgorithmName => "Average Closing Price";
+
             public IStock Apply(string shortName)
             {
                 return Globals.CurrentDatabase.GetStockFromDb(shortName);
@@ -45,9 +47,8 @@ namespace SoftwareProject
             }
         }
         
-        // For some stupid reason, AvaloniaDictionary did not work due to not implementing IList.
-        public static IEnumerable<KeyValuePair<string, IAlgorithm>> AlgorithmList { get; } =
-            new AvaloniaList<KeyValuePair<string, IAlgorithm>> { new("Average", new AverageClosingPrice()) };
+        public static IEnumerable<IAlgorithm> AlgorithmList { get; } =
+            new AvaloniaList<IAlgorithm> { new AverageClosingPrice() };
         
     }
 }
