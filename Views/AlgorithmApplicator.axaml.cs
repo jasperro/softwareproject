@@ -1,15 +1,13 @@
-using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
-using ReactiveUI;
 using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Views
 {
-    public class MainWindow : ReactiveWindow<MainWindowViewModel>
+    public class AlgorithmApplicator : Window
     {
-        public MainWindow()
+        public AlgorithmApplicator()
         {
             InitializeComponent();
 #if DEBUG
@@ -20,8 +18,6 @@ namespace SoftwareProject.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            
-            DataContext = ViewModel;
         }
     }
 }

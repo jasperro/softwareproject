@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Reactive;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 using SoftwareProject.Models;
 using SoftwareProject.Types;
+using SoftwareProject.Views;
 
 namespace SoftwareProject.ViewModels
 {
@@ -37,5 +43,21 @@ namespace SoftwareProject.ViewModels
                 UnitWidth = TimeSpan.FromDays(1).Ticks
             }
         };
+
+        public void ApplyAlgorithmOpen(string shortName)
+        {
+            // This is a bad way of doing things, but it seems to work.
+            // Can be improved by using ReactiveUI, but that's quite convoluted.
+            var algorithmapplicator = new AlgorithmApplicator{DataContext = new AlgorithmApplicatorViewModel("AAPL", new CalendarDateRange(DateTime.Now, DateTime.Now))};
+            Task windowtask;
+            if (Avalonia.Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                windowtask = algorithmapplicator.ShowDialog(desktop.MainWindow);
+            }
+        }
+
+
+
+
     }
 }

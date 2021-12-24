@@ -21,6 +21,7 @@
         <Button Content="Add stock point" Name="AddPointButton" Click="AddPointButton_OnClick" />
         <TextBox Text="{Binding NewStockName, Mode=TwoWay}" Name="UsernameTextBox" />
         <Button Content="Add stock" Name="AddStockButton" Click="AddStockButton_OnClick" />
+        <Button Content="Apply algorithm" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithmOpen}"></Button>
 
         <DatePicker />
         <TimePicker />
