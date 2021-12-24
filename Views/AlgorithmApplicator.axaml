@@ -27,10 +27,18 @@
             <TextBlock Text="{Binding ShortName, StringFormat=You are currently editing: {0}}" />
 
             <ComboBox Name="ApiInterval" SelectedIndex="0"
-                      SelectedItem="{Binding SelectedAlgorithmComboBoxItem, Mode=TwoWay}"
-                      Items="{Binding AlgorithmComboBoxItems}" />
-            
-            <TextBlock Text="{Binding SelectedAlgorithmName^}" />
+                      Items="{Binding AlgorithmList, Mode=OneWay}"
+                      SelectedItem="{Binding SelectedAlgorithmListItem}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Key}"></TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Apply!" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithm}" />
+            </StackPanel>
         </StackPanel>
 
         <!--TODO: Put a chart here with the DateRange-->

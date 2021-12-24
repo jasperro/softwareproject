@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Avalonia.Styling;
-using LiveChartsCore;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.SkiaSharpView;
+﻿using System.Collections.Generic;
+using Avalonia.Collections;
 using SoftwareProject.Types;
 
-
-namespace SoftwareProject.Algorithms
+namespace SoftwareProject
 {
-    public class Algorithms
+    public interface IAlgorithm
+    {
+        public string AlgorithmId { get; }
+        public string AlgorithmName { get; }
+
+        public IStock Apply(string shortName);
+        public IStock Apply(IStock stock);
+    }
+    
+    public static class Algorithms
     {
         /*
         public double AverageClosingPrice(ObservableCollection<FinancialPoint> stockPoints)
@@ -28,6 +31,23 @@ namespace SoftwareProject.Algorithms
 
         }
         */
+        public class AverageClosingPrice : IAlgorithm
+        {
+            public string AlgorithmId => "avgclosing";
+            public string AlgorithmName => "Average Closing Price";
+            public IStock Apply(string shortName)
+            {
+                return Globals.CurrentDatabase.GetStockFromDb(shortName);
+            }
+            public IStock Apply(IStock stock)
+            {
+                return Apply(stock.ShortName);
+            }
+        }
+        
+        // For some stupid reason, AvaloniaDictionary did not work due to not implementing IList.
+        public static IEnumerable<KeyValuePair<string, IAlgorithm>> AlgorithmList { get; } =
+            new AvaloniaList<KeyValuePair<string, IAlgorithm>> { new("Average", new AverageClosingPrice()) };
         
     }
 }
