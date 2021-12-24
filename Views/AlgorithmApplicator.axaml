@@ -23,10 +23,16 @@
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
 
-        <Panel Margin="40">
-            <TextBlock Text="{Binding ShortName}" />
-        </Panel>
-        
+        <StackPanel Margin="40">
+            <TextBlock Text="{Binding ShortName, StringFormat=You are currently editing: {0}}" />
+
+            <ComboBox Name="ApiInterval" SelectedIndex="0"
+                      SelectedItem="{Binding SelectedAlgorithmComboBoxItem, Mode=TwoWay}"
+                      Items="{Binding AlgorithmComboBoxItems}" />
+            
+            <TextBlock Text="{Binding SelectedAlgorithmName^}" />
+        </StackPanel>
+
         <!--TODO: Put a chart here with the DateRange-->
     </Panel>
 </Window>
