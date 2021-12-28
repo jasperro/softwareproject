@@ -24,7 +24,7 @@ namespace SoftwareProject.Models
         } = "";
 
         [Reactive]
-        public InvestmentPortfolio InvestedStocks
+        public InvestmentPortfolio UserInvestmentPortfolio
         {
             get;
             set;

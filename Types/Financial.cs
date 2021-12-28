@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Types
@@ -21,7 +25,8 @@ namespace SoftwareProject.Types
 
     public class Stock : CandlesticksSeries<FinancialPoint>, IStock
     {
-        private readonly ObservableCollection<FinancialPoint> _observableValues;
+        [Reactive]
+        public ObservableCollection<FinancialPoint> AllValues { get; set; }
 
         public string LongName { get; set; } = "Abcd efghi";
 
@@ -31,22 +36,31 @@ namespace SoftwareProject.Types
             set => Name = value;
         }
 
-        public DateTime LastUpdate => _observableValues?.Last().Date ?? DateTime.Now;
+        public DateTime LastUpdate => Values != null ? Values.Last().Date : DateTime.Now;
 
         public double TrendPercentage => 0;
 
         public Stock(string shortName = "ABCD", ObservableCollection<FinancialPoint>? defaultData = null)
         {
             // Set default values if stock has no data yet.
-            _observableValues = defaultData ?? new ObservableCollection<FinancialPoint>();
+            AllValues = defaultData ?? new ObservableCollection<FinancialPoint>();
 
-            Values = _observableValues;
             ShortName = shortName;
+
+            MainWindowViewModel.GlobalData.Timer.Subscribe(x => Values = AllValues.Where(financialPoint => financialPoint.Date.CompareTo(MainWindowViewModel.GlobalData.CurrentTime) < 0));
+        }
+
+        /// <summary>Update all stocks data to match current application time</summary>
+        public void UpdateToTime(DateTime currentTime)
+        {
         }
     }
 
     public class Investment
     {
+        /// <summary>This list contains the predictive algorithms that will be applied after each other</summary>
+        /// <example>This allows us to take for example the average, and apply a smoothing factor after this.</example>
+        public List<IAlgorithm> AlgorithmList;
         public Stock Stock { get; }
 
         public Investment(Stock stock, DateTime? startOfInvestment = null)
