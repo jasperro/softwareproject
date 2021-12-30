@@ -28,7 +28,8 @@
             <StackPanel>
                 <TextBlock Text="Random data generator" />
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Number between" /><NumericUpDown /><TextBlock Text="and" /><NumericUpDown />
+                    <TextBlock Text="Number between" /><NumericUpDown Value="{Binding FirstBetween}" />
+                    <TextBlock Text="and" /><NumericUpDown Value="{Binding SecondBetween}" />
                 </StackPanel>
             </StackPanel>
         </DataTemplate>

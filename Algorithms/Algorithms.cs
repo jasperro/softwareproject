@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Collections;
 using LiveChartsCore.Defaults;
+using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
 
 namespace SoftwareProject.Algorithms
@@ -14,7 +16,7 @@ namespace SoftwareProject.Algorithms
         public IStock Apply(string shortName);
         public IStock Apply(IStock stock);
     }
-    
+
     public class AverageClosingPrice : IAlgorithm
     {
         public string AlgorithmId => "avgclosing";
@@ -24,12 +26,13 @@ namespace SoftwareProject.Algorithms
         {
             return Globals.CurrentDatabase.GetStockFromDb(shortName);
         }
+
         public IStock Apply(IStock stock)
         {
             return Apply(stock.ShortName);
         }
     }
-    
+
     /// <summary>
     /// Algorithm that will just generate random values as predictions, useful for testing.
     /// </summary>
@@ -38,14 +41,36 @@ namespace SoftwareProject.Algorithms
         public string AlgorithmId => "random";
         public string AlgorithmName => "Random Data";
 
+        [Reactive] public double FirstBetween { get; set; } = 100;
+        [Reactive] public double SecondBetween { get; set; } = 200;
+
         public IStock Apply(string shortName)
         {
-            return Globals.CurrentDatabase.GetStockFromDb(shortName);
+            Stock predictedStock = Globals.CurrentDatabase.GetStockFromDb(shortName);
+
+            DateTime date = predictedStock.LastUpdate;
+
+            for (int i = 0; i < 100; i++)
+            {
+                predictedStock.Values = predictedStock.Values.Append(new FinancialPoint(date, generateRndNum(), generateRndNum(),
+                    generateRndNum(), generateRndNum()));
+                date.AddHours(4);
+            }
+
+            return predictedStock;
         }
+
+        private double generateRndNum()
+        {
+            return (double)_rnd.Next((int)(FirstBetween * 100), (int)(SecondBetween * 100)) / 100;
+        }
+
         public IStock Apply(IStock stock)
         {
             return Apply(stock.ShortName);
         }
+
+        private System.Random _rnd = new();
     }
 
     public static class AlgorithmHelpers
@@ -61,6 +86,7 @@ namespace SoftwareProject.Algorithms
             {
                 sum += stockPoint.Close;
             }
+
             average = sum / stockPoints.Count();
             return average;
         }

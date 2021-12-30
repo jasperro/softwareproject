@@ -26,8 +26,7 @@ namespace SoftwareProject.Types
 
     public class Stock : CandlesticksSeries<FinancialPoint>, IStock
     {
-        [Reactive]
-        public ObservableCollection<FinancialPoint> AllValues { get; set; }
+        [Reactive] public ObservableCollection<FinancialPoint> AllValues { get; set; }
 
         public string LongName { get; set; } = "Abcd efghi";
 
@@ -45,10 +44,19 @@ namespace SoftwareProject.Types
         {
             // Set default values if stock has no data yet.
             AllValues = defaultData ?? new ObservableCollection<FinancialPoint>();
+            Values = AllValues;
 
             ShortName = shortName;
 
-            MainWindowViewModel.GlobalData.Timer.Subscribe(x => Values = AllValues.Where(financialPoint => financialPoint.Date.CompareTo(MainWindowViewModel.GlobalData.CurrentTime) < 0));
+            MainWindowViewModel.GlobalData.Timer.Subscribe(_ =>
+            {
+                var valuesBeforeDate = AllValues.Where(financialPoint =>
+                    financialPoint.Date.CompareTo(MainWindowViewModel.GlobalData.CurrentTime) < 0);
+                if (valuesBeforeDate.Any())
+                {
+                    Values = valuesBeforeDate;
+                }
+            });
         }
 
         /// <summary>Update all stocks data to match current application time</summary>
@@ -62,6 +70,7 @@ namespace SoftwareProject.Types
         /// <summary>This list contains the predictive algorithms that will be applied after each other</summary>
         /// <example>This allows us to take for example the average, and apply a smoothing factor after this.</example>
         public List<IAlgorithm> AlgorithmList;
+
         public Stock Stock { get; }
 
         public Investment(Stock stock, DateTime? startOfInvestment = null)
@@ -69,9 +78,11 @@ namespace SoftwareProject.Types
             Stock = stock;
             StartOfInvestment = startOfInvestment ?? DateTime.Now;
         }
+
         public Investment(string shortName, DateTime? startOfInvestment = null)
         {
-            Stock = MainWindowViewModel.GlobalData.AvailableStocks.FirstOrDefault(x => x.ShortName == shortName) ?? Globals.CurrentDatabase.GetStockFromDb(shortName);
+            Stock = MainWindowViewModel.GlobalData.AvailableStocks.FirstOrDefault(x => x.ShortName == shortName) ??
+                    Globals.CurrentDatabase.GetStockFromDb(shortName);
             StartOfInvestment = startOfInvestment ?? DateTime.Now;
         }
 
