@@ -5,6 +5,7 @@
         xmlns:viewModels="clr-namespace:SoftwareProject.ViewModels"
         xmlns:softwareProject="clr-namespace:SoftwareProject"
         xmlns:algorithms="clr-namespace:SoftwareProject.Algorithms"
+        xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SoftwareProject.Views.AlgorithmApplicator"
         Title="Apply algorithm"
@@ -66,6 +67,11 @@
             <ContentControl Content="{Binding ElementName=ApiInterval, Path=DataContext.SelectedAlgorithmListItem}" />
         </StackPanel>
 
-        <!--TODO: Put a chart here with the DateRange-->
+        <Grid Height="500">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <lvc:CartesianChart ZoomMode="X" Series="{Binding Series}" XAxes="{Binding XAxes}" />
+        </Grid>
     </Panel>
 </Window>
