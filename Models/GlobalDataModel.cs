@@ -15,11 +15,18 @@ namespace SoftwareProject.Models
     /// </summary>
     public class GlobalDataModel : ReactiveObject
     {
-        public readonly IObservable<long> Timer = Observable.Timer(DateTimeOffset.Now, TimeSpan.FromSeconds(1));
+        public IObservable<long> Timer;
+
         public GlobalDataModel()
         {
-            Timer.Subscribe(x => DoTick(TimeSpan.FromDays(1))); 
-            //this.WhenAnyValue(x => x.UpdateTimeMultiplier).Subscribe(s => Timer.Interval = 1000 / s);
+            Timer = Observable.Timer(DateTimeOffset.Now, UpdateFrequency);
+            Timer.Subscribe(_ => DoTick(TimeStep));
+            this.WhenAny(x => x.UpdateFrequency, s =>
+            {
+                Console.WriteLine(UpdateFrequency);
+                return Timer = Observable.Timer(DateTimeOffset.Now, s.Value);
+            });
+            UpdateFrequency = TimeSpan.FromSeconds(4);
         }
 
         private void DoTick(TimeSpan timeSpan)
@@ -29,17 +36,17 @@ namespace SoftwareProject.Models
             Console.WriteLine(CurrentTime.ToShortDateString());
 
             // TODO: All code that needs to be updated every tick
-            
+
             foreach (Stock stock in MainWindowViewModel.GlobalData.AvailableStocks)
             {
                 stock.UpdateToTime(CurrentTime);
             }
-            
+
             // Update all Investments returns and calculate based on algorithms the strategies for the next tick
             foreach (Investment investment in MainWindowViewModel.User.UserInvestmentPortfolio)
             {
                 // Because stock data was just updated, the algorithms will be reapplied on newest stock data
-                
+
                 // This will apply the algorithms
                 //investment.ApplyAlgorithms()
 
@@ -63,12 +70,12 @@ namespace SoftwareProject.Models
         /// The speed at which time is moving (How often is a tick?). 1.0 is normal speed (one second per second)
         /// </summary>
         [Reactive]
-        public double UpdateTimeMultiplier { get; set; } = 1.0;
+        public TimeSpan UpdateFrequency { get; set; } = TimeSpan.FromSeconds(1);
 
         /// <summary>
         /// How much time in seconds has passed since the last update timer tick
         /// </summary>
         [Reactive]
-        public TimeSpan TimeStep { get; set; } = TimeSpan.FromMinutes(10);
+        public TimeSpan TimeStep { get; set; } = TimeSpan.FromDays(1);
     }
 }

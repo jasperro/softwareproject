@@ -45,12 +45,6 @@ namespace SoftwareProject.ViewModels
 
         public string? Interval => CbbItem.Content.ToString();
 
-        public double UpdateTimeMultiplier
-        {
-            get => _globalData.UpdateTimeMultiplier;
-            set => _globalData.UpdateTimeMultiplier = value;
-        }
-
         [Reactive]
         public DateTime ImportDatum { get; set; }
 
