@@ -6,12 +6,13 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SoftwareProject.Algorithms;
 
 namespace SoftwareProject.ViewModels
 {
     public class AlgorithmApplicatorViewModel : ViewModelBase
     {
-        public static IEnumerable<IAlgorithm> AlgorithmList => Algorithms.AlgorithmList;
+        public static IEnumerable<IAlgorithm> AlgorithmList => Algorithms.AlgorithmHelpers.AlgorithmList;
         public string ShortName { get; } = "";
 
         public CalendarDateRange? DateRange { get; }

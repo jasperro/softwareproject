@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Collections;
-using DynamicData;
+using LiveChartsCore.Defaults;
 using SoftwareProject.Types;
 
-namespace SoftwareProject
+namespace SoftwareProject.Algorithms
 {
     public interface IAlgorithm
     {
@@ -14,12 +15,45 @@ namespace SoftwareProject
         public IStock Apply(IStock stock);
     }
     
-    public static class Algorithms
+    public class AverageClosingPrice : IAlgorithm
     {
-        /*
-        public double AverageClosingPrice(ObservableCollection<FinancialPoint> stockPoints)
-        // returns average closing price of StockPoints collection
-        /*
+        public string AlgorithmId => "avgclosing";
+        public string AlgorithmName => "Average Closing Price";
+
+        public IStock Apply(string shortName)
+        {
+            return Globals.CurrentDatabase.GetStockFromDb(shortName);
+        }
+        public IStock Apply(IStock stock)
+        {
+            return Apply(stock.ShortName);
+        }
+    }
+    
+    /// <summary>
+    /// Algorithm that will just generate random values as predictions, useful for testing.
+    /// </summary>
+    public class Random : IAlgorithm
+    {
+        public string AlgorithmId => "random";
+        public string AlgorithmName => "Random Data";
+
+        public IStock Apply(string shortName)
+        {
+            return Globals.CurrentDatabase.GetStockFromDb(shortName);
+        }
+        public IStock Apply(IStock stock)
+        {
+            return Apply(stock.ShortName);
+        }
+    }
+
+    public static class AlgorithmHelpers
+    {
+        /// <returns>
+        /// Average closing price of a StockPoints collection
+        /// </returns>
+        public static double AverageClosingPrice(IEnumerable<FinancialPoint> stockPoints)
         {
             double sum = 0;
             double average;
@@ -27,28 +61,11 @@ namespace SoftwareProject
             {
                 sum += stockPoint.Close;
             }
-            average = sum / stockPoints.Count;
+            average = sum / stockPoints.Count();
             return average;
-
         }
-        */
-        public class AverageClosingPrice : IAlgorithm
-        {
-            public string AlgorithmId => "avgclosing";
-            public string AlgorithmName => "Average Closing Price";
 
-            public IStock Apply(string shortName)
-            {
-                return Globals.CurrentDatabase.GetStockFromDb(shortName);
-            }
-            public IStock Apply(IStock stock)
-            {
-                return Apply(stock.ShortName);
-            }
-        }
-        
         public static IEnumerable<IAlgorithm> AlgorithmList { get; } =
-            new AvaloniaList<IAlgorithm> { new AverageClosingPrice() };
-        
+            new AvaloniaList<IAlgorithm> { new AverageClosingPrice(), new Random() };
     }
 }

@@ -8,6 +8,7 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SoftwareProject.Algorithms;
 using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Types
