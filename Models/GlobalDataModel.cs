@@ -21,12 +21,11 @@ namespace SoftwareProject.Models
         {
             Timer = Observable.Timer(DateTimeOffset.Now, UpdateFrequency);
             Timer.Subscribe(_ => DoTick(TimeStep));
-            this.WhenAny(x => x.UpdateFrequency, s =>
-            {
-                Console.WriteLine(UpdateFrequency);
-                return Timer = Observable.Timer(DateTimeOffset.Now, s.Value);
-            });
-            UpdateFrequency = TimeSpan.FromSeconds(4);
+            //this.WhenAny(x => x.UpdateFrequency, s =>
+            //{
+            //    Console.WriteLine(UpdateFrequency);
+            //    return Timer = Observable.Timer(DateTimeOffset.Now, s.Value);
+            //});
         }
 
         private void DoTick(TimeSpan timeSpan)
