@@ -14,11 +14,9 @@ namespace SoftwareProject.Algorithms
     {
         public string AlgorithmId { get; }
         public string AlgorithmName { get; }
-
-        public IStock Apply(string shortName);
+        public IStock Apply(string shortName) => Apply(Globals.CurrentDatabase.GetStockFromDb(shortName));
         public IStock Apply(IStock stock);
     }
-
     public class AverageClosingPrice : IAlgorithm
     {
         public string AlgorithmId => "avgclosing";
@@ -45,11 +43,6 @@ namespace SoftwareProject.Algorithms
 
         [Reactive] public double FirstBetween { get; set; } = 100;
         [Reactive] public double SecondBetween { get; set; } = 200;
-
-        public IStock Apply(string shortName)
-        {
-            return Apply(Globals.CurrentDatabase.GetStockFromDb(shortName));
-        }
 
         private double generateRndNum()
         {
