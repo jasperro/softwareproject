@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
@@ -23,6 +24,8 @@ namespace SoftwareProject.ViewModels
 
         [Reactive] public IAlgorithm SelectedAlgorithmListItem { get; set; }
 
+        private IStock CurrentStock { get; set; }
+
 
         /// <summary>Stocks that are visible in the test chart</summary>
         public ObservableCollection<IStock> Series { get; set; } = new();
@@ -38,14 +41,15 @@ namespace SoftwareProject.ViewModels
         public void ApplyAlgorithm()
         {
             Console.WriteLine($"Applying {SelectedAlgorithmListItem.AlgorithmId}");
-            Series.Clear();
-            Series.Add(SelectedAlgorithmListItem.Apply(ShortName));
+            Series.Insert(0, CurrentStock);
+            Series.Insert(1, SelectedAlgorithmListItem.Apply(CurrentStock));
         }
 
         public AlgorithmApplicatorViewModel(string shortName, CalendarDateRange dateRange)
         {
             ShortName = shortName;
             DateRange = dateRange;
+            CurrentStock = Globals.CurrentDatabase.GetStockFromDb(shortName);
         }
     }
 }

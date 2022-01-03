@@ -102,5 +102,7 @@ namespace SoftwareProject.Types
     {
         public string ShortName { get; set; }
         public string LongName { get; set; }
+        
+        public DateTime LastUpdate { get; } 
     }
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Collections;
 using LiveChartsCore.Defaults;
+using LiveChartsCore.SkiaSharpView.Painting;
 using ReactiveUI.Fody.Helpers;
+using SkiaSharp;
 using SoftwareProject.Types;
 
 namespace SoftwareProject.Algorithms
@@ -46,18 +48,7 @@ namespace SoftwareProject.Algorithms
 
         public IStock Apply(string shortName)
         {
-            Stock predictedStock = Globals.CurrentDatabase.GetStockFromDb(shortName);
-
-            DateTime date = predictedStock.LastUpdate;
-
-            for (int i = 0; i < 100; i++)
-            {
-                predictedStock.Values = predictedStock.Values.Append(new FinancialPoint(date, generateRndNum(), generateRndNum(),
-                    generateRndNum(), generateRndNum()));
-                date.AddHours(4);
-            }
-
-            return predictedStock;
+            return Apply(Globals.CurrentDatabase.GetStockFromDb(shortName));
         }
 
         private double generateRndNum()
@@ -67,7 +58,25 @@ namespace SoftwareProject.Algorithms
 
         public IStock Apply(IStock stock)
         {
-            return Apply(stock.ShortName);
+             Stock predictedStock = new($"{stock.ShortName} (prediction)")
+             {
+                 UpFill = new SolidColorPaint { Color = SKColors.Blue },
+                 DownFill = new SolidColorPaint { Color = SKColors.Orange },
+                 UpStroke = new SolidColorPaint { Color = SKColors.Blue },
+                 DownStroke = new SolidColorPaint { Color = SKColors.Orange }
+             };
+
+             DateTime date = stock.LastUpdate;
+ 
+             for (int i = 0; i < 100; i++)
+             {
+                 predictedStock.Values = predictedStock.Values.Append(new FinancialPoint(date, generateRndNum(),
+                     generateRndNum(),
+                     generateRndNum(), generateRndNum()));
+                 date = date.AddHours(4);
+             }
+
+             return predictedStock;
         }
 
         private System.Random _rnd = new();
