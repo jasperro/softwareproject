@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
+using DesktopNotifications.Avalonia;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.MaterialDesign;
 using SoftwareProject.ViewModels;
@@ -25,6 +26,7 @@ namespace SoftwareProject
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
+                .SetupDesktopNotifications() 
                 .LogToTrace()
                 .UseReactiveUI();
     }
