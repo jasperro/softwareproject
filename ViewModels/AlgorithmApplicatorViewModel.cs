@@ -22,7 +22,7 @@ namespace SoftwareProject.ViewModels
 
         public CalendarDateRange? DateRange { get; }
 
-        [Reactive] public IAlgorithm SelectedAlgorithmListItem { get; set; }
+        [Reactive] public IAlgorithm SelectedAlgorithmListItem { get; set; } = AlgorithmList.First();
 
         private IStock CurrentStock { get; set; }
 
