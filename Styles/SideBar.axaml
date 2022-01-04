@@ -1,4 +1,5 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Design.PreviewWith>
         <Border Padding="20">
@@ -11,7 +12,8 @@
     <Style Selector="TabControl.sidebar">
         <Setter Property="TabStripPlacement" Value="Left" />
         <Setter Property="Padding" Value="0 0 0 0" />
-        <Setter Property="Background" Value="{x:Null}" />
+        <Setter Property="Background" Value="#1A1F16" />
+        <Setter Property="Margin" Value="0 0 20 0"></Setter>
         <Setter Property="Template">
             <ControlTemplate>
                 <Border
@@ -19,7 +21,7 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}">
                     <DockPanel>
-                        <ScrollViewer Width="240" Margin="0 0 0 0"
+                        <ScrollViewer Width="240" Margin="0 0 20 0"
                                       Name="PART_ScrollViewer"
                                       HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
                                       VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
@@ -52,22 +54,33 @@
 
     <Style Selector="TabControl.sidebar > TabItem">
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="100" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="Margin" Value="0" />
+        <Setter Property="Margin" Value="4 4 0 4" />
         <Setter Property="Padding" Value="16" />
-        <Setter Property="Width" Value="240" />
+        <Setter Property="Width" Value="232"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="(ScrollViewer.HorizontalScrollBarVisibility)" Value="Auto" />
         <Setter Property="(ScrollViewer.VerticalScrollBarVisibility)" Value="Auto" />
+    </Style>
+    <Style Selector="TabControl.sidebar > TabItem > StackPanel">
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="Spacing" Value="10" />
+    </Style>
+    <Style Selector="TabControl.sidebar > TabItem > StackPanel > TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="TabControl.sidebar > TabItem > StackPanel > i|Icon">
+        <Setter Property="FontSize" Value="16" />
     </Style>
     <Style Selector="TabControl.sidebar > TabItem:selected /template/ Border#PART_SelectedPipe">
         <Setter Property="IsVisible" Value="False" />
     </Style>
     <Style Selector="TabControl.sidebar > TabItem:selected">
-        <Setter Property="Background" Value="#1fffffff" />
+        <Setter Property="Background" Value="#4A7856" />
     </Style>
 
     <Style Selector="TabControl.sidebar > TabItem:pointerover /template/ Border#PART_LayoutRoot">
-        <Setter Property="Background" Value="#3fffffff" />
+        <Setter Property="Background" Value="#345830" />
     </Style>
 </Styles>

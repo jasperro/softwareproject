@@ -17,19 +17,19 @@
     </Design.DataContext>
 
     <Panel>
-    <ExperimentalAcrylicBorder IsHitTestVisible="False">
-        <ExperimentalAcrylicBorder.Material>
-            <ExperimentalAcrylicMaterial
-                BackgroundSource="Digger"
-                TintColor="Black"
-                TintOpacity="1"
-                MaterialOpacity="0.5" />
-        </ExperimentalAcrylicBorder.Material>
-    </ExperimentalAcrylicBorder>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="1"
+                    MaterialOpacity="0.5" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
         <TabControl x:Name="TabControl" Classes="sidebar">
             <TabItem>
                 <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel>
                         <i:Icon Value="mdi-home" />
                         <TextBlock Text="Hoofdscherm" />
                     </StackPanel>
@@ -38,7 +38,7 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel>
                         <i:Icon Value="mdi-view-dashboard" />
                         <TextBlock Text="Portfolio" />
                     </StackPanel>
@@ -47,7 +47,7 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel>
                         <i:Icon Value="mdi-cog" />
                         <TextBlock Text="Instellingen" />
                     </StackPanel>
