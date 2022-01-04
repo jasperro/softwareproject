@@ -41,6 +41,7 @@ namespace SoftwareProject.ViewModels
         public void ApplyAlgorithm()
         {
             Console.WriteLine($"Applying {SelectedAlgorithmListItem.AlgorithmId}");
+            Series.Clear();
             Series.Insert(0, CurrentStock);
             Series.Insert(1, SelectedAlgorithmListItem.Apply(CurrentStock));
         }
