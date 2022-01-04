@@ -10,6 +10,7 @@
         Icon="/Assets/avalonia-logo.ico"
         WindowStartupLocation="CenterScreen"
         TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
         Title="SoftwareProject">
 
     <Design.DataContext>
@@ -21,9 +22,9 @@
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
                     BackgroundSource="Digger"
-                    TintColor="Black"
+                    TintColor="#1A1F16"
                     TintOpacity="1"
-                    MaterialOpacity="0.5" />
+                    MaterialOpacity="0.65" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <TabControl x:Name="TabControl" Classes="sidebar">
