@@ -3,53 +3,43 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:styles="clr-namespace:SoftwareProject.Styles"
              d:DesignWidth="800" d:DesignHeight="450" x:Class="SoftwareProject.Pages.PortfolioPage">
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
     <StackPanel DataContext="{Binding PortfolioPage}" Background="Transparent" Spacing="10">
-        <StackPanel.Styles>
-            <Style Selector="TextBlock.header">
-                <Setter Property="FontSize" Value="40" />
-            </Style>
-        </StackPanel.Styles>
         <TextBlock Classes="header" Text="{Binding Greeting^}" />
         <Separator Height="10" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <TextBox Text="{Binding StockToInvest, Mode=TwoWay}" />
             <TextBox Text="{Binding AmountToInvest, Mode=TwoWay}" />
             <Button Content="Select stock" Name="SelectStock" Click="SelectStock_OnClick" />
-            <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='No stock selected'}"></TextBlock>
-            <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='Unknown price'}"></TextBlock>
+            <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='No stock selected'}" />
+            <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='Unknown price'}" />
             <Button Content="Buy stock in selected share" Name="AddInvest" Click="AddInvest_OnClick" />
         </StackPanel>
         <!-- List with current investments, their last update, profit and trend -->
 
 
         <DataGrid Name="InvestedGrid" IsReadOnly="True" AutoGenerateColumns="False" Height="600"
-                  Items="{Binding Investments}"
-                  >
+                  Items="{Binding Investments}">
             <DataGrid.Columns>
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Start of investment"
-                                    Binding="{Binding StartOfInvestment}"
-                                    />
+                                    Binding="{Binding StartOfInvestment}" />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Stock Name"
-                                    Binding="{Binding ShortName}"
-                                    />
+                                    Binding="{Binding ShortName}" />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Last update"
-                                    Binding="{Binding Stock.LastUpdate}"
-                                    />
+                                    Binding="{Binding Stock.LastUpdate}" />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Profit"
-                                    Binding="{Binding Profit}"
-                                    />
+                                    Binding="{Binding Profit}" />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Trend"
-                                    Binding="{Binding Stock.TrendPercentage}"
-                                    />
+                                    Binding="{Binding Stock.TrendPercentage}" />
                 <DataGridTemplateColumn Header="Action">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -59,17 +49,32 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        
+
+        <Grid ColumnDefinitions="*,*,*" Width="800" HorizontalAlignment="Left">
+            <styles:Card Grid.Column="0" Margin="4">
+                <TextBlock Text="HALLO!" />
+            </styles:Card>
+            <styles:Card Grid.Column="1" Margin="4">
+                <TextBlock Text="HALLO!" />
+            </styles:Card>
+            <styles:Card Grid.Column="2" Margin="4">
+                <TextBlock Text="HALLO!" />
+            </styles:Card>
+        </Grid>
+
         <TextBlock Classes="header" Text="Invested stocks" />
-        <TextBlock Text="{Binding InvestedStocksSummary^}"/>
-        <lvc:PieChart Width="300" Height="300" Series="{Binding SharePieChart}"/>
-        
-        <TextBlock Classes="header" Text="Weekly report"/>
+        <TextBlock Text="{Binding InvestedStocksSummary^}" />
+        <lvc:PieChart Width="300" Height="300" Series="{Binding SharePieChart}" />
+
+        <TextBlock Classes="header" Text="Weekly report" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button i:Attached.Icon="mdi-arrow-left" Command="{Binding SelectPreviousWeek}" FontSize="32" Background="transparent"/>
-            <TextBlock Text="{Binding SelectedWeekInfo^}"/>
-            <Button i:Attached.Icon="mdi-arrow-right" Command="{Binding SelectNextWeek}" FontSize="32" Background="transparent"/>
-            <Button i:Attached.Icon="mdi-refresh" Command="{Binding SelectCurrentWeek}" FontSize="32" Background="transparent"/>
+            <Button i:Attached.Icon="mdi-arrow-left" Command="{Binding SelectPreviousWeek}" FontSize="32"
+                    Background="transparent" />
+            <TextBlock Text="{Binding SelectedWeekInfo^}" />
+            <Button i:Attached.Icon="mdi-arrow-right" Command="{Binding SelectNextWeek}" FontSize="32"
+                    Background="transparent" />
+            <Button i:Attached.Icon="mdi-refresh" Command="{Binding SelectCurrentWeek}" FontSize="32"
+                    Background="transparent" />
         </StackPanel>
     </StackPanel>
 </UserControl>

@@ -11,17 +11,11 @@
     </Design.DataContext>
     <StackPanel DataContext="{Binding HomePage}" Background="Transparent"
                 Spacing="10">
-        <StackPanel.Styles>
-            <Style Selector="TextBlock.header">
-                <Setter Property="FontSize" Value="40" />
-            </Style>
-        </StackPanel.Styles>
-        <TextBlock Classes="header"
-                   Text="Stock Debugging" />
+        <TextBlock Classes="header" Text="Stock Debugging" />
         <Button Content="Add stock point" Name="AddPointButton" Click="AddPointButton_OnClick" />
         <TextBox Text="{Binding NewStockName, Mode=TwoWay}" Name="UsernameTextBox" />
         <Button Content="Add stock" Name="AddStockButton" Click="AddStockButton_OnClick" />
-        <Button Content="Apply algorithm" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithmOpen}"></Button>
+        <Button Content="Apply algorithm" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithmOpen}" />
 
         <DatePicker />
         <TimePicker />

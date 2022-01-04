@@ -11,9 +11,9 @@
     </Design.PreviewWith>
     <Style Selector="TabControl.sidebar">
         <Setter Property="TabStripPlacement" Value="Left" />
-        <Setter Property="Padding" Value="0 0 0 0" />
+        <Setter Property="Padding" Value="20 20 20 0" />
         <Setter Property="Background" Value="#1A1F16" />
-        <Setter Property="Margin" Value="0 0 20 0"></Setter>
+        <Setter Property="Margin" Value="0 0 0 0"></Setter>
         <Setter Property="Template">
             <ControlTemplate>
                 <Border
@@ -21,7 +21,7 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}">
                     <DockPanel>
-                        <ScrollViewer Width="240" Margin="0 0 20 0"
+                        <ScrollViewer Width="240" Margin="0 0 0 0"
                                       Name="PART_ScrollViewer"
                                       HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
                                       VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"

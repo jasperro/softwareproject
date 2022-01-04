@@ -24,4 +24,7 @@
         <PackageReference Include="SkiaSharp" Version="2.80.3" />
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.3" />
     </ItemGroup>
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Components\Card.axaml" />
+    </ItemGroup>
 </Project>
