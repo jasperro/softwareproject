@@ -48,10 +48,10 @@ namespace SoftwareProject.Types
 
             ShortName = shortName;
 
-            MainWindowViewModel.GlobalData.Timer.Subscribe(_ =>
+            MainWindowViewModel.Timekeeping.Timer.Subscribe(_ =>
             {
                 var valuesBeforeDate = AllValues.Where(financialPoint =>
-                    financialPoint.Date.CompareTo(MainWindowViewModel.GlobalData.CurrentTime) < 0);
+                    financialPoint.Date.CompareTo(MainWindowViewModel.Timekeeping.CurrentTime) < 0);
                 if (valuesBeforeDate.Any())
                 {
                     Values = valuesBeforeDate;

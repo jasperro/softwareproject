@@ -10,14 +10,13 @@ using SoftwareProject.ViewModels;
 namespace SoftwareProject.Models
 {
     /// <summary>
-    /// Stores data that can be accessed by multiple users
-    /// <example>Available stocks, news info, system information</example>
+    /// Timekeeping for application state, current date and time for calculations
     /// </summary>
-    public class GlobalDataModel : ReactiveObject
+    public class TimekeepingModel : ReactiveObject
     {
         public IObservable<long> Timer;
 
-        public GlobalDataModel()
+        public TimekeepingModel()
         {
             Timer = Observable.Timer(DateTimeOffset.Now, UpdateFrequency);
             Timer.Subscribe(_ => DoTick(TimeStep));
@@ -36,7 +35,7 @@ namespace SoftwareProject.Models
 
             // TODO: All code that needs to be updated every tick
 
-            foreach (Stock stock in MainWindowViewModel.GlobalData.AvailableStocks)
+            foreach (Stock stock in Globals.AvailableStocks)
             {
                 stock.UpdateToTime(CurrentTime);
             }
@@ -55,9 +54,6 @@ namespace SoftwareProject.Models
                 //investment.UpdateToStock()
             }
         }
-
-        public ObservableCollection<Stock> AvailableStocks { get; } = new();
-
         /// <summary>
         /// The current time of the primary simulation,
         /// the point where we can look at profits from historical data

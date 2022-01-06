@@ -31,7 +31,7 @@ namespace SoftwareProject.Pages
 
         private void SelectStock_OnClick(object? sender, RoutedEventArgs e)
         {
-            Viewmodel.SelectedStock = MainWindowViewModel.GlobalData.AvailableStocks.FirstOrDefault(s =>
+            Viewmodel.SelectedStock = Globals.AvailableStocks.FirstOrDefault(s =>
                 s.ShortName == Viewmodel.StockToInvest);
         }
     }

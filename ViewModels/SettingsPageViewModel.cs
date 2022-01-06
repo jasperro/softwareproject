@@ -20,7 +20,7 @@ namespace SoftwareProject.ViewModels
         private UserModel _userModel => MainWindowViewModel.User;
         private string ticker;
         
-        private GlobalDataModel _globalData => MainWindowViewModel.GlobalData;
+        private TimekeepingModel _timeKeeping => MainWindowViewModel.Timekeeping;
 
         public string Username
         {

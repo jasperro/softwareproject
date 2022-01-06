@@ -27,7 +27,7 @@ namespace SoftwareProject.ViewModels
         {
             Stocks = new ObservableCollection<Stock> {new()};
             
-            Series = MainWindowViewModel.GlobalData.AvailableStocks;
+            Series = Globals.AvailableStocks;
         }
         public string NewStockName
         {
