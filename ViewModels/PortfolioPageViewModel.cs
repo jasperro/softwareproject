@@ -46,7 +46,7 @@ namespace SoftwareProject.ViewModels
         public IObservable<string> InvestedStocksSummary => _userModel.WhenAny(x => x.UserInvestmentPortfolio,
             s => $"Your {s.Value.StockAmt} stocks have changed with {s.Value.PortfolioTrend}% since yesterday");
 
-        public ObservableCollection<Investment> Investments { get; } = Globals.CurrentDatabase.GetInvestmentsFromDb(MainWindowViewModel.User.UserId);
+        public InvestmentPortfolio Investments { get; } = MainWindowViewModel.User.UserInvestmentPortfolio;
 
         public ObservableCollection<ISeries> SharePieChart { get; } = new()
         {

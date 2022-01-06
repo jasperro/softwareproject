@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
@@ -13,9 +10,15 @@ namespace SoftwareProject.Models
     /// </summary>
     public class UserModel : ReactiveObject
     {
-        // Temporary user id is 0 by default
-        public readonly int UserId = 0;
-        
+        public int UserId { get; }
+
+        public UserModel(int userId = 0)
+        {
+            UserId = userId;
+            UserInvestmentPortfolio =
+                Globals.CurrentDatabase.GetInvestmentPortfolioFromDb(UserId);
+        }
+
         [Reactive]
         public string Username
         {
@@ -23,17 +26,9 @@ namespace SoftwareProject.Models
             set;
         } = "";
 
-        [Reactive]
         public InvestmentPortfolio UserInvestmentPortfolio
         {
             get;
-            set;
-        } = new();
-    }
-
-    public class InvestmentPortfolio : ObservableCollection<Investment>
-    {
-        public int StockAmt = 4;
-        public double PortfolioTrend = 30.422;
+        }
     }
 }

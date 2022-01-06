@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Microsoft.Data.Sqlite;
+using SoftwareProject.Models;
 using SoftwareProject.Types;
 using SoftwareProject.ViewModels;
 
@@ -21,10 +22,10 @@ namespace SoftwareProject
             command.Parameters.AddWithValue("$startOfInvestment", investment.StartOfInvestment);
             command.ExecuteNonQuery();
         }
-        public ObservableCollection<Investment> GetInvestmentsFromDb(int userId, string? shortName = null)
+        public InvestmentPortfolio GetInvestmentPortfolioFromDb(int userId, string? shortName = null)
         {
             var command = DatabaseConnection.CreateCommand();
-            ObservableCollection<Investment> investments = new();
+            InvestmentPortfolio investments = new();
             if (shortName != null)
             {
                 command.CommandText = @"

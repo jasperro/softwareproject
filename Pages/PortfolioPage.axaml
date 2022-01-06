@@ -52,13 +52,22 @@
 
         <Grid ColumnDefinitions="*,*,*" Width="800" HorizontalAlignment="Left">
             <styles:Card Grid.Column="0" Margin="4">
-                <TextBlock Text="HALLO!" />
+                <StackPanel>
+                    <TextBlock Classes="header" Text="Investments" />
+                    <TextBlock FontSize="24" Text="{Binding Investments.Count}" />
+                </StackPanel>
             </styles:Card>
             <styles:Card Grid.Column="1" Margin="4">
-                <TextBlock Text="HALLO!" />
+                <StackPanel>
+                    <TextBlock Classes="header" Text="Profits" />
+                    <TextBlock FontSize="24" Text="{Binding Investments.TotalProfits}" />
+                </StackPanel>
             </styles:Card>
             <styles:Card Grid.Column="2" Margin="4">
-                <TextBlock Text="HALLO!" />
+                <StackPanel>
+                    <TextBlock Classes="header" Text="Amount invested" />
+                    <TextBlock FontSize="24" Text="{Binding Investments.TotalInvested}" />
+                </StackPanel>
             </styles:Card>
         </Grid>
 

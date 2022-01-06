@@ -11,8 +11,8 @@ namespace SoftwareProject.ViewModels
         public string Intro => "Welkom bij het softwareproject!";
         
         // Initialize the Models
-        public static UserModel User { get; }= new();
         public static GlobalDataModel GlobalData { get; } = new();
+        public static UserModel User { get; } = new();
 
         // Sub-viewmodels for the pages
         public static HomePageViewModel HomePage { get; } = new();
