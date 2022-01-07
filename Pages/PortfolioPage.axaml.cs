@@ -21,18 +21,5 @@ namespace SoftwareProject.Pages
         {
             AvaloniaXamlLoader.Load(this);
         }
-
-        private void AddInvest_OnClick(object? sender, RoutedEventArgs e)
-        {
-            Investment newInvestment = new(Viewmodel.SelectedStock);
-            Viewmodel.Investments.Add(newInvestment);
-            Globals.CurrentDatabase.AddInvestmentToDb(MainWindowViewModel.User.UserId, newInvestment);
-        }
-
-        private void SelectStock_OnClick(object? sender, RoutedEventArgs e)
-        {
-            Viewmodel.SelectedStock = Globals.AvailableStocks.FirstOrDefault(s =>
-                s.ShortName == Viewmodel.StockToInvest);
-        }
     }
 }

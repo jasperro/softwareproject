@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using Avalonia;
 using DynamicData.Binding;
 using LiveChartsCore;
@@ -19,8 +20,9 @@ namespace SoftwareProject.ViewModels
         [Reactive]
         private int SelectedWeek { get; set; } =
             ISOWeek.GetWeekOfYear(MainWindowViewModel.Timekeeping.CurrentTime);
+
         private int CurrentWeek => ISOWeek.GetWeekOfYear(MainWindowViewModel.Timekeeping.CurrentTime);
-        
+
 
         private UserModel _userModel => MainWindowViewModel.User;
 
@@ -44,7 +46,7 @@ namespace SoftwareProject.ViewModels
         public IObservable<string> Greeting => _userModel.WhenAny(x => x.Username, s => $"Good {TimeOfDay}, {s.Value}");
 
         public IObservable<string> InvestedStocksSummary => _userModel.WhenAny(x => x.UserInvestmentPortfolio,
-            s => $"Your {s.Value.StockAmt} stocks have changed with {s.Value.PortfolioTrend}% since yesterday");
+            s => $"Your {s.Value.StockAmt} stocks have changed with {s.Value.AvgPortfolioTrend}% since yesterday");
 
         public InvestmentPortfolio Investments { get; } = MainWindowViewModel.User.UserInvestmentPortfolio;
 
@@ -75,10 +77,24 @@ namespace SoftwareProject.ViewModels
         {
             SelectedWeek++;
         }
-        
+
         public void SelectCurrentWeek()
         {
             SelectedWeek = CurrentWeek;
+        }
+
+
+        public void AddInvestment()
+        {
+            Investment newInvestment = new(SelectedStock);
+            Investments.Add(newInvestment);
+            Globals.CurrentDatabase.AddInvestmentToDb(MainWindowViewModel.User.UserId, newInvestment);
+        }
+
+        public void SelectStock()
+        {
+            SelectedStock = Globals.AvailableStocks.FirstOrDefault(s =>
+                s.ShortName == StockToInvest);
         }
     }
 }

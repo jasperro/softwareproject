@@ -14,10 +14,10 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <TextBox Text="{Binding StockToInvest, Mode=TwoWay}" />
             <TextBox Text="{Binding AmountToInvest, Mode=TwoWay}" />
-            <Button Content="Select stock" Name="SelectStock" Click="SelectStock_OnClick" />
+            <Button Content="Select stock" Name="SelectStock" Command="{Binding SelectStock}" />
             <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='No stock selected'}" />
             <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='Unknown price'}" />
-            <Button Content="Buy stock in selected share" Name="AddInvest" Click="AddInvest_OnClick" />
+            <Button Content="Buy stock in selected share" Name="AddInvest" Command="{Binding AddInvestment}" />
         </StackPanel>
         <!-- List with current investments, their last update, profit and trend -->
 
