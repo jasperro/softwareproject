@@ -12,6 +12,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Models;
 using SoftwareProject.Types;
+using static SoftwareProject.Globals;
 
 namespace SoftwareProject.ViewModels
 {
@@ -88,13 +89,12 @@ namespace SoftwareProject.ViewModels
         {
             Investment newInvestment = new(SelectedStock);
             Investments.Add(newInvestment);
-            Globals.CurrentDatabase.AddInvestmentToDb(MainWindowViewModel.User.UserId, newInvestment);
+            CurrentDatabase.AddInvestmentToDb(MainWindowViewModel.User.UserId, newInvestment);
         }
 
         public void SelectStock()
         {
-            SelectedStock = Globals.AvailableStocks.FirstOrDefault(s =>
-                s.ShortName == StockToInvest);
+            SelectedStock = GetStock(StockToInvest);
         }
     }
 }

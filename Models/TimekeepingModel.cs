@@ -35,7 +35,7 @@ namespace SoftwareProject.Models
 
             // TODO: All code that needs to be updated every tick
 
-            foreach (Stock stock in Globals.AvailableStocks)
+            foreach (Stock stock in Globals.CachedStocks)
             {
                 stock.UpdateToTime(CurrentTime);
             }

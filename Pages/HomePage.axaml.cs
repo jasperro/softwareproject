@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using SoftwareProject.Types;
 using SoftwareProject.ViewModels;
+using static SoftwareProject.Globals;
 
 namespace SoftwareProject.Pages
 {
@@ -41,7 +42,7 @@ namespace SoftwareProject.Pages
 
             try
             {
-                newstock = Globals.CurrentDatabase.GetStockFromDb(Viewmodel.NewStockName);
+                newstock = GetStock(Viewmodel.NewStockName);
             }
             catch
             {

@@ -12,6 +12,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Algorithms;
 using SoftwareProject.Types;
+using static SoftwareProject.Globals;
 
 namespace SoftwareProject.ViewModels
 {
@@ -50,7 +51,7 @@ namespace SoftwareProject.ViewModels
         {
             ShortName = shortName;
             DateRange = dateRange;
-            CurrentStock = Globals.CurrentDatabase.GetStockFromDb(shortName);
+            CurrentStock = GetStock(shortName);
         }
     }
 }

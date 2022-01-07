@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using SoftwareProject.Algorithms;
 using SoftwareProject.ViewModels;
+using static SoftwareProject.Globals;
 
 namespace SoftwareProject.Types
 {
@@ -23,8 +24,7 @@ namespace SoftwareProject.Types
 
         public Investment(string shortName, DateTime? startOfInvestment = null)
         {
-            Stock = Globals.AvailableStocks.FirstOrDefault(x => x.ShortName == shortName) ??
-                    Globals.CurrentDatabase.GetStockFromDb(shortName);
+            Stock = GetStock(shortName);
             StartOfInvestment = startOfInvestment ?? DateTime.Now;
         }
 

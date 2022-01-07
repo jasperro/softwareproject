@@ -10,6 +10,7 @@ using ReactiveUI;
 using SoftwareProject.Models;
 using SoftwareProject.Types;
 using SoftwareProject.Views;
+using static SoftwareProject.Globals;
 
 namespace SoftwareProject.ViewModels
 {
@@ -27,7 +28,7 @@ namespace SoftwareProject.ViewModels
         {
             Stocks = new ObservableCollection<Stock> {new()};
             
-            Series = Globals.AvailableStocks;
+            Series = CachedStocks;
         }
         public string NewStockName
         {

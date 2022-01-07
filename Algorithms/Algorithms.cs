@@ -7,6 +7,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using ReactiveUI.Fody.Helpers;
 using SkiaSharp;
 using SoftwareProject.Types;
+using static SoftwareProject.Globals;
 
 namespace SoftwareProject.Algorithms
 {
@@ -14,7 +15,7 @@ namespace SoftwareProject.Algorithms
     {
         public string AlgorithmId { get; }
         public string AlgorithmName { get; }
-        public IStock Apply(string shortName) => Apply(Globals.CurrentDatabase.GetStockFromDb(shortName));
+        public IStock Apply(string shortName) => Apply(GetStock(shortName));
         public IStock Apply(IStock stock);
     }
     public class AverageClosingPrice : IAlgorithm
@@ -24,7 +25,7 @@ namespace SoftwareProject.Algorithms
 
         public IStock Apply(string shortName)
         {
-            return Globals.CurrentDatabase.GetStockFromDb(shortName);
+            return GetStock(shortName);
         }
 
         public IStock Apply(IStock stock)
