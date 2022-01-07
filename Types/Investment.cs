@@ -11,7 +11,7 @@ namespace SoftwareProject.Types
     {
         /// <summary>This list contains the predictive algorithms that will be applied after each other</summary>
         /// <example>This allows us to take for example the average, and apply a smoothing factor after this.</example>
-        public List<IAlgorithm> AlgorithmList;
+        public List<IAlgorithm> AlgorithmList = new();
 
         public Stock Stock { get; }
 
@@ -41,9 +41,10 @@ namespace SoftwareProject.Types
     }
     public class InvestmentPortfolio : ObservableCollection<Investment>
     {
-        public int StockAmt => 4;
-        public double PortfolioTrend => 30.422;
-        public int TotalProfits => 0;
-        public int TotalInvested => 0;
+        public int StockAmt => Count;
+        public double AvgPortfolioTrend => this.Average(investment => investment.Stock.TrendPercentage);
+        public double TotalProfits => this.Sum(investment => investment.Profit);
+        public double TotalInvested => this.Sum(investment => investment.MoneyInvested);
+        public double TotalReturn => this.Sum(investment => investment.MoneyReturn);
     }
 }
