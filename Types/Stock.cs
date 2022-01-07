@@ -48,7 +48,7 @@ namespace SoftwareProject.Types
 
             ShortName = shortName;
 
-            MainWindowViewModel.Timekeeping.Timer.Subscribe(_ =>
+            MainWindowViewModel.Timekeeping.ObservableTimer.Subscribe(_ =>
             {
                 var valuesBeforeDate = AllValues.Where(financialPoint =>
                     financialPoint.Date.CompareTo(MainWindowViewModel.Timekeeping.CurrentTime) < 0);

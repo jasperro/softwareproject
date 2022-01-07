@@ -4,6 +4,7 @@
              xmlns:vm="using:SoftwareProject.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SoftwareProject.Pages.HomePage">
     <Design.DataContext>
@@ -11,7 +12,7 @@
     </Design.DataContext>
     <StackPanel DataContext="{Binding HomePage}" Background="Transparent"
                 Spacing="10">
-        <TextBlock Classes="header" Text="Stock Debugging" />
+        <TextBlock Classes="header" Text="Home Page" />
         <Button Content="Add stock point" Name="AddPointButton" Click="AddPointButton_OnClick" />
         <TextBox Text="{Binding NewStockName, Mode=TwoWay}" Name="UsernameTextBox" />
         <Button Content="Add stock" Name="AddStockButton" Click="AddStockButton_OnClick" />
@@ -26,5 +27,16 @@
             </Grid.RowDefinitions>
             <lvc:CartesianChart ZoomMode="X" Series="{Binding Series}" XAxes="{Binding XAxes}" />
         </Grid>
+
+        <DockPanel Dock="Bottom" HorizontalAlignment="Right"
+                   VerticalAlignment="Bottom">
+            <TextBlock Text="{Binding CurrentDateString^}" />
+            <Button Command="{Binding ToggleTimer}">
+                <Panel>
+                    <i:Icon Value="mdi-play" IsVisible="{Binding !TimerRunning}" />
+                    <i:Icon Value="mdi-pause" IsVisible="{Binding TimerRunning}" />
+                </Panel>
+            </Button>
+        </DockPanel>
     </StackPanel>
 </UserControl>

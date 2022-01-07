@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Timers;
 using ReactiveUI;
@@ -14,12 +15,17 @@ namespace SoftwareProject.Models
     /// </summary>
     public class TimekeepingModel : ReactiveObject
     {
-        public IObservable<long> Timer;
+        public readonly IObservable<DateTime> ObservableTimer;
+        public readonly Timer Timer;
 
         public TimekeepingModel()
         {
-            Timer = Observable.Timer(DateTimeOffset.Now, UpdateFrequency);
-            Timer.Subscribe(_ => DoTick(TimeStep));
+            Timer = new Timer(UpdateFrequency.TotalMilliseconds) {AutoReset = true};
+            ObservableTimer = Observable.FromEventPattern<ElapsedEventHandler, ElapsedEventArgs>(
+                h => Timer.Elapsed += h,
+                h => Timer.Elapsed -= h).Select(t => t.EventArgs.SignalTime);
+            ObservableTimer.Subscribe(_ => DoTick(TimeStep));
+            Timer.Enabled = true;
             //this.WhenAny(x => x.UpdateFrequency, s =>
             //{
             //    Console.WriteLine(UpdateFrequency);
@@ -31,7 +37,6 @@ namespace SoftwareProject.Models
         {
             // Forward current time with the timespan
             CurrentTime = CurrentTime.Add(timeSpan);
-            Console.WriteLine(CurrentTime.ToShortDateString());
 
             // TODO: All code that needs to be updated every tick
 
@@ -54,6 +59,7 @@ namespace SoftwareProject.Models
                 //investment.UpdateToStock()
             }
         }
+
         /// <summary>
         /// The current time of the primary simulation,
         /// the point where we can look at profits from historical data
