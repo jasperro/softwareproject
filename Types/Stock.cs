@@ -44,7 +44,6 @@ namespace SoftwareProject.Types
         {
             // Set default values if stock has no data yet.
             AllValues = defaultData ?? new ObservableCollection<FinancialPoint>();
-            Values = AllValues;
 
             ShortName = shortName;
 
