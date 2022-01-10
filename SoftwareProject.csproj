@@ -11,18 +11,18 @@
         <None Remove=".gitignore" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.10" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.10" />
+        <PackageReference Include="Avalonia" Version="0.10.11" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.11" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.11" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.10" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.10" />
-        <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-beta.80" />
-        <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.0" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.11" />
+        <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-beta.90" />
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.1" />
         <PackageReference Include="Projektanker.Icons.Avalonia" Version="3.7.1" />
         <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="3.7.1" />
-        <PackageReference Include="ReactiveUI.Fody" Version="17.1.9" />
-        <PackageReference Include="SkiaSharp" Version="2.80.3" />
-        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.3" />
+        <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
+        <PackageReference Include="SkiaSharp" Version="2.88.0-preview.179" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0-preview.179" />
     </ItemGroup>
     <ItemGroup>
       <UpToDateCheckInput Remove="Components\Card.axaml" />

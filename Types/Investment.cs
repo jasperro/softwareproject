@@ -42,7 +42,22 @@ namespace SoftwareProject.Types
     public class InvestmentPortfolio : ObservableCollection<Investment>
     {
         public int StockAmt => Count;
-        public double AvgPortfolioTrend => this.Average(investment => investment.Stock.TrendPercentage);
+
+        public double AvgPortfolioTrend
+        {
+            get
+            {
+                try
+                {
+                    return this.Average(investment => investment.Stock.TrendPercentage);
+                }
+                catch
+                {
+                    return 0;
+                }
+            }
+        }
+
         public double TotalProfits => this.Sum(investment => investment.Profit);
         public double TotalInvested => this.Sum(investment => investment.MoneyInvested);
         public double TotalReturn => this.Sum(investment => investment.MoneyReturn);

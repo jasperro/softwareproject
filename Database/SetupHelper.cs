@@ -73,9 +73,9 @@ namespace SoftwareProject
                     AddStockToDb(
                         csvLine[0],
                         double.Parse(csvLine[1], CultureInfo.InvariantCulture),
+                        double.Parse(csvLine[4], CultureInfo.InvariantCulture),
                         double.Parse(csvLine[2], CultureInfo.InvariantCulture),
                         double.Parse(csvLine[3], CultureInfo.InvariantCulture),
-                        double.Parse(csvLine[4], CultureInfo.InvariantCulture),
                         int.Parse(csvLine[5], CultureInfo.InvariantCulture),
                         shortname
                     );
