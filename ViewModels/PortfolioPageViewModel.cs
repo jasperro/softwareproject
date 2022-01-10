@@ -87,6 +87,7 @@ namespace SoftwareProject.ViewModels
 
         public void AddInvestment()
         {
+            if (SelectedStock == null) return;
             Investment newInvestment = new(SelectedStock);
             Investments.Add(newInvestment);
             CurrentDatabase.AddInvestmentToDb(MainWindowViewModel.User.UserId, newInvestment);

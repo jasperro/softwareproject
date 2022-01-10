@@ -22,35 +22,5 @@ namespace SoftwareProject.Pages
         {
             AvaloniaXamlLoader.Load(this);
         }
-
-        private int _testdaycounter = 0;
-
-        private void AddPointButton_OnClick(object? sender, RoutedEventArgs e)
-        {
-            Random rnd = new Random();
-            Viewmodel.Series.Last().Values = Viewmodel.Series.Last().Values?.Append(new StockPoint(
-                new DateTime(2021, 1, 1).AddDays(_testdaycounter), rnd.Next(100, 1000), rnd.Next(100, 1000),
-                rnd.Next(100, 1000),
-                rnd.Next(100, 1000)));
-            _testdaycounter++;
-        }
-
-        private void AddStockButton_OnClick(object? sender, RoutedEventArgs e)
-        {
-            _testdaycounter = 0;
-            Stock newstock;
-
-            try
-            {
-                newstock = GetStock(Viewmodel.NewStockName);
-            }
-            catch
-            {
-                newstock = new Stock(Viewmodel.NewStockName);
-            }
-
-            Viewmodel.Stocks.Add(newstock);
-            Viewmodel.Series.Add(Viewmodel.Stocks.Last());
-        }
     }
 }

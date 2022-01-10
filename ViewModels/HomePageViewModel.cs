@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -15,8 +16,6 @@ namespace SoftwareProject.ViewModels
 {
     public class HomePageViewModel : ViewModelBase
     {
-        private string _newstockname;
-
         /// <summary>Stocks that are followed</summary>
         public ObservableCollection<Stock> Stocks { get; }
 
@@ -30,11 +29,7 @@ namespace SoftwareProject.ViewModels
             Series = new ObservableCollection<Stock>();
         }
 
-        public string NewStockName
-        {
-            get => _newstockname;
-            set => this.RaiseAndSetIfChanged(ref _newstockname, value);
-        }
+        [Reactive] public string NewStockName { get; set; } = "";
 
         public Axis[] XAxes { get; set; } =
         {
@@ -51,6 +46,24 @@ namespace SoftwareProject.ViewModels
 
         [Reactive] public bool TimerRunning { get; set; } = Timekeeping.Timer.Enabled;
 
+
+        public void AddStock()
+        {
+            Stock newStock;
+
+            try
+            {
+                newStock = GetStock(NewStockName);
+            }
+            catch
+            {
+                newStock = new Stock(NewStockName);
+            }
+
+            Stocks.Add(newStock);
+            Series.Add(Stocks.Last());
+        }
+
         public void ToggleTimer()
         {
             Timekeeping.Timer.Enabled = !Timekeeping.Timer.Enabled;
@@ -61,16 +74,11 @@ namespace SoftwareProject.ViewModels
         {
             // This is a bad way of doing things, but it seems to work.
             // Can be improved by using ReactiveUI, but that's quite convoluted.
-            var algorithmapplicator = new AlgorithmApplicator
+            var algorithmApplicator = new AlgorithmApplicator
             {
                 DataContext =
                     new AlgorithmApplicatorViewModel("AAPL", new CalendarDateRange(DateTime.Now, DateTime.Now))
             };
-            Task windowtask;
-            if (Avalonia.Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                windowtask = algorithmapplicator.ShowDialog(desktop.MainWindow);
-            }
         }
     }
 }

@@ -18,8 +18,7 @@ namespace SoftwareProject.ViewModels
     public class SettingsPageViewModel : ViewModelBase
     {
         private UserModel _userModel => MainWindowViewModel.User;
-        private string ticker;
-        
+
         private TimekeepingModel _timeKeeping => MainWindowViewModel.Timekeeping;
 
         public string Username
@@ -30,27 +29,20 @@ namespace SoftwareProject.ViewModels
 
         public IObservable<string> Greeting => _userModel.WhenAny(x => x.Username, s => "Uw naam is: " + s.Value);
 
-        public string Ticker
-        {
-            set { ticker = value; }
-            get { return ticker; }
-        }
-        
-        
-        
-        public ComboBoxItem CbbItem
+        public string Ticker { set; get; } = "";
+
+        public ComboBoxItem? CbbItem
         {
             set; get;
         }
 
-        public string? Interval => CbbItem.Content.ToString();
+        private string Interval => CbbItem?.Content.ToString() ?? "daily";
 
-        [Reactive]
-        public DateTime ImportDatum { get; set; }
+        [Reactive] public DateTime ImportDatum { get; set; } = DateTime.Today;
 
         public void ApiImportButton()
         {
-            ApiModel.DataImport(ticker, ImportDatum, Interval);
+            ApiModel.DataImport(Ticker, ImportDatum, Interval);
         }
         
     }

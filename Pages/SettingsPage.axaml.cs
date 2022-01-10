@@ -26,8 +26,7 @@ namespace SoftwareProject.Pages
 
         private void ApiImportDate_OnSelectedDateChanged(object sender, DatePickerSelectedValueChangedEventArgs e)
         {
-            MainWindowViewModel.SettingsPage.ImportDatum = e.NewDate.Value.Date;
-
+            if (e.NewDate != null) MainWindowViewModel.SettingsPage.ImportDatum = e.NewDate.Value.Date;
         }
     }
 }

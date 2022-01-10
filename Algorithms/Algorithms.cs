@@ -64,7 +64,7 @@ namespace SoftwareProject.Algorithms
  
              for (int i = 0; i < 100; i++)
              {
-                 predictedStock.Values = predictedStock.Values.Append(new FinancialPoint(date, generateRndNum(),
+                 predictedStock.Values = predictedStock.Values!.Append(new FinancialPoint(date, generateRndNum(),
                      generateRndNum(),
                      generateRndNum(), generateRndNum()));
                  date = date.AddHours(4);
@@ -73,7 +73,7 @@ namespace SoftwareProject.Algorithms
              return predictedStock;
         }
 
-        private System.Random _rnd = new();
+        private readonly System.Random _rnd = new();
     }
 
     public static class AlgorithmHelpers

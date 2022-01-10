@@ -32,7 +32,7 @@ namespace SoftwareProject.Types
 
         public string ShortName
         {
-            get => Name;
+            get => Name!;
             set => Name = value;
         }
 
