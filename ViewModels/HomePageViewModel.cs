@@ -89,7 +89,11 @@ namespace SoftwareProject.ViewModels
             {
                 DataContext =
                     new AlgorithmApplicatorViewModel("AAPL", new CalendarDateRange(DateTime.Now, DateTime.Now))
-            };
+            }; 
+            if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                algorithmApplicator.ShowDialog(desktop.MainWindow);
+            }
         }
     }
 }

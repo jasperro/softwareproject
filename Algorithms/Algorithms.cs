@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Collections;
 using LiveChartsCore.Defaults;
@@ -54,6 +55,7 @@ namespace SoftwareProject.Algorithms
         {
              Stock predictedStock = new($"{stock.ShortName} (prediction)")
              {
+                 Values = new ObservableCollection<FinancialPoint>(),
                  UpFill = new SolidColorPaint { Color = SKColors.Blue },
                  DownFill = new SolidColorPaint { Color = SKColors.Orange },
                  UpStroke = new SolidColorPaint { Color = SKColors.Blue },
@@ -64,7 +66,7 @@ namespace SoftwareProject.Algorithms
  
              for (int i = 0; i < 100; i++)
              {
-                 predictedStock.Values = predictedStock.Values!.Append(new FinancialPoint(date, generateRndNum(),
+                 predictedStock.Values = predictedStock.Values.Append(new FinancialPoint(date, generateRndNum(),
                      generateRndNum(),
                      generateRndNum(), generateRndNum()));
                  date = date.AddHours(4);
