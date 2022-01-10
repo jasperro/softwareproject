@@ -27,7 +27,7 @@ namespace SoftwareProject.ViewModels
         {
             Stocks = new ObservableCollection<Stock> { new() };
 
-            Series = CachedStocks;
+            Series = new ObservableCollection<Stock>();
         }
 
         public string NewStockName
