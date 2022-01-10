@@ -20,9 +20,9 @@ namespace SoftwareProject.ViewModels
     {
         [Reactive]
         private int SelectedWeek { get; set; } =
-            ISOWeek.GetWeekOfYear(MainWindowViewModel.Timekeeping.CurrentTime);
+            ISOWeek.GetWeekOfYear(MainWindowViewModel.Timekeeping.CurrentTime.DateTime);
 
-        private int CurrentWeek => ISOWeek.GetWeekOfYear(MainWindowViewModel.Timekeeping.CurrentTime);
+        private int CurrentWeek => ISOWeek.GetWeekOfYear(MainWindowViewModel.Timekeeping.CurrentTime.DateTime);
 
 
         private UserModel _userModel => MainWindowViewModel.User;

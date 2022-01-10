@@ -38,7 +38,7 @@ namespace SoftwareProject.ViewModels
 
         private string Interval => CbbItem?.Content.ToString() ?? "daily";
 
-        [Reactive] public DateTime ImportDatum { get; set; } = DateTime.Today;
+        [Reactive] public DateTimeOffset ImportDatum { get; set; } = DateTimeOffset.Now;
 
         public void ApiImportButton()
         {

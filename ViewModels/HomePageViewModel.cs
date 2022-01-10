@@ -42,10 +42,21 @@ namespace SoftwareProject.ViewModels
         };
 
         public IObservable<string> CurrentDateString =>
-            Timekeeping.WhenAny(x => x.CurrentTime, _ => Timekeeping.CurrentTime.ToLongDateString());
+            Timekeeping.WhenAny(x => x.CurrentTime, _ => Timekeeping.CurrentTime.Date.ToLongDateString());
 
         [Reactive] public bool TimerRunning { get; set; } = Timekeeping.Timer.Enabled;
 
+        [Reactive]
+        public DateTimeOffset? SelectedDate
+        {
+            get;
+            set;
+        }
+
+        public void ChangeDateToSelected()
+        {
+            if (SelectedDate != null) Timekeeping.CurrentTime = SelectedDate.Value;
+        }
 
         public void AddStock()
         {

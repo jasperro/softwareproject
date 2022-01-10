@@ -10,9 +10,6 @@ namespace SoftwareProject.Pages
 {
     public class SettingsPage : UserControl
     {
-
-        
-        
         public SettingsPage()
         {
             InitializeComponent();
@@ -21,12 +18,6 @@ namespace SoftwareProject.Pages
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-        }
-
-
-        private void ApiImportDate_OnSelectedDateChanged(object sender, DatePickerSelectedValueChangedEventArgs e)
-        {
-            if (e.NewDate != null) MainWindowViewModel.SettingsPage.ImportDatum = e.NewDate.Value.Date;
         }
     }
 }

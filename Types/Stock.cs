@@ -50,7 +50,7 @@ namespace SoftwareProject.Types
             MainWindowViewModel.Timekeeping.ObservableTimer.Subscribe(_ =>
             {
                 var valuesBeforeDate = AllValues.Where(financialPoint =>
-                    financialPoint.Date.CompareTo(MainWindowViewModel.Timekeeping.CurrentTime) < 0);
+                    financialPoint.Date.CompareTo(MainWindowViewModel.Timekeeping.CurrentTime.DateTime) < 0);
                 if (valuesBeforeDate.Any())
                 {
                     Values = valuesBeforeDate;
@@ -59,7 +59,7 @@ namespace SoftwareProject.Types
         }
 
         /// <summary>Update all stocks data to match current application time</summary>
-        public void UpdateToTime(DateTime currentTime)
+        public void UpdateToTime(DateTimeOffset currentTime)
         {
         }
     }

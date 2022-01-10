@@ -65,7 +65,7 @@ namespace SoftwareProject.Models
         /// the point where we can look at profits from historical data
         /// </summary>
         [Reactive]
-        public DateTime CurrentTime { get; set; } = DateTime.Now.Subtract(TimeSpan.FromDays(50));
+        public DateTimeOffset CurrentTime { get; set; } = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(50));
 
         /// <summary>
         /// The speed at which time is moving (How often is a tick?). 1.0 is normal speed (one second per second)

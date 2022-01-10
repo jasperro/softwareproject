@@ -11,11 +11,11 @@ namespace SoftwareProject.Models
     {
         // Method to import data from api based on given parameters.
         // String interval must be: daily, 1min, 5min, 15min or 60min.
-        public static void DataImport(string ticker, DateTime date, string interval)
+        public static void DataImport(string ticker, DateTimeOffset date, string interval)
         {
             string function, interval1, slice, datatype;
             string apikey = "VRUNKSO09I7IAXN4";
-            DateTime now = DateTime.Now;
+            DateTimeOffset now = DateTimeOffset.Now;
             TimeSpan difference = now.Subtract(date);
             TimeSpan maxDifference = new TimeSpan(720, 0, 0, 0, 0);
             if (interval == "daily")

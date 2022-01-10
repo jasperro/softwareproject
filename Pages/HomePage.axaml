@@ -17,9 +17,6 @@
         <Button Content="Add stock to preview graph" Name="AddStockButton" Command="{Binding AddStock}" />
         <Button Content="Apply algorithm" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithmOpen}" />
 
-        <DatePicker />
-        <TimePicker />
-
         <Grid Height="500">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -27,15 +24,19 @@
             <lvc:CartesianChart ZoomMode="X" Series="{Binding Series}" XAxes="{Binding XAxes}" />
         </Grid>
 
-        <DockPanel Dock="Bottom" HorizontalAlignment="Right"
-                   VerticalAlignment="Bottom">
-            <TextBlock Text="{Binding CurrentDateString^}" />
-            <Button Command="{Binding ToggleTimer}">
-                <Panel>
-                    <i:Icon Value="mdi-play" IsVisible="{Binding !TimerRunning}" />
-                    <i:Icon Value="mdi-pause" IsVisible="{Binding TimerRunning}" />
-                </Panel>
-            </Button>
-        </DockPanel>
+        <StackPanel>
+            <DatePicker SelectedDate="{Binding SelectedDate}" />
+            <Button Content="Change date to selection" Command="{Binding ChangeDateToSelected}" />
+
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding ToggleTimer}">
+                    <Panel>
+                        <i:Icon Value="mdi-play" IsVisible="{Binding !TimerRunning}" />
+                        <i:Icon Value="mdi-pause" IsVisible="{Binding TimerRunning}" />
+                    </Panel>
+                </Button>
+                <TextBlock Text="{Binding CurrentDateString^}" />
+            </StackPanel>
+        </StackPanel>
     </StackPanel>
 </UserControl>
