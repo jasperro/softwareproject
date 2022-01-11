@@ -27,6 +27,11 @@ namespace SoftwareProject.ViewModels
             Stocks = new ObservableCollection<Stock> { new() };
 
             Series = new ObservableCollection<Stock>();
+
+            Timekeeping.ObservableTimer.Subscribe(_ =>
+            {
+                if (FollowTicker) (XAxes[0].MinLimit, XAxes[0].MaxLimit) = (null, null);
+            });
         }
 
         [Reactive] public string NewStockName { get; set; } = "";
@@ -37,7 +42,9 @@ namespace SoftwareProject.ViewModels
             {
                 LabelsRotation = 15,
                 Labeler = value => new DateTime((long)value).ToString("yyyy MMM dd"),
-                UnitWidth = TimeSpan.FromDays(1).Ticks
+                UnitWidth = TimeSpan.FromDays(1).Ticks,
+                MinLimit = null,
+                MaxLimit = null
             }
         };
 
@@ -48,6 +55,13 @@ namespace SoftwareProject.ViewModels
 
         [Reactive]
         public DateTimeOffset? SelectedDate
+        {
+            get;
+            set;
+        }
+
+        [Reactive]
+        public bool FollowTicker
         {
             get;
             set;

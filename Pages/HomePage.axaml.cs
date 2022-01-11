@@ -1,18 +1,12 @@
-using System;
-using System.Linq;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using SoftwareProject.Types;
 using SoftwareProject.ViewModels;
-using static SoftwareProject.Globals;
 
 namespace SoftwareProject.Pages
 {
     public class HomePage : UserControl
     {
-        private static readonly HomePageViewModel Viewmodel = MainWindowViewModel.HomePage;
-
         public HomePage()
         {
             InitializeComponent();
@@ -21,6 +15,11 @@ namespace SoftwareProject.Pages
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        private void InputElement_OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
+        {
+            MainWindowViewModel.HomePage.FollowTicker = false;
         }
     }
 }

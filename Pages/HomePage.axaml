@@ -16,13 +16,10 @@
         <TextBox Text="{Binding NewStockName, Mode=TwoWay}" Name="UsernameTextBox" />
         <Button Content="Add stock to preview graph" Name="AddStockButton" Command="{Binding AddStock}" />
         <Button Content="Apply algorithm" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithmOpen}" />
+        <CheckBox Content="Follow stock ticker" IsChecked="{Binding FollowTicker}" />
 
-        <Grid Height="500">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <lvc:CartesianChart ZoomMode="X" Series="{Binding Series}" XAxes="{Binding XAxes}" />
-        </Grid>
+        <lvc:CartesianChart Height="500" ZoomMode="X" PointerWheelChanged="InputElement_OnPointerWheelChanged"
+                            Series="{Binding Series}" XAxes="{Binding XAxes}" />
 
         <StackPanel>
             <DatePicker SelectedDate="{Binding SelectedDate}" />
