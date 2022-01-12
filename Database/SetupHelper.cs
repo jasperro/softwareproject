@@ -137,7 +137,7 @@ namespace SoftwareProject
         
         CREATE TABLE IF NOT EXISTS UserSettings ( 
 			UserId               integer NOT NULL    ,			
-			SettingsId			 varchar(100) NOT NULL ,
+			SimTime              integer,			
 			FOREIGN KEY ( UserId ) REFERENCES Users( UserId )			  
 		);
 

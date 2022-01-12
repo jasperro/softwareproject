@@ -4,6 +4,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
 using static SoftwareProject.Models.ApiModel;
+using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Models
 {
@@ -21,14 +22,16 @@ namespace SoftwareProject.Models
             UserInvestmentPortfolio =
                 Globals.CurrentDatabase.GetInvestmentPortfolioFromDb(UserId);
             Username = Globals.CurrentDatabase.GetUsernameFromDb(UserId) ?? "invalid user";
+            UserSettings = Globals.CurrentDatabase.GetSettingsFromUserSettingsDb(UserId);
+            MainWindowViewModel.Timekeeping.CurrentTime = DateTimeOffset.FromUnixTimeSeconds(UserSettings.Simtime);
         }
 
         [Reactive] public string Username { get; set; }
-
         public InvestmentPortfolio UserInvestmentPortfolio { get; }
         public string ApiKey { get; set; } = "VRUNKSO09I7IAXN4";
 
         public bool AutoRefresh = false;
+        public Usersettings UserSettings { get; set; }
 
         /// <summary>
         /// Dictionary of all stocks that need to get automatic updates, and how often those updates are downloaded.

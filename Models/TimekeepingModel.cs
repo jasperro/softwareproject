@@ -75,10 +75,12 @@ namespace SoftwareProject.Models
             }
         }
 
-        /// <summary>
-        /// The current time of the primary simulation,
-        /// the point where we can look at profits from historical data
-        /// </summary>
+        
+            /// <summary>
+            /// The current time of the primary simulation,
+            /// the point where we can look at profits from historical data
+            /// </summary>
+            
         [Reactive]
         public DateTimeOffset CurrentTime { get; set; } = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(50));
 
