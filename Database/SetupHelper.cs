@@ -1,6 +1,10 @@
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using DynamicData.Kernel;
 using Microsoft.Data.Sqlite;
 using SoftwareProject.ViewModels;
 
@@ -8,8 +12,7 @@ namespace SoftwareProject
 {
     public partial class Database
     {
-        
-	    public void ImportTestData()
+        public void ImportTestData()
         {
             using (var transaction = DatabaseConnection.BeginTransaction())
             {
@@ -64,19 +67,29 @@ namespace SoftwareProject
         {
             string? line;
             var currentLine = 0;
+            Dictionary<string, int> idxs = new(){ {"time", 0}, {"open", 1}, {"close", 2}, {"high", 3}, {"low",4} , {"volume",5} };
             while ((line = sr.ReadLine()) != null)
             {
-                string[] csvLine = line.Split(',');
+                List<string> csvLine = line.Split(',').ToList();
 
-                if (currentLine != 0)
+                if (currentLine == 0)
+                {
+	                idxs["time"] = csvLine.FindIndex(str => str.Contains("time"));
+	                idxs["open"] = csvLine.FindIndex(str => str.Contains("open"));
+	                idxs["close"] = csvLine.FindIndex(str => str.Contains("close"));
+	                idxs["high"] = csvLine.FindIndex(str => str.Contains("high"));
+	                idxs["low"] = csvLine.FindIndex(str => str.Contains("low"));
+	                idxs["volume"] = csvLine.FindIndex(str => str.Contains("volume"));
+                }
+                else
                 {
                     AddStockToDb(
-                        csvLine[0],
-                        double.Parse(csvLine[1], CultureInfo.InvariantCulture),
-                        double.Parse(csvLine[4], CultureInfo.InvariantCulture),
-                        double.Parse(csvLine[2], CultureInfo.InvariantCulture),
-                        double.Parse(csvLine[3], CultureInfo.InvariantCulture),
-                        int.Parse(csvLine[5], CultureInfo.InvariantCulture),
+                        csvLine[idxs["time"]],
+                        double.Parse(csvLine[idxs["open"]], CultureInfo.InvariantCulture),
+                        double.Parse(csvLine[idxs["close"]], CultureInfo.InvariantCulture),
+                        double.Parse(csvLine[idxs["high"]], CultureInfo.InvariantCulture),
+                        double.Parse(csvLine[idxs["low"]], CultureInfo.InvariantCulture),
+                        (int) double.Parse(csvLine[idxs["volume"]], CultureInfo.InvariantCulture),
                         shortname
                     );
                 }
@@ -135,7 +148,7 @@ namespace SoftwareProject
         private void SetupDatabase()
         {
             SqliteCommand setupCommand = DatabaseConnection.CreateCommand();
-	        setupCommand.CommandText = SetupQuery;
+            setupCommand.CommandText = SetupQuery;
             setupCommand.ExecuteNonQuery();
             CreateTestUser();
             ImportTestData();
