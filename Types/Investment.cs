@@ -12,7 +12,7 @@ namespace SoftwareProject.Types
     {
         /// <summary>This list contains the predictive algorithms that will be applied after each other</summary>
         /// <example>This allows us to take for example the average, and apply a smoothing factor after this.</example>
-        public List<IAlgorithm> AlgorithmList = new();
+        public List<IStockAlgorithm> AlgorithmList = new();
 
         public Stock Stock { get; }
 

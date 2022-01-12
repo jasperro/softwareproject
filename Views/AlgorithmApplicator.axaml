@@ -51,7 +51,7 @@
 
                 <ComboBox Name="ApiInterval" SelectedIndex="0"
                           Items="{Binding AlgorithmList, Mode=OneWay}"
-                          SelectedItem="{Binding SelectedAlgorithmListItem}">
+                          SelectedItem="{Binding SelectedStockAlgorithmListItem}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding AlgorithmName}" />
@@ -63,7 +63,7 @@
                     <Button Content="Apply!" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithm}" />
                 </StackPanel>
 
-                <ContentControl Content="{Binding ElementName=ApiInterval, Path=DataContext.SelectedAlgorithmListItem}" />
+                <ContentControl Content="{Binding ElementName=ApiInterval, Path=DataContext.SelectedStockAlgorithmListItem}" />
             </StackPanel>
 
             <Grid Grid.Row="1" Height="500" RowDefinitions="*">

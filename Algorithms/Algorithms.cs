@@ -12,14 +12,19 @@ using static SoftwareProject.Globals;
 
 namespace SoftwareProject.Algorithms
 {
+    
     public interface IAlgorithm
     {
-        public string AlgorithmId { get; }
-        public string AlgorithmName { get; }
+       public string AlgorithmId { get; }
+       public string AlgorithmName { get; }
+    }
+    public interface IStockAlgorithm : IAlgorithm
+    {
         public IStock Apply(string shortName) => Apply(GetStock(shortName));
         public IStock Apply(IStock stock);
     }
-    public class AverageClosingPrice : IAlgorithm
+
+    public class AverageClosingPrice : IStockAlgorithm
     {
         public string AlgorithmId => "avgclosing";
         public string AlgorithmName => "Average Closing Price";
@@ -38,7 +43,7 @@ namespace SoftwareProject.Algorithms
     /// <summary>
     /// Algorithm that will just generate random values as predictions, useful for testing.
     /// </summary>
-    public class Random : IAlgorithm
+    public class Random : IStockAlgorithm
     {
         public string AlgorithmId => "random";
         public string AlgorithmName => "Random Data";
@@ -96,7 +101,7 @@ namespace SoftwareProject.Algorithms
             return average;
         }
 
-        public static IEnumerable<IAlgorithm> AlgorithmList { get; } =
-            new AvaloniaList<IAlgorithm> { new AverageClosingPrice(), new Random() };
+        public static IEnumerable<IStockAlgorithm> StockAlgorithmList { get; } =
+            new AvaloniaList<IStockAlgorithm> { new AverageClosingPrice(), new Random() };
     }
 }

@@ -18,12 +18,12 @@ namespace SoftwareProject.ViewModels
 {
     public class AlgorithmApplicatorViewModel : ViewModelBase
     {
-        public static IEnumerable<IAlgorithm> AlgorithmList => Algorithms.AlgorithmHelpers.AlgorithmList;
+        public static IEnumerable<IStockAlgorithm> AlgorithmList => Algorithms.AlgorithmHelpers.StockAlgorithmList;
         public string ShortName { get; } = "";
 
         public CalendarDateRange? DateRange { get; }
 
-        [Reactive] public IAlgorithm SelectedAlgorithmListItem { get; set; } = AlgorithmList.First();
+        [Reactive] public IStockAlgorithm SelectedStockAlgorithmListItem { get; set; } = AlgorithmList.First();
 
         private IStock CurrentStock { get; set; }
 
@@ -41,10 +41,10 @@ namespace SoftwareProject.ViewModels
 
         public void ApplyAlgorithm()
         {
-            Console.WriteLine($"Applying {SelectedAlgorithmListItem.AlgorithmId}");
+            Console.WriteLine($"Applying {SelectedStockAlgorithmListItem.AlgorithmId}");
             Series.Clear();
             Series.Insert(0, CurrentStock);
-            Series.Insert(1, SelectedAlgorithmListItem.Apply(CurrentStock));
+            Series.Insert(1, SelectedStockAlgorithmListItem.Apply(CurrentStock));
         }
 
         public AlgorithmApplicatorViewModel(string shortName, CalendarDateRange dateRange)
