@@ -23,7 +23,7 @@ namespace SoftwareProject.Models
                 Globals.CurrentDatabase.GetInvestmentPortfolioFromDb(UserId);
             Username = Globals.CurrentDatabase.GetUsernameFromDb(UserId) ?? "invalid user";
             UserSettings = Globals.CurrentDatabase.GetSettingsFromUserSettingsDb(UserId);
-            MainWindowViewModel.Timekeeping.CurrentTime = DateTimeOffset.FromUnixTimeSeconds(UserSettings.Simtime);
+            MainWindowViewModel.Timekeeping.CurrentTime = DateTimeOffset.FromUnixTimeSeconds(UserSettings.SimTime);
         }
 
         [Reactive] public string Username { get; set; }

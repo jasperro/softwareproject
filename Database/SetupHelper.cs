@@ -138,7 +138,8 @@ namespace SoftwareProject
         CREATE TABLE IF NOT EXISTS UserSettings ( 
 			UserId               integer NOT NULL    ,			
 			SimTime              integer,			
-			FOREIGN KEY ( UserId ) REFERENCES Users( UserId )			  
+			FOREIGN KEY ( UserId ) REFERENCES Users( UserId ),	  
+			PRIMARY KEY ( UserId )
 		);
 
 		CREATE TABLE IF NOT EXISTS StockData ( 

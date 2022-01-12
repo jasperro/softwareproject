@@ -40,7 +40,7 @@ namespace SoftwareProject
             var command = DatabaseConnection.CreateCommand();
             command.CommandText = @"INSERT OR IGNORE INTO Users (UserName, UserId)
             VALUES('TESTUSER', 0);
-            INSERT OR IGNORE INTO UserSettings VALUES (0)";
+            INSERT OR IGNORE INTO UserSettings (UserId) VALUES(0)";
             command.ExecuteNonQuery();
         }
 
@@ -62,8 +62,9 @@ namespace SoftwareProject
         public Usersettings GetSettingsFromUserSettingsDb(int userId = 0)
         {
             var command = DatabaseConnection.CreateCommand();
-            int tijd = (int)DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(50)).ToUnixTimeSeconds();
 
+            int? tijd = (int)DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(50)).ToUnixTimeSeconds();
+            
             command.CommandText = @"
 			    SELECT * FROM UserSettings WHERE UserId = $userid;	
 				";
@@ -74,8 +75,8 @@ namespace SoftwareProject
             {
                 while (reader.Read())
                 {
-                    tijd = int.Parse(reader.GetString(reader.GetOrdinal("SimTime"))
-                    );
+                    int tijdOrdinal = reader.GetOrdinal("SimTime");
+                    tijd = reader.IsDBNull(tijdOrdinal) ? null : int.Parse(reader.GetString(tijdOrdinal));
                 }
             }
 
