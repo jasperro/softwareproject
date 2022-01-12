@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
-using Avalonia;
-using DynamicData.Binding;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
@@ -13,19 +10,25 @@ using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Models;
 using SoftwareProject.Types;
 using static SoftwareProject.Globals;
+using static SoftwareProject.ViewModels.MainWindowViewModel;
 
 namespace SoftwareProject.ViewModels
 {
     public class PortfolioPageViewModel : ViewModelBase
     {
+        public PortfolioPageViewModel()
+        {
+            this.WhenAny(x => x.SelectedStockListItem, s => StockToInvest = s.Value.ShortName);
+        }
+
         [Reactive]
         private int SelectedWeek { get; set; } =
-            ISOWeek.GetWeekOfYear(MainWindowViewModel.Timekeeping.CurrentTime.DateTime);
+            ISOWeek.GetWeekOfYear(Timekeeping.CurrentTime.DateTime);
 
-        private int CurrentWeek => ISOWeek.GetWeekOfYear(MainWindowViewModel.Timekeeping.CurrentTime.DateTime);
+        private int CurrentWeek => ISOWeek.GetWeekOfYear(Timekeeping.CurrentTime.DateTime);
 
 
-        private UserModel _userModel => MainWindowViewModel.User;
+        private UserModel _userModel => User;
 
         public string Username
         {
@@ -49,7 +52,7 @@ namespace SoftwareProject.ViewModels
         public IObservable<string> InvestedStocksSummary => _userModel.WhenAny(x => x.UserInvestmentPortfolio,
             s => $"Your {s.Value.StockAmt} stocks have changed with {s.Value.AvgPortfolioTrend}% since yesterday");
 
-        public InvestmentPortfolio Investments { get; } = MainWindowViewModel.User.UserInvestmentPortfolio;
+        public InvestmentPortfolio Investments { get; } = User.UserInvestmentPortfolio;
 
         public ObservableCollection<ISeries> SharePieChart { get; } = new()
         {
@@ -69,6 +72,15 @@ namespace SoftwareProject.ViewModels
             s =>
                 $"Week {s.Value}");
 
+        [Reactive]
+        public IStock SelectedStockListItem
+        {
+            get;
+            set;
+        }
+
+        public static IEnumerable<IStock> StockList => CachedStocks;
+
         public void SelectPreviousWeek()
         {
             SelectedWeek--;
@@ -83,6 +95,14 @@ namespace SoftwareProject.ViewModels
         {
             SelectedWeek = CurrentWeek;
         }
+        
+        public void PreviewStock(Stock stock)
+        {
+            MainWindow.SelectedIndex = 0;
+            HomePage.Series.Clear();
+            HomePage.Series.Add(stock);
+            Console.WriteLine($"Preview {stock.ShortName}");
+        }
 
 
         public void AddInvestment()
@@ -90,7 +110,7 @@ namespace SoftwareProject.ViewModels
             if (SelectedStock == null) return;
             Investment newInvestment = new(SelectedStock);
             Investments.Add(newInvestment);
-            CurrentDatabase.AddInvestmentToDb(MainWindowViewModel.User.UserId, newInvestment);
+            CurrentDatabase.AddInvestmentToDb(User.UserId, newInvestment);
         }
 
         public void SelectStock()

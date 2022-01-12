@@ -4,6 +4,7 @@
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              xmlns:i="using:Projektanker.Icons.Avalonia"
              xmlns:styles="clr-namespace:SoftwareProject.Styles"
+             Name="PortfolioPage"
              d:DesignWidth="800" d:DesignHeight="450" x:Class="SoftwareProject.Pages.PortfolioPage">
     <Design.DataContext>
         <vm:MainWindowViewModel />
@@ -15,9 +16,21 @@
             <TextBox Text="{Binding StockToInvest, Mode=TwoWay}" />
             <TextBox Text="{Binding AmountToInvest, Mode=TwoWay}" />
             <Button Content="Select stock" Name="SelectStock" Command="{Binding SelectStock}" />
+
+            <ComboBox Name="StockSelector" SelectedIndex="0"
+                      Items="{Binding StockList, Mode=OneWay}"
+                      SelectedItem="{Binding SelectedStockListItem}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ShortName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='No stock selected'}" />
             <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='Unknown price'}" />
-            <Button Content="Buy stock in selected share" Name="AddInvest" Command="{Binding AddInvestment}" />
+            <Button
+                Content="{Binding SelectedStock.ShortName, StringFormat=Invest in {0}, FallbackValue='Select and invest in stock'}"
+                Name="AddInvest" Command="{Binding AddInvestment}" />
         </StackPanel>
         <!-- List with current investments, their last update, profit and trend -->
 
@@ -40,10 +53,15 @@
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Trend"
                                     Binding="{Binding Stock.TrendPercentage}" />
-                <DataGridTemplateColumn Header="Action">
+                <DataGridTemplateColumn d:DataContext="{Binding Investments}" Header="Action">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button>Sell all stock</Button>
+                            <StackPanel Orientation="Horizontal">
+                                <Button
+                                    CommandParameter="{Binding Stock}"
+                                    Command="{Binding Source={x:Static vm:MainWindowViewModel.PortfolioPage }, Path=PreviewStock}"
+                                    Content="{Binding ShortName, StringFormat=Preview {0}}" />
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

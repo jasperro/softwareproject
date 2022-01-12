@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Data.Sqlite;
+﻿using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Models;
 
 namespace SoftwareProject.ViewModels
@@ -18,5 +15,12 @@ namespace SoftwareProject.ViewModels
         public static HomePageViewModel HomePage { get; } = new();
         public static PortfolioPageViewModel PortfolioPage { get; } = new();
         public static SettingsPageViewModel SettingsPage { get; } = new();
+
+        [Reactive]
+        public int SelectedIndex
+        {
+            get;
+            set;
+        }
     }
 }

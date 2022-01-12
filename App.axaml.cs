@@ -19,7 +19,7 @@ namespace SoftwareProject
             {
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(),
+                    DataContext = Globals.MainWindow,
                 };
             }
 

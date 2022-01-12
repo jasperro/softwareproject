@@ -27,7 +27,7 @@
                     MaterialOpacity="0.65" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
-        <TabControl x:Name="TabControl" Classes="sidebar">
+        <TabControl x:Name="TabControl" Classes="sidebar" SelectedIndex="{Binding SelectedIndex}">
             <TabItem>
                 <TabItem.Header>
                     <StackPanel>

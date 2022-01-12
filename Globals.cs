@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using SoftwareProject.Types;
+using SoftwareProject.ViewModels;
 
 namespace SoftwareProject
 {
@@ -9,6 +10,7 @@ namespace SoftwareProject
         public static Database CurrentDatabase = new();
         
         public static ObservableCollection<Stock> CachedStocks { get; } = new();
+        public static MainWindowViewModel MainWindow { get; } = new();
 
         public static Stock GetStock(string shortName)
         {
