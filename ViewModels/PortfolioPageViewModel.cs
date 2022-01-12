@@ -18,7 +18,11 @@ namespace SoftwareProject.ViewModels
     {
         public PortfolioPageViewModel()
         {
-            this.WhenAny(x => x.SelectedStockListItem, s => StockToInvest = s.Value.ShortName);
+            this.ObservableForProperty(x => x.SelectedStockListItem).Subscribe(_ =>
+            {
+                SelectedStock = SelectedStockListItem;
+                StockToInvest = SelectedStock!.ShortName;
+            });
         }
 
         [Reactive]
@@ -61,8 +65,7 @@ namespace SoftwareProject.ViewModels
             new PieSeries<ObservableValue> { Values = new[] { new ObservableValue(2) }, Name = "GOOGL" }
         };
 
-        public string StockToInvest { get; set; } = "AAPL";
-
+        [Reactive] public string StockToInvest { get; set; }
 
         [Reactive] public Stock? SelectedStock { get; set; }
 
@@ -72,12 +75,7 @@ namespace SoftwareProject.ViewModels
             s =>
                 $"Week {s.Value}");
 
-        [Reactive]
-        public IStock SelectedStockListItem
-        {
-            get;
-            set;
-        }
+        [Reactive] public Stock? SelectedStockListItem { get; set; }
 
         public static IEnumerable<IStock> StockList => CachedStocks;
 
@@ -95,7 +93,7 @@ namespace SoftwareProject.ViewModels
         {
             SelectedWeek = CurrentWeek;
         }
-        
+
         public void PreviewStock(Stock stock)
         {
             MainWindow.SelectedIndex = 0;
@@ -108,7 +106,7 @@ namespace SoftwareProject.ViewModels
         public void AddInvestment()
         {
             if (SelectedStock == null) return;
-            Investment newInvestment = new(SelectedStock);
+            Investment newInvestment = new(SelectedStock) { MoneyInvested = AmountToInvest };
             Investments.Add(newInvestment);
             CurrentDatabase.AddInvestmentToDb(User.UserId, newInvestment);
         }

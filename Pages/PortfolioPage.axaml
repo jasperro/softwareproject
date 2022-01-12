@@ -34,6 +34,7 @@
         </StackPanel>
         <!-- List with current investments, their last update, profit and trend -->
 
+        <TextBlock Text="Investment log" Classes="header" />
 
         <DataGrid Name="InvestedGrid" IsReadOnly="True" AutoGenerateColumns="False" Height="600"
                   Items="{Binding Investments}">
