@@ -23,6 +23,7 @@ namespace SoftwareProject.ViewModels
                 SelectedStock = SelectedStockListItem;
                 StockToInvest = SelectedStock!.ShortName;
             });
+            
         }
 
         [Reactive]
@@ -53,9 +54,6 @@ namespace SoftwareProject.ViewModels
 
         public IObservable<string> Greeting => _userModel.WhenAny(x => x.Username, s => $"Good {TimeOfDay}, {s.Value}");
 
-        public IObservable<string> InvestedStocksSummary => _userModel.WhenAny(x => x.UserInvestmentPortfolio,
-            s => $"Your {s.Value.StockAmt} stocks have changed with {s.Value.AvgPortfolioTrend}% since yesterday");
-
         public InvestmentPortfolio Investments { get; } = User.UserInvestmentPortfolio;
 
         public ObservableCollection<ISeries> SharePieChart { get; } = new()
@@ -70,10 +68,6 @@ namespace SoftwareProject.ViewModels
         [Reactive] public Stock? SelectedStock { get; set; }
 
         [Reactive] public double AmountToInvest { get; set; }
-
-        public IObservable<string> SelectedWeekInfo => this.WhenAny(x => x.SelectedWeek,
-            s =>
-                $"Week {s.Value}");
 
         [Reactive] public Stock? SelectedStockListItem { get; set; }
 
