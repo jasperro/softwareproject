@@ -7,6 +7,8 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
 using SoftwareProject.ViewModels;
+using Splat;
+using static SoftwareProject.Globals;
 
 namespace SoftwareProject.Models
 {
@@ -20,17 +22,18 @@ namespace SoftwareProject.Models
 
         public TimekeepingModel()
         {
-            Timer = new Timer(UpdateFrequency.TotalMilliseconds) {AutoReset = true};
+            Timer = new Timer(TickInterval.TotalMilliseconds) {AutoReset = true};
             ObservableTimer = Observable.FromEventPattern<ElapsedEventHandler, ElapsedEventArgs>(
                 h => Timer.Elapsed += h,
                 h => Timer.Elapsed -= h).Select(t => t.EventArgs.SignalTime);
             ObservableTimer.Subscribe(_ => DoTick(TimeStep));
             Timer.Enabled = true;
-            //this.WhenAny(x => x.UpdateFrequency, s =>
-            //{
-            //    Console.WriteLine(UpdateFrequency);
-            //    return Timer = Observable.Timer(DateTimeOffset.Now, s.Value);
-            //});
+            
+            this.WhenAny(x => x.TickInterval, x => x.TimeStep1Second, (_,_) =>
+            {
+                TimeStep = TimeStep1Second * TickInterval.TotalSeconds;
+                return Timer.Interval = TickInterval.TotalMilliseconds;
+            }).Subscribe();
         }
 
         private void DoTick(TimeSpan timeSpan)
@@ -40,7 +43,7 @@ namespace SoftwareProject.Models
 
             // TODO: All code that needs to be updated every tick
 
-            foreach (Stock stock in Globals.CachedStocks)
+            foreach (Stock stock in CachedStocks)
             {
                 stock.UpdateToTime(CurrentTime);
             }
@@ -68,15 +71,22 @@ namespace SoftwareProject.Models
         public DateTimeOffset CurrentTime { get; set; } = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(50));
 
         /// <summary>
-        /// The speed at which time is moving (How often is a tick?). 1.0 is normal speed (one second per second)
+        /// The speed at which time is moving (How often is a tick?). 1 second is realtime speed (one step per second)
         /// </summary>
         [Reactive]
-        public TimeSpan UpdateFrequency { get; set; } = TimeSpan.FromSeconds(1);
+        public TimeSpan TickInterval { get; set; } = TimeSpan.FromSeconds(1);
+        
+        
+        /// <summary>
+        /// Actual time step every timer update, adjusted for update frequency.
+        /// </summary>
+        [Reactive]
+        public TimeSpan TimeStep { get; private set; }
 
         /// <summary>
-        /// How much time in seconds has passed since the last update timer tick
+        /// Time step every second, how many time passes every second.
         /// </summary>
         [Reactive]
-        public TimeSpan TimeStep { get; set; } = TimeSpan.FromDays(1);
+        public TimeSpan TimeStep1Second { get; set; } = TimeSpan.FromDays(1);
     }
 }

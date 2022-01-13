@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia.Logging;
 using SoftwareProject.Types;
 using SoftwareProject.ViewModels;
+using Splat;
 
 namespace SoftwareProject
 {
@@ -25,5 +27,7 @@ namespace SoftwareProject
 
             return stock;
         }
+        
+        public static ILogger Logs = new ConsoleLogger {Level = LogLevel.Debug};
     }
 }

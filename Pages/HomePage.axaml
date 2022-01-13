@@ -23,7 +23,9 @@
 
         <StackPanel>
             <DatePicker SelectedDate="{Binding SelectedDate}" />
-            <Button Content="Change date to selection" Command="{Binding ChangeDateToSelected}" />
+            <TextBox Text="{Binding NewTickInterval}" />
+            <TextBox Text="{Binding NewTimeStep1Second}" />
+            <Button Content="Change date settings to selection" Command="{Binding ChangeDateToSelected}" />
 
             <StackPanel Orientation="Horizontal">
                 <Button Command="{Binding ToggleTimer}">

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -9,6 +10,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
 using SoftwareProject.Views;
+using Splat;
 using static SoftwareProject.Globals;
 using static SoftwareProject.ViewModels.MainWindowViewModel;
 
@@ -49,7 +51,7 @@ namespace SoftwareProject.ViewModels
         };
 
         public IObservable<string> CurrentDateString =>
-            Timekeeping.WhenAny(x => x.CurrentTime, _ => Timekeeping.CurrentTime.Date.ToLongDateString());
+            Timekeeping.WhenAny(x => x.CurrentTime, _ => Timekeeping.CurrentTime.ToString());
 
         [Reactive] public bool TimerRunning { get; set; } = Timekeeping.Timer.Enabled;
 
@@ -66,10 +68,35 @@ namespace SoftwareProject.ViewModels
             get;
             set;
         }
+        
+        
+
+        [Reactive]
+        public string NewTickInterval
+        {
+            get;
+            set;
+        } = Timekeeping.TickInterval.ToString();
+        
+        [Reactive]
+        public string NewTimeStep1Second
+        {
+            get;
+            set;
+        } = Timekeeping.TimeStep1Second.ToString();
 
         public void ChangeDateToSelected()
         {
-            if (SelectedDate != null) Timekeeping.CurrentTime = SelectedDate.Value;
+            try
+            {
+                if (SelectedDate != null) Timekeeping.CurrentTime = SelectedDate.Value;
+                Timekeeping.TickInterval = TimeSpan.Parse(NewTickInterval);
+                Timekeeping.TimeStep1Second = TimeSpan.Parse(NewTimeStep1Second);
+            }
+            catch
+            {
+                Logs.Write("Date invalid", LogLevel.Debug);
+            }
         }
 
         public void AddStock()
