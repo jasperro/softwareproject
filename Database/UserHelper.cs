@@ -1,3 +1,4 @@
+using Microsoft.Data.Sqlite;
 using SoftwareProject.ViewModels;
 
 namespace SoftwareProject
@@ -12,6 +13,25 @@ namespace SoftwareProject
 
             command.Parameters.AddWithValue("$name", name);
             command.ExecuteNonQuery();
+        }
+
+        public string? GetUsernameFromDb(int userId)
+        {
+            var command = DatabaseConnection.CreateCommand();
+            command.CommandText = @"
+			    SELECT * FROM Users WHERE UserId = $userId;	
+				";
+            command.Parameters.AddWithValue("$userId", userId);
+            SqliteDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    return reader.GetString(reader.GetOrdinal("UserName"));
+                }
+            }
+
+            return null;
         }
 
         public void CreateTestUser()

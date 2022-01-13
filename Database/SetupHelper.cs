@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
@@ -68,33 +69,40 @@ namespace SoftwareProject
             string? line;
             var currentLine = 0;
             Dictionary<string, int> idxs = new(){ {"time", 0}, {"open", 1}, {"close", 2}, {"high", 3}, {"low",4} , {"volume",5} };
-            while ((line = sr.ReadLine()) != null)
+            try
             {
-                List<string> csvLine = line.Split(',').ToList();
+	            while ((line = sr.ReadLine()) != null)
+	            {
+		            List<string> csvLine = line.Split(',').ToList();
 
-                if (currentLine == 0)
-                {
-	                idxs["time"] = csvLine.FindIndex(str => str.Contains("time"));
-	                idxs["open"] = csvLine.FindIndex(str => str.Contains("open"));
-	                idxs["close"] = csvLine.FindIndex(str => str.Contains("close"));
-	                idxs["high"] = csvLine.FindIndex(str => str.Contains("high"));
-	                idxs["low"] = csvLine.FindIndex(str => str.Contains("low"));
-	                idxs["volume"] = csvLine.FindIndex(str => str.Contains("volume"));
-                }
-                else
-                {
-                    AddStockToDb(
-                        csvLine[idxs["time"]],
-                        double.Parse(csvLine[idxs["open"]], CultureInfo.InvariantCulture),
-                        double.Parse(csvLine[idxs["close"]], CultureInfo.InvariantCulture),
-                        double.Parse(csvLine[idxs["high"]], CultureInfo.InvariantCulture),
-                        double.Parse(csvLine[idxs["low"]], CultureInfo.InvariantCulture),
-                        (int) double.Parse(csvLine[idxs["volume"]], CultureInfo.InvariantCulture),
-                        shortname
-                    );
-                }
+		            if (currentLine == 0)
+		            {
+			            idxs["time"] = csvLine.FindIndex(str => str.Contains("time"));
+			            idxs["open"] = csvLine.FindIndex(str => str.Contains("open"));
+			            idxs["close"] = csvLine.FindIndex(str => str.Contains("close"));
+			            idxs["high"] = csvLine.FindIndex(str => str.Contains("high"));
+			            idxs["low"] = csvLine.FindIndex(str => str.Contains("low"));
+			            idxs["volume"] = csvLine.FindIndex(str => str.Contains("volume"));
+		            }
+		            else
+		            {
+			            AddStockToDb(
+				            csvLine[idxs["time"]],
+				            double.Parse(csvLine[idxs["open"]], CultureInfo.InvariantCulture),
+				            double.Parse(csvLine[idxs["close"]], CultureInfo.InvariantCulture),
+				            double.Parse(csvLine[idxs["high"]], CultureInfo.InvariantCulture),
+				            double.Parse(csvLine[idxs["low"]], CultureInfo.InvariantCulture),
+				            (int)double.Parse(csvLine[idxs["volume"]], CultureInfo.InvariantCulture),
+				            shortname
+			            );
+		            }
 
-                currentLine++;
+		            currentLine++;
+	            }
+            }
+            catch (Exception ex)
+            {
+	            Console.Error.WriteLine($"{ex.Message} during reading of stock \"{shortname}\"");
             }
         }
 

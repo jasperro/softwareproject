@@ -17,18 +17,11 @@ namespace SoftwareProject.Models
             UserId = userId;
             UserInvestmentPortfolio =
                 Globals.CurrentDatabase.GetInvestmentPortfolioFromDb(UserId);
+            Username = Globals.CurrentDatabase.GetUsernameFromDb(UserId) ?? "invalid user";
         }
 
-        [Reactive]
-        public string Username
-        {
-            get;
-            set;
-        } = "";
+        [Reactive] public string Username { get; set; }
 
-        public InvestmentPortfolio UserInvestmentPortfolio
-        {
-            get;
-        }
+        public InvestmentPortfolio UserInvestmentPortfolio { get; }
     }
 }

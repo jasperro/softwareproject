@@ -31,19 +31,24 @@ namespace SoftwareProject.ViewModels
 
         public string Ticker { set; get; } = "";
 
-        public ComboBoxItem? CbbItem
-        {
-            set; get;
-        }
-
-        private string Interval => CbbItem?.Content.ToString() ?? "daily";
+        [Reactive] public string Interval { get; set; } = ApiIntervalList[0];
 
         [Reactive] public DateTimeOffset ImportDatum { get; set; } = DateTimeOffset.Now;
+
+        public static string[] ApiIntervalList => new[]
+        {
+            "daily", "1min", "5min", "15min", "30min", "60min"
+        };
+
+        public void ApplyUserSettings()
+        {
+            // Apply user settings, possibly not needed
+        }
 
         public void ApiImportButton()
         {
             ApiModel.DataImport(Ticker, ImportDatum, Interval);
+            Globals.CurrentDatabase.ImportTestData();
         }
-        
     }
 }
