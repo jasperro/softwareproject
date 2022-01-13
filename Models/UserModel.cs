@@ -23,5 +23,6 @@ namespace SoftwareProject.Models
         [Reactive] public string Username { get; set; }
 
         public InvestmentPortfolio UserInvestmentPortfolio { get; }
+        public string ApiKey { get; set; } = "VRUNKSO09I7IAXN4";
     }
 }

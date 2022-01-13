@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
+using static SoftwareProject.ViewModels.MainWindowViewModel;
 
 namespace SoftwareProject.Models
 {
@@ -9,53 +11,46 @@ namespace SoftwareProject.Models
     /// </summary>
     public class ApiModel
     {
+        public enum ImportType
+        {
+            Stock = 0, Crypto = 1
+        }
         // Method to import data from api based on given parameters.
         // String interval must be: daily, 1min, 5min, 15min or 60min.
-        public static void DataImport(string ticker, DateTimeOffset date, string interval)
+        public static void DataImport(string ticker, DateTimeOffset date, string interval = "daily", ImportType type = ImportType.Stock)
         {
-            string function, interval1, slice, datatype;
-            string apikey = "VRUNKSO09I7IAXN4";
+            string parameters = "";
+            string function = type == ImportType.Stock ? "TIME_SERIES_DAILY" : "DIGITAL_CURRENCY_DAILY";
+            string market = type == ImportType.Crypto ? "&market=USD" : "";
+            string datatype = "&datatype=csv";
+            string apikey = User.ApiKey;
+
             DateTimeOffset now = DateTimeOffset.Now;
+
             TimeSpan difference = now.Subtract(date);
             TimeSpan maxDifference = new TimeSpan(720, 0, 0, 0, 0);
-            if (interval == "daily")
-            {
-                function = "TIME_SERIES_DAILY";
-                interval1 = "";
-                slice = "";
-                datatype = "&datatype=csv";
-            }
-            else if (difference < maxDifference) 
-            {
-                    function = "TIME_SERIES_INTRADAY_EXTENDED";
-                    interval1 = "&interval=" + interval;
-                    int year, month;
-                    if (difference.Days <= 360)
-                    {
-                        year = 1;
-                        month = difference.Days / 12;
-                    }
-                    else
-                    {
-                        year = 2;
-                        month = (difference.Days - 360) / 12;
-                    }
-
-                    datatype = "";
-                    slice = "&slice=" + "year" + year + "month" + month;
-            }
-            else 
-            {
-                function = "";
-                interval1 = "";
-                slice = "";
-                datatype = "";
-            }
             
-            String url = "https://www.alphavantage.co/query?function=" + function + "&symbol=" + ticker + interval1 + slice +
-                         "&apikey=" + apikey + datatype;
-            string filename = @"../../../TestData/" + ticker + "/" + ticker + date.Day + "-" + date.Month.ToString() + "-" + date.Year.ToString() +
-                              interval + ".csv";
+            if (difference < maxDifference)
+            {
+                function = type == ImportType.Stock ? "TIME_SERIES_INTRADAY_EXTENDED" : "CRYPTO_INTRADAY";
+                int year, month;
+                if (difference.Days <= 360)
+                {
+                    year = 1;
+                    month = difference.Days / 12;
+                }
+                else
+                {
+                    year = 2;
+                    month = (difference.Days - 360) / 12;
+                }
+
+                parameters = $"&slice=year{year}month{month}&interval={interval}";
+            }
+
+            String url =
+                $"https://www.alphavantage.co/query?function={function}&symbol={ticker}&apikey={apikey}{datatype}{parameters}{market}";
+            string filename = $@"../../../TestData/{ticker}/{ticker}{date.Day}-{date.Month}-{date.Year}{interval}.csv";
             MakeDirectory(ticker);
             WebClient client = new();
             client.DownloadFile(url, filename);
