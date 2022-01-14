@@ -2,9 +2,13 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using LiveChartsCore;
+using LiveChartsCore.Defaults;
+using LiveChartsCore.Kernel;
 using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -18,17 +22,20 @@ namespace SoftwareProject.ViewModels
 {
     public class HomePageViewModel : ViewModelBase
     {
-        /// <summary>Stocks that are followed</summary>
+        /// <summary>
+        /// Stocks that are viewed in the graph, this should only be one stock in most cases,
+        /// except in the case of a stock comparison.
+        /// </summary>
         public ObservableCollection<Stock> Stocks { get; }
 
         /// <summary>Stocks that are visible in the chart</summary>
-        public ObservableCollection<Stock> Series { get; set; }
+        public ObservableCollection<ISeries> Series { get; set; }
 
         public HomePageViewModel()
         {
             Stocks = new ObservableCollection<Stock> { new() };
 
-            Series = new ObservableCollection<Stock>();
+            Series = new ObservableCollection<ISeries>();
 
             Timekeeping.ObservableTimer.Subscribe(_ =>
             {
@@ -55,35 +62,14 @@ namespace SoftwareProject.ViewModels
 
         [Reactive] public bool TimerRunning { get; set; } = Timekeeping.Timer.Enabled;
 
-        [Reactive]
-        public DateTimeOffset? SelectedDate
-        {
-            get;
-            set;
-        }
+        [Reactive] public DateTimeOffset? SelectedDate { get; set; }
 
-        [Reactive]
-        public bool FollowTicker
-        {
-            get;
-            set;
-        }
-        
-        
+        [Reactive] public bool FollowTicker { get; set; }
 
-        [Reactive]
-        public string NewTickInterval
-        {
-            get;
-            set;
-        } = Timekeeping.TickInterval.ToString();
-        
-        [Reactive]
-        public string NewTimeStep1Second
-        {
-            get;
-            set;
-        } = Timekeeping.TimeStep1Second.ToString();
+
+        [Reactive] public string NewTickInterval { get; set; } = Timekeeping.TickInterval.ToString();
+
+        [Reactive] public string NewTimeStep1Second { get; set; } = Timekeeping.TimeStep1Second.ToString();
 
         public void ChangeDateToSelected()
         {
@@ -99,21 +85,28 @@ namespace SoftwareProject.ViewModels
             }
         }
 
-        public void AddStock()
+        public void ViewStock()
         {
-            Stock newStock;
-
-            try
+            Stocks.Clear();
+            Series.Clear();
+            Stocks.Add(GetStock(NewStockName));
+            Series.Add(Stocks[0]);
+            Series.Add(new LineSeries<ObservablePoint> { Name = $"{NewStockName} Trend" });
+            Stocks[0].ObservableForProperty(x => x.Values).Subscribe(_ =>
             {
-                newStock = GetStock(NewStockName);
-            }
-            catch
-            {
-                newStock = new Stock(NewStockName);
-            }
-
-            Stocks.Add(newStock);
-            Series.Add(Stocks.Last());
+                if (Stocks[0].Values!.Any())
+                {
+                    Series[1].Values = new[]
+                    {
+                        new ObservablePoint
+                        {
+                            X = (double)Stocks[0].Values!.First().Date.Ticks, Y = Stocks[0].Values!.First().Open
+                        },
+                        new ObservablePoint
+                            { X = (double)Stocks[0].Values!.Last().Date.Ticks, Y = Stocks[0].Values!.Last().Close }
+                    };
+                }
+            });
         }
 
         public void ToggleTimer()
@@ -130,7 +123,7 @@ namespace SoftwareProject.ViewModels
             {
                 DataContext =
                     new AlgorithmApplicatorViewModel("AAPL", new CalendarDateRange(DateTime.Now, DateTime.Now))
-            }; 
+            };
             if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 algorithmApplicator.ShowDialog(desktop.MainWindow);

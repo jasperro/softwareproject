@@ -14,7 +14,7 @@
                 Spacing="10">
         <TextBlock Classes="header" Text="Home Page" />
         <TextBox Text="{Binding NewStockName, Mode=TwoWay}" Name="UsernameTextBox" />
-        <Button Content="Add stock to preview graph" Name="AddStockButton" Command="{Binding AddStock}" />
+        <Button Content="Add stock to preview graph" Name="AddStockButton" Command="{Binding ViewStock}" />
         <Button Content="Apply algorithm" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithmOpen}" />
         <CheckBox Content="Follow stock ticker" IsChecked="{Binding FollowTicker}" />
 
