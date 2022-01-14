@@ -55,7 +55,7 @@ namespace SoftwareProject.Models
                 parameters = $"&interval={interval}";
                 if (type == ImportType.Stock)
                 {
-                    parameters += "&slice=year{year}month{month}";
+                    parameters += $"&slice=year{year}month{month}";
                 }
             }
 
