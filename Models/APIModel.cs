@@ -13,23 +13,30 @@ namespace SoftwareProject.Models
     {
         public enum ImportType
         {
-            Stock = 0, Crypto = 1
+            Stock = 0,
+            Crypto = 1
         }
-        // Method to import data from api based on given parameters.
-        // String interval must be: daily, 1min, 5min, 15min or 60min.
-        public static void DataImport(string ticker, DateTimeOffset date, string interval = "daily", ImportType type = ImportType.Stock)
+
+        /// <summary>
+        /// Method to import data from api based on given parameters.
+        /// </summary>
+        /// <example>
+        /// String interval must be: daily for daily data, or
+        /// 1min, 5min, 15min or 60min for intra-day.
+        /// </example>
+        public static string DataImport(string ticker, DateTimeOffset date, string interval = "daily",
+            ImportType type = ImportType.Crypto)
         {
             string parameters = "";
+
             string function = type == ImportType.Stock ? "TIME_SERIES_DAILY" : "DIGITAL_CURRENCY_DAILY";
             string market = type == ImportType.Crypto ? "&market=USD" : "";
             string datatype = "&datatype=csv";
             string apikey = User.ApiKey;
 
-            DateTimeOffset now = DateTimeOffset.Now;
-
-            TimeSpan difference = now.Subtract(date);
+            TimeSpan difference = DateTimeOffset.Now.Subtract(date);
             TimeSpan maxDifference = new TimeSpan(720, 0, 0, 0, 0);
-            
+
             if (difference < maxDifference)
             {
                 function = type == ImportType.Stock ? "TIME_SERIES_INTRADAY_EXTENDED" : "CRYPTO_INTRADAY";
@@ -45,15 +52,21 @@ namespace SoftwareProject.Models
                     month = (difference.Days - 360) / 12;
                 }
 
-                parameters = $"&slice=year{year}month{month}&interval={interval}";
+                parameters = $"&interval={interval}";
+                if (type == ImportType.Stock)
+                {
+                    parameters += "&slice=year{year}month{month}";
+                }
             }
 
-            String url =
+            string url =
                 $"https://www.alphavantage.co/query?function={function}&symbol={ticker}&apikey={apikey}{datatype}{parameters}{market}";
-            string filename = $@"../../../TestData/{ticker}/{ticker}{date.Day}-{date.Month}-{date.Year}{interval}.csv";
+            string filename =
+                $@"../../../TestData/{ticker}/{ticker}{date.Day}-{date.Month}-{date.Year}-{interval}-{DateTime.Now.ToShortTimeString()}.csv";
             MakeDirectory(ticker);
             WebClient client = new();
             client.DownloadFile(url, filename);
+            return filename;
         }
 
         private static void MakeDirectory(string name)

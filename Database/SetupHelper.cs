@@ -86,7 +86,7 @@ namespace SoftwareProject
 		            }
 		            else
 		            {
-			            AddStockToDb(
+			            AddStockDataToDb(
 				            csvLine[idxs["time"]],
 				            double.Parse(csvLine[idxs["open"]], CultureInfo.InvariantCulture),
 				            double.Parse(csvLine[idxs["close"]], CultureInfo.InvariantCulture),

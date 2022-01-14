@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
+using static SoftwareProject.Models.ApiModel;
 
 namespace SoftwareProject.Models
 {
@@ -24,5 +27,44 @@ namespace SoftwareProject.Models
 
         public InvestmentPortfolio UserInvestmentPortfolio { get; }
         public string ApiKey { get; set; } = "VRUNKSO09I7IAXN4";
+
+        public bool AutoRefresh = false;
+
+        /// <summary>
+        /// Dictionary of all stocks that need to get automatic updates, and how often those updates are downloaded.
+        /// This is not for realtime trading, but could possibly be used as such.
+        /// </summary>
+        /// <example>
+        /// ETH with a intraday span of 5 min
+        /// </example>
+        [Reactive]
+        public IList<AutoRefreshable> AutoRefreshList { get; set; } = new List<AutoRefreshable>
+            { new("ETH", TimeSpan.FromSeconds(30), "5min", ImportType.Crypto) };
+    }
+
+    public class AutoRefreshable
+    {
+        public AutoRefreshable(string ticker, TimeSpan refreshInterval, string apiInterval,
+            ImportType type = ImportType.Stock)
+        {
+            Ticker = ticker;
+            RefreshInterval = refreshInterval;
+            ApiInterval = apiInterval;
+            Type = type;
+        }
+
+        public string Ticker { get; set; }
+        public TimeSpan RefreshInterval { get; set; }
+        public string ApiInterval { get; set; }
+        public ImportType Type { get; set; }
+
+        public void Download()
+        {
+            LastDownload = DateTimeOffset.Now;
+            DataImport(Ticker, DateTimeOffset.Now, ApiInterval,
+                Type);
+        }
+
+        public DateTimeOffset LastDownload { get; set; } = DateTimeOffset.Now;
     }
 }

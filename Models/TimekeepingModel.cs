@@ -6,9 +6,9 @@ using System.Timers;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
-using SoftwareProject.ViewModels;
 using Splat;
 using static SoftwareProject.Globals;
+using static SoftwareProject.ViewModels.MainWindowViewModel;
 
 namespace SoftwareProject.Models
 {
@@ -22,14 +22,14 @@ namespace SoftwareProject.Models
 
         public TimekeepingModel()
         {
-            Timer = new Timer(TickInterval.TotalMilliseconds) {AutoReset = true};
+            Timer = new Timer(TickInterval.TotalMilliseconds) { AutoReset = true };
             ObservableTimer = Observable.FromEventPattern<ElapsedEventHandler, ElapsedEventArgs>(
                 h => Timer.Elapsed += h,
                 h => Timer.Elapsed -= h).Select(t => t.EventArgs.SignalTime);
             ObservableTimer.Subscribe(_ => DoTick(TimeStep));
             Timer.Enabled = true;
-            
-            this.WhenAny(x => x.TickInterval, x => x.TimeStep1Second, (_,_) =>
+
+            this.WhenAny(x => x.TickInterval, x => x.TimeStep1Second, (_, _) =>
             {
                 TimeStep = TimeStep1Second * TickInterval.TotalSeconds;
                 return Timer.Interval = TickInterval.TotalMilliseconds;
@@ -41,6 +41,18 @@ namespace SoftwareProject.Models
             // Forward current time with the timespan
             CurrentTime = CurrentTime.Add(timeSpan);
 
+            // Download any autorefresh stocks
+            if (User.AutoRefresh)
+            {
+                foreach (var autoRefreshable in User.AutoRefreshList)
+                {
+                    if (!(DateTimeOffset.Now.Subtract(autoRefreshable.LastDownload).TotalMinutes >
+                          autoRefreshable.RefreshInterval.TotalMinutes)) continue;
+                    autoRefreshable.Download();
+                    CurrentDatabase.ImportTestData();
+                }
+            }
+
             // TODO: All code that needs to be updated every tick
 
             foreach (Stock stock in CachedStocks)
@@ -49,7 +61,7 @@ namespace SoftwareProject.Models
             }
 
             // Update all Investments returns and calculate based on algorithms the strategies for the next tick
-            foreach (Investment investment in MainWindowViewModel.User.UserInvestmentPortfolio)
+            foreach (Investment investment in User.UserInvestmentPortfolio)
             {
                 // Because stock data was just updated, the algorithms will be reapplied on newest stock data
 
@@ -75,8 +87,8 @@ namespace SoftwareProject.Models
         /// </summary>
         [Reactive]
         public TimeSpan TickInterval { get; set; } = TimeSpan.FromSeconds(1);
-        
-        
+
+
         /// <summary>
         /// Actual time step every timer update, adjusted for update frequency.
         /// </summary>

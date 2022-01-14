@@ -9,7 +9,7 @@ namespace SoftwareProject
 {
     public partial class Database
     {
-        public void AddStockToDb(string time, double open, double close, double high, double low, int volume,
+        public void AddStockDataToDb(string time, double open, double close, double high, double low, int volume,
             string shortname)
         {
             var command = DatabaseConnection.CreateCommand();

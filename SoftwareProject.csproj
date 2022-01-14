@@ -8,6 +8,7 @@
         <Folder Include="Models\" />
         <AvaloniaResource Include="Assets\**" />
         <Folder Include="TestData\AAPL, Apple" />
+        <Folder Include="TestData\ETH" />
         <None Remove=".gitignore" />
     </ItemGroup>
     <ItemGroup>
