@@ -85,11 +85,11 @@ namespace SoftwareProject.ViewModels
             }
         }
 
-        public void ViewStock()
+        public void ViewStock(Stock? stock = null)
         {
             Stocks.Clear();
             Series.Clear();
-            Stocks.Add(GetStock(NewStockName));
+            Stocks.Add(stock ?? GetStock(NewStockName));
             Series.Add(Stocks[0]);
             Series.Add(new LineSeries<ObservablePoint> { Name = $"{NewStockName} Trend" });
             Stocks[0].ObservableForProperty(x => x.Values).Subscribe(_ =>

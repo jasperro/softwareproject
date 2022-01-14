@@ -91,8 +91,7 @@ namespace SoftwareProject.ViewModels
         public void PreviewStock(Stock stock)
         {
             MainWindow.SelectedIndex = 0;
-            HomePage.Series.Clear();
-            HomePage.Series.Add(stock);
+            HomePage.ViewStock(stock);
             Console.WriteLine($"Preview {stock.ShortName}");
         }
 
