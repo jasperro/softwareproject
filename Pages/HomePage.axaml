@@ -16,7 +16,12 @@
         <TextBox Text="{Binding NewStockName, Mode=TwoWay}" Name="UsernameTextBox" />
         <Button Content="Add stock to preview graph" Name="AddStockButton" Command="{Binding ViewStock}" />
         <Button Content="Apply algorithm" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithmOpen}" />
-        <CheckBox Content="Follow stock ticker" IsChecked="{Binding FollowTicker}" />
+        <StackPanel Orientation="Horizontal">
+            <CheckBox Content="Follow stock ticker" IsChecked="{Binding FollowTicker}" />
+            <CheckBox Content="Candlesticks graph" IsChecked="{Binding ShowCandleSticks}" />
+            <CheckBox Content="Line graph" IsChecked="{Binding ShowLineGraph}" />
+            <CheckBox Content="Trend line" IsChecked="{Binding ShowTrendLine}" />
+        </StackPanel>
 
         <lvc:CartesianChart Height="500" ZoomMode="X" PointerWheelChanged="InputElement_OnPointerWheelChanged"
                             Series="{Binding Series}" XAxes="{Binding XAxes}" />

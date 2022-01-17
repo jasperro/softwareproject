@@ -4,12 +4,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using DynamicData.Binding;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Drawing;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
@@ -41,6 +44,19 @@ namespace SoftwareProject.ViewModels
             {
                 if (FollowTicker) (XAxes[0].MinLimit, XAxes[0].MaxLimit) = (null, null);
             });
+
+            this.ObservableForProperty(x => x.ShowCandleSticks).Subscribe(_ =>
+            {
+                if (Series.ElementAtOrDefault(0) != null) Series[0].IsVisible = ShowCandleSticks;
+            });
+            this.ObservableForProperty(x => x.ShowTrendLine).Subscribe(_ =>
+            {
+                if (Series.ElementAtOrDefault(1) != null) Series[1].IsVisible = ShowTrendLine;
+            });
+            this.ObservableForProperty(x => x.ShowLineGraph).Subscribe(_ =>
+            {
+                if (Series.ElementAtOrDefault(2) != null) Series[2].IsVisible = ShowLineGraph;
+            });
         }
 
         [Reactive] public string NewStockName { get; set; } = "";
@@ -71,6 +87,10 @@ namespace SoftwareProject.ViewModels
 
         [Reactive] public string NewTimeStep1Second { get; set; } = Timekeeping.TimeStep1Second.ToString();
 
+        [Reactive] public bool ShowCandleSticks { get; set; } = true;
+        [Reactive] public bool ShowTrendLine { get; set; }
+        [Reactive] public bool ShowLineGraph { get; set; }
+
         public void ChangeDateToSelected()
         {
             try
@@ -90,10 +110,17 @@ namespace SoftwareProject.ViewModels
             Stocks.Clear();
             Series.Clear();
             Stocks.Add(stock ?? GetStock(NewStockName));
+            Stocks[0].IsVisible = ShowCandleSticks;
             Series.Add(Stocks[0]);
-            Series.Add(new LineSeries<ObservablePoint> { Name = $"{NewStockName} Trend" });
+            Series.Add(new LineSeries<ObservablePoint> { IsVisible = ShowTrendLine, Name = $"{NewStockName} Trend" });
+            Series.Add(new LineSeries<ObservablePoint>
+            {
+                IsVisible = ShowLineGraph, Name = $"{NewStockName} Line",
+                LineSmoothness = 200
+            });
             Stocks[0].ObservableForProperty(x => x.Values).Subscribe(_ =>
             {
+                if (Stocks[0].Values == null) return;
                 if (Stocks[0].Values!.Any())
                 {
                     Series[1].Values = new[]
@@ -105,6 +132,8 @@ namespace SoftwareProject.ViewModels
                         new ObservablePoint
                             { X = (double)Stocks[0].Values!.Last().Date.Ticks, Y = Stocks[0].Values!.Last().Close }
                     };
+                    Series[2].Values = Stocks[0].Values!.Select(x => new ObservablePoint
+                        { X = (double)x.Date.Ticks, Y = (x.Open + x.Close) / 2 }).ToArray();
                 }
             });
         }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
+using LiveChartsCore.Kernel;
 using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -44,7 +45,7 @@ namespace SoftwareProject.Types
         {
             // Set default values if stock has no data yet.
             AllValues = defaultData ?? new ObservableCollection<FinancialPoint>();
-
+            
             ShortName = shortName;
 
             MainWindowViewModel.Timekeeping.ObservableTimer.Subscribe(_ =>
