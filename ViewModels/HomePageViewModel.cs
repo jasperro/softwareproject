@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using DynamicData.Binding;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
-using LiveChartsCore.Kernel;
 using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Drawing;
+using LiveChartsCore.SkiaSharpView.Painting;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SkiaSharp;
 using SoftwareProject.Types;
 using SoftwareProject.Views;
 using Splat;
@@ -42,7 +37,7 @@ namespace SoftwareProject.ViewModels
 
             Timekeeping.ObservableTimer.Subscribe(_ =>
             {
-                if (FollowTicker) (XAxes[0].MinLimit, XAxes[0].MaxLimit) = (null, null);
+                if (FollowTicker) ResetGraphPosition();
             });
 
             this.ObservableForProperty(x => x.ShowCandleSticks).Subscribe(_ =>
@@ -57,6 +52,11 @@ namespace SoftwareProject.ViewModels
             {
                 if (Series.ElementAtOrDefault(2) != null) Series[2].IsVisible = ShowLineGraph;
             });
+        }
+
+        public void ResetGraphPosition()
+        {
+            (XAxes[0].MinLimit, XAxes[0].MaxLimit) = (null, null);
         }
 
         [Reactive] public string NewStockName { get; set; } = "";
@@ -80,8 +80,18 @@ namespace SoftwareProject.ViewModels
 
         [Reactive] public DateTimeOffset? SelectedDate { get; set; }
 
-        [Reactive] public bool FollowTicker { get; set; }
+        private bool _followTicker;
 
+        public bool FollowTicker
+        {
+            get => _followTicker;
+            set
+            {
+                // Instantly reset the graph if the user starts following the ticker
+                if (value) ResetGraphPosition();
+                this.RaiseAndSetIfChanged(ref _followTicker, value);
+            }
+        }
 
         [Reactive] public string NewTickInterval { get; set; } = Timekeeping.TickInterval.ToString();
 
@@ -110,13 +120,30 @@ namespace SoftwareProject.ViewModels
             Stocks.Clear();
             Series.Clear();
             Stocks.Add(stock ?? GetStock(NewStockName));
+            // Candle graph
             Stocks[0].IsVisible = ShowCandleSticks;
+            Stocks[0].MaxBarWidth = 4;
             Series.Add(Stocks[0]);
-            Series.Add(new LineSeries<ObservablePoint> { IsVisible = ShowTrendLine, Name = $"{NewStockName} Trend" });
+            // Trend line
             Series.Add(new LineSeries<ObservablePoint>
             {
-                IsVisible = ShowLineGraph, Name = $"{NewStockName} Line",
-                LineSmoothness = 200
+                IsVisible = ShowTrendLine,
+                GeometrySize = 0,
+                Name = $"{NewStockName} Trend",
+                Stroke = new SolidColorPaint(SKColors.Aquamarine, 5),
+                GeometryStroke = new SolidColorPaint(SKColors.Empty),
+                Fill = new SolidColorPaint(SKColor.Empty)
+            });
+            // Line graph
+            Series.Add(new LineSeries<ObservablePoint>
+            {
+                IsVisible = ShowLineGraph,
+                Name = $"{NewStockName} Line",
+                LineSmoothness = 200,
+                GeometrySize = 0,
+                Stroke = new SolidColorPaint(SKColors.Orange, 2),
+                GeometryStroke = new SolidColorPaint(SKColors.Empty),
+                Fill = new SolidColorPaint(SKColors.Orange.WithAlpha(20))
             });
             Stocks[0].ObservableForProperty(x => x.Values).Subscribe(_ =>
             {
@@ -136,6 +163,9 @@ namespace SoftwareProject.ViewModels
                         { X = (double)x.Date.Ticks, Y = (x.Open + x.Close) / 2 }).ToArray();
                 }
             });
+            // Reset the view to make the whole graph visible, and start tracking the ticker
+            ResetGraphPosition();
+            FollowTicker = true;
         }
 
         public void ToggleTimer()
