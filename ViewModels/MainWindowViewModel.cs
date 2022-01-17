@@ -1,4 +1,6 @@
-﻿using ReactiveUI.Fody.Helpers;
+﻿using System;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Models;
 
 namespace SoftwareProject.ViewModels
@@ -18,6 +20,13 @@ namespace SoftwareProject.ViewModels
 
         [Reactive]
         public int SelectedIndex
+        {
+            get;
+            set;
+        }
+        
+        [Reactive]
+        public bool SmallSidebar
         {
             get;
             set;

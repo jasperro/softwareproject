@@ -21,7 +21,7 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}">
                     <DockPanel>
-                        <ScrollViewer Width="240" Margin="0 0 0 0"
+                        <ScrollViewer Margin="0 0 0 0"
                                       Name="PART_ScrollViewer"
                                       HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
                                       VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
@@ -58,7 +58,6 @@
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Margin" Value="4 4 0 4" />
         <Setter Property="Padding" Value="16" />
-        <Setter Property="Width" Value="232"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="(ScrollViewer.HorizontalScrollBarVisibility)" Value="Auto" />
         <Setter Property="(ScrollViewer.VerticalScrollBarVisibility)" Value="Auto" />
@@ -66,6 +65,9 @@
     <Style Selector="TabControl.sidebar > TabItem > StackPanel">
         <Setter Property="Orientation" Value="Horizontal" />
         <Setter Property="Spacing" Value="10" />
+    </Style>
+    <Style Selector="TabControl.sidebar.small > TabItem > StackPanel > TextBlock">
+        <Setter Property="IsVisible" Value="False" />
     </Style>
     <Style Selector="TabControl.sidebar > TabItem > StackPanel > TextBlock">
         <Setter Property="VerticalAlignment" Value="Center" />

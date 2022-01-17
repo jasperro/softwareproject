@@ -55,6 +55,24 @@
                 </TabItem.Header>
                 <pages:SettingsPage />
             </TabItem>
+            <TabItem IsEnabled="False">
+                <TabItem.Header>
+                    <ToggleButton IsChecked="{Binding SmallSidebar}">
+                        <ToggleButton.Template>
+                            <ControlTemplate>
+                                <Panel>
+                                    <i:Icon Value="mdi-chevron-right" IsVisible="{Binding SmallSidebar}" />
+                                    <StackPanel IsVisible="{Binding !SmallSidebar}" Orientation="Horizontal"
+                                                Spacing="4">
+                                        <TextBlock Text="Hide" />
+                                        <i:Icon Value="mdi-chevron-left" />
+                                    </StackPanel>
+                                </Panel>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
+                </TabItem.Header>
+            </TabItem>
         </TabControl>
     </Panel>
 
