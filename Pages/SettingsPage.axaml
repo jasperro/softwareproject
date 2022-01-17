@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SoftwareProject.ViewModels"
+             xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SoftwareProject.Pages.SettingsPage">
     <Design.DataContext>
@@ -10,16 +11,33 @@
     </Design.DataContext>
 
     <StackPanel DataContext="{Binding SettingsPage}">
+        <TextBlock Classes="header" Text="Time settings" />
+        <StackPanel>
+            <DatePicker SelectedDate="{Binding SelectedDate}" />
+            <TextBox Text="{Binding NewTickInterval}" />
+            <TextBox Text="{Binding NewTimeStep1Second}" />
+            <Button Content="Change date settings to selection" Command="{Binding ChangeDateToSelected}" />
+
+            <StackPanel Orientation="Horizontal">
+                <Button CornerRadius="100" Width="48" Height="48" Command="{Binding ToggleTimer}">
+                    <Panel>
+                        <i:Icon Value="mdi-play" IsVisible="{Binding !TimerRunning}" />
+                        <i:Icon Value="mdi-pause" IsVisible="{Binding TimerRunning}" />
+                    </Panel>
+                </Button>
+                <TextBlock Text="{Binding CurrentDateString^}" />
+            </StackPanel>
+        </StackPanel>
         <TextBlock Classes="header" Text="User settings" />
         <TextBox Text="{Binding Username, Mode=TwoWay}" Name="UsernameTextBox" />
         <Button Content="Apply (not implemented)" Command="{Binding ApplyUserSettings}" />
 
         <TextBlock Classes="header" Text="Import Data from Api" />
-        <TextBlock Text="Ticker shortname (eg. AAPL/IBM/TSLA)"/>
+        <TextBlock Text="Ticker shortname (eg. AAPL/IBM/TSLA)" />
         <TextBox Watermark="Ticker" Name="TickerTextBox" Text="{Binding Ticker, Mode=TwoWay}" />
-        <TextBlock Text="Date"/>
+        <TextBlock Text="Date" />
         <DatePicker Name="ApiImportDate" SelectedDate="{Binding ImportDatum}" />
-        <TextBlock Text="Interval"/>
+        <TextBlock Text="Interval" />
         <ComboBox Name="ApiInterval" SelectedItem="{Binding Interval, Mode=TwoWay}"
                   Items="{Binding ApiIntervalList, Mode=OneWay}" />
         <Button Width="160" Command="{Binding ApiImportButton}" Content="Import Data" />

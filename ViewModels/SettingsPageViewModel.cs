@@ -1,33 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using Avalonia.Controls;
-using LiveChartsCore;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SkiaSharp;
 using SoftwareProject.Models;
-using SoftwareProject.Pages;
+using Splat;
+using static SoftwareProject.ViewModels.MainWindowViewModel;
+using static SoftwareProject.Globals;
 
 namespace SoftwareProject.ViewModels
 {
     public class SettingsPageViewModel : ViewModelBase
     {
-        private UserModel _userModel => MainWindowViewModel.User;
-
-        private TimekeepingModel _timeKeeping => MainWindowViewModel.Timekeeping;
+        private UserModel _userModel => User;
 
         public string Username
         {
             get => _userModel.Username;
             set => _userModel.Username = value;
         }
-
-        public IObservable<string> Greeting => _userModel.WhenAny(x => x.Username, s => "Uw naam is: " + s.Value);
 
         public string Ticker { set; get; } = "";
 
@@ -48,7 +37,35 @@ namespace SoftwareProject.ViewModels
         public void ApiImportButton()
         {
             ApiModel.DataImport(Ticker, ImportDatum, Interval);
-            Globals.CurrentDatabase.ImportTestData();
+            CurrentDatabase.ImportTestData();
+        }
+
+        // Time settings
+        public IObservable<string> CurrentDateString =>
+            Timekeeping.WhenAny(x => x.CurrentTime, _ => Timekeeping.CurrentTime.ToString());
+        [Reactive] public DateTimeOffset? SelectedDate { get; set; }
+        [Reactive] public string NewTickInterval { get; set; } = Timekeeping.TickInterval.ToString();
+        [Reactive] public bool TimerRunning { get; set; } = Timekeeping.Timer.Enabled;
+        [Reactive] public string NewTimeStep1Second { get; set; } = Timekeeping.TimeStep1Second.ToString();
+
+        public void ChangeDateToSelected()
+        {
+            try
+            {
+                if (SelectedDate != null) Timekeeping.CurrentTime = SelectedDate.Value;
+                Timekeeping.TickInterval = TimeSpan.Parse(NewTickInterval);
+                Timekeeping.TimeStep1Second = TimeSpan.Parse(NewTimeStep1Second);
+            }
+            catch
+            {
+                Logs.Write("Date invalid", LogLevel.Debug);
+            }
+        }
+
+        public void ToggleTimer()
+        {
+            Timekeeping.Timer.Enabled = !Timekeeping.Timer.Enabled;
+            TimerRunning = Timekeeping.Timer.Enabled;
         }
     }
 }

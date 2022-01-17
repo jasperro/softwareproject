@@ -10,37 +10,48 @@
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
-    <StackPanel DataContext="{Binding HomePage}" Background="Transparent"
-                Spacing="10">
-        <TextBlock Classes="header" Text="Home Page" />
-        <TextBox Text="{Binding NewStockName, Mode=TwoWay}" Name="UsernameTextBox" />
-        <Button Content="Add stock to preview graph" Name="AddStockButton" Command="{Binding ViewStock}" />
-        <Button Content="Apply algorithm" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithmOpen}" />
-        <StackPanel Orientation="Horizontal">
-            <CheckBox Content="Follow stock ticker" IsChecked="{Binding FollowTicker}" />
-            <CheckBox Content="Candlesticks graph" IsChecked="{Binding ShowCandleSticks}" />
-            <CheckBox Content="Line graph" IsChecked="{Binding ShowLineGraph}" />
-            <CheckBox Content="Trend line" IsChecked="{Binding ShowTrendLine}" />
+
+    <Grid RowDefinitions="Auto,*" DataContext="{Binding HomePage}">
+
+        <StackPanel Grid.Row="0" IsVisible="{Binding ShowSettings}" Background="Transparent"
+                    Spacing="10">
+            <TextBlock Classes="header" Text="Home Page" />
+            <TextBox Text="{Binding NewStockName, Mode=TwoWay}" Name="UsernameTextBox" />
+            <Button Content="Add stock to preview graph" Name="AddStockButton" Command="{Binding ViewStock}" />
+            <Button Content="Apply algorithm" Name="ApplyAlgorithmButton" Command="{Binding ApplyAlgorithmOpen}" />
         </StackPanel>
 
-        <lvc:CartesianChart Height="500" ZoomMode="X" PointerWheelChanged="InputElement_OnPointerWheelChanged"
-                            Series="{Binding Series}" XAxes="{Binding XAxes}" />
-
-        <StackPanel>
-            <DatePicker SelectedDate="{Binding SelectedDate}" />
-            <TextBox Text="{Binding NewTickInterval}" />
-            <TextBox Text="{Binding NewTimeStep1Second}" />
-            <Button Content="Change date settings to selection" Command="{Binding ChangeDateToSelected}" />
-
-            <StackPanel Orientation="Horizontal">
-                <Button Command="{Binding ToggleTimer}">
-                    <Panel>
-                        <i:Icon Value="mdi-play" IsVisible="{Binding !TimerRunning}" />
-                        <i:Icon Value="mdi-pause" IsVisible="{Binding TimerRunning}" />
-                    </Panel>
-                </Button>
+        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <ToggleButton IsChecked="{Binding ShowSettings}">
+                    <ToggleButton.Template>
+                        <ControlTemplate>
+                            <Panel>
+                                <StackPanel IsVisible="{Binding ShowSettings}" Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="Hide settings" />
+                                    <i:Icon Value="mdi-menu-up" />
+                                </StackPanel>
+                                <StackPanel IsVisible="{Binding !ShowSettings}" Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="Show settings" />
+                                    <i:Icon Value="mdi-menu-down" />
+                                </StackPanel>
+                            </Panel>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                </ToggleButton>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="Follow stock ticker" IsChecked="{Binding FollowTicker}" />
+                    <CheckBox Content="Candlesticks graph" IsChecked="{Binding ShowCandleSticks}" />
+                    <CheckBox Content="Line graph" IsChecked="{Binding ShowLineGraph}" />
+                    <CheckBox Content="Trend line" IsChecked="{Binding ShowTrendLine}" />
+                </StackPanel>
                 <TextBlock Text="{Binding CurrentDateString^}" />
             </StackPanel>
-        </StackPanel>
-    </StackPanel>
+
+            <lvc:CartesianChart Grid.Row="1" ZoomMode="X"
+                                PointerWheelChanged="InputElement_OnPointerWheelChanged"
+                                Series="{Binding Series}" XAxes="{Binding XAxes}" />
+        </Grid>
+
+    </Grid>
 </UserControl>

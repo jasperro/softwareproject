@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -74,11 +75,8 @@ namespace SoftwareProject.ViewModels
         };
 
         public IObservable<string> CurrentDateString =>
-            Timekeeping.WhenAny(x => x.CurrentTime, _ => Timekeeping.CurrentTime.ToString());
-
-        [Reactive] public bool TimerRunning { get; set; } = Timekeeping.Timer.Enabled;
-
-        [Reactive] public DateTimeOffset? SelectedDate { get; set; }
+            Timekeeping.WhenAny(x => x.CurrentTime,
+                _ => Timekeeping.CurrentTime.ToLocalTime().ToString(DateTimeFormatInfo.CurrentInfo));
 
         private bool _followTicker;
 
@@ -93,27 +91,11 @@ namespace SoftwareProject.ViewModels
             }
         }
 
-        [Reactive] public string NewTickInterval { get; set; } = Timekeeping.TickInterval.ToString();
-
-        [Reactive] public string NewTimeStep1Second { get; set; } = Timekeeping.TimeStep1Second.ToString();
 
         [Reactive] public bool ShowCandleSticks { get; set; } = true;
         [Reactive] public bool ShowTrendLine { get; set; }
         [Reactive] public bool ShowLineGraph { get; set; }
-
-        public void ChangeDateToSelected()
-        {
-            try
-            {
-                if (SelectedDate != null) Timekeeping.CurrentTime = SelectedDate.Value;
-                Timekeeping.TickInterval = TimeSpan.Parse(NewTickInterval);
-                Timekeeping.TimeStep1Second = TimeSpan.Parse(NewTimeStep1Second);
-            }
-            catch
-            {
-                Logs.Write("Date invalid", LogLevel.Debug);
-            }
-        }
+        [Reactive] public bool ShowSettings { get; set; } = true;
 
         public void ViewStock(Stock? stock = null)
         {
@@ -143,7 +125,7 @@ namespace SoftwareProject.ViewModels
                 GeometrySize = 0,
                 Stroke = new SolidColorPaint(SKColors.Orange, 2),
                 GeometryStroke = new SolidColorPaint(SKColors.Empty),
-                Fill = new SolidColorPaint(SKColors.Orange.WithAlpha(20))
+                Fill = new SolidColorPaint(SKColors.Orange.WithAlpha(20)),
             });
             Stocks[0].ObservableForProperty(x => x.Values).Subscribe(_ =>
             {
@@ -166,12 +148,6 @@ namespace SoftwareProject.ViewModels
             // Reset the view to make the whole graph visible, and start tracking the ticker
             ResetGraphPosition();
             FollowTicker = true;
-        }
-
-        public void ToggleTimer()
-        {
-            Timekeeping.Timer.Enabled = !Timekeeping.Timer.Enabled;
-            TimerRunning = Timekeeping.Timer.Enabled;
         }
 
         public void ApplyAlgorithmOpen(string shortName)
