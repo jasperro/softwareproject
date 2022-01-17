@@ -18,6 +18,10 @@ namespace SoftwareProject.ViewModels
 {
     public class AlgorithmApplicatorViewModel : ViewModelBase
     {
+        public AlgorithmApplicatorViewModel() : this("AAPL", new CalendarDateRange(DateTime.UnixEpoch, DateTime.Now))
+        {
+        }
+
         public static IEnumerable<IStockAlgorithm> AlgorithmList => Algorithms.AlgorithmHelpers.StockAlgorithmList;
         public string ShortName { get; } = "";
 
@@ -30,11 +34,13 @@ namespace SoftwareProject.ViewModels
 
         /// <summary>Stocks that are visible in the test chart</summary>
         public ObservableCollection<IStock> Series { get; set; } = new();
-        public Axis[] XAxes { get; set; } = {
+
+        public Axis[] XAxes { get; set; } =
+        {
             new()
             {
                 LabelsRotation = 15,
-                Labeler = value => new DateTime((long) value).ToString("yyyy MMM dd"),
+                Labeler = value => new DateTime((long)value).ToString("yyyy MMM dd"),
                 UnitWidth = TimeSpan.FromDays(1).Ticks
             }
         };
