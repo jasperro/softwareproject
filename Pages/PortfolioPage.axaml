@@ -9,7 +9,7 @@
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
-    
+
     <StackPanel DataContext="{Binding PortfolioPage}" Background="Transparent" Spacing="10">
         <TextBlock Classes="header" Text="{Binding Greeting^}" />
         <Separator Height="10" />
@@ -70,22 +70,31 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Grid ColumnDefinitions="*,*,*" Width="800" HorizontalAlignment="Left">
+        <Grid ColumnDefinitions="*,*,*" HorizontalAlignment="Stretch">
             <styles:Card Grid.Column="0" Margin="4">
                 <StackPanel>
-                    <TextBlock Classes="header" Text="Investments" />
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <i:Icon Value="mdi-briefcase" Classes="header" />
+                        <TextBlock Classes="header" Text="Investments" />
+                    </StackPanel>
                     <TextBlock FontSize="24" Text="{Binding Investments.Count}" />
                 </StackPanel>
             </styles:Card>
             <styles:Card Grid.Column="1" Margin="4">
                 <StackPanel>
-                    <TextBlock Classes="header" Text="Profits" />
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <i:Icon Value="mdi-cash" Classes="header" />
+                        <TextBlock Classes="header" Text="Profits" />
+                    </StackPanel>
                     <TextBlock FontSize="24" Text="{Binding Investments.TotalProfits}" />
                 </StackPanel>
             </styles:Card>
             <styles:Card Grid.Column="2" Margin="4">
                 <StackPanel>
-                    <TextBlock Classes="header" Text="Amount invested" />
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <i:Icon Value="mdi-piggy-bank" Classes="header" />
+                        <TextBlock Classes="header" Text="Amount invested" />
+                    </StackPanel>
                     <TextBlock FontSize="24" Text="{Binding Investments.TotalInvested}" />
                 </StackPanel>
             </styles:Card>
@@ -104,7 +113,7 @@
             <Button i:Attached.Icon="mdi-refresh" Command="{Binding SelectCurrentWeek}" FontSize="32"
                     Background="transparent" />
         </StackPanel>
-        
+
         <StackPanel>
             <!-- Total info -->
             <TextBlock>
@@ -115,7 +124,7 @@
                         <Binding Path="Investments.StockAmt" />
                         <Binding Path="Investments.StockAmt" />
                     </MultiBinding>
-                </TextBlock.Text> 
+                </TextBlock.Text>
             </TextBlock>
             <!-- Specific info for the total investment weekly change -->
         </StackPanel>
