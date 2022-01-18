@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
+using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using ReactiveUI;
@@ -21,25 +22,39 @@ namespace SoftwareProject.ViewModels
 {
     public class HomePageViewModel : ViewModelBase
     {
+        [Reactive] public Stock MainStock { get; set; }
+
         /// <summary>
-        /// Stocks that are viewed in the graph, this should only be one stock in most cases,
-        /// except in the case of a stock comparison.
+        /// Extra stocks that are viewed in the graph, for example in the case of a stock comparison.
         /// </summary>
-        public ObservableCollection<Stock> Stocks { get; }
+        public ObservableCollection<Stock> ExtraStocks { get; }
 
         /// <summary>Stocks that are visible in the chart</summary>
         public ObservableCollection<ISeries> Series { get; set; }
 
         public HomePageViewModel()
         {
-            Stocks = new ObservableCollection<Stock> { new() };
+            ExtraStocks = new ObservableCollection<Stock> { new() };
 
             Series = new ObservableCollection<ISeries>();
 
             Timekeeping.ObservableTimer.Subscribe(_ =>
             {
                 if (FollowTicker) ResetGraphPosition();
-                if (!DayByDayMode) SelectedViewDate = Timekeeping.CurrentTime;
+                if (!DayByDayMode)
+                {
+                    if (MainStock != null)
+                        SelectedViewDate = MainStock.Values == null
+                            ? Timekeeping.CurrentTime
+                            : MainStock.Values!.Last().Date;
+                }
+            });
+
+            this.ObservableForProperty(x => x.SelectedViewDate).Subscribe(_ =>
+            {
+                if (DayByDayMode)
+                    (XAxes[0].MinLimit, XAxes[0].MaxLimit) = (SelectedViewDate.Date.AddHours(-2).Ticks,
+                        SelectedViewDate.Date.AddDays(1).AddHours(2).Ticks);
             });
 
             this.ObservableForProperty(x => x.ShowCandleSticks).Subscribe(_ =>
@@ -59,6 +74,7 @@ namespace SoftwareProject.ViewModels
         public void ResetGraphPosition()
         {
             (XAxes[0].MinLimit, XAxes[0].MaxLimit) = (null, null);
+            DayByDayMode = false;
         }
 
         [Reactive] public string NewStockName { get; set; } = "";
@@ -105,19 +121,18 @@ namespace SoftwareProject.ViewModels
 
         public void ViewStock(Stock? stock = null)
         {
-            Stocks.Clear();
             Series.Clear();
-            Stocks.Add(stock ?? GetStock(NewStockName));
+            MainStock = stock ?? GetStock(NewStockName);
             // Candle graph
-            Stocks[0].IsVisible = ShowCandleSticks;
-            Stocks[0].MaxBarWidth = 4;
-            Stocks[0].UpFill = new LinearGradientPaint(_upcolor1, _upcolor2);
-            Stocks[0].DownFill = new LinearGradientPaint(_downcolor1, _downcolor2);
-            Stocks[0].UpStroke = new LinearGradientPaint(_upcolor1, _upcolor2)
+            MainStock.IsVisible = ShowCandleSticks;
+            MainStock.MaxBarWidth = 4;
+            MainStock.UpFill = new LinearGradientPaint(_upcolor1, _upcolor2);
+            MainStock.DownFill = new LinearGradientPaint(_downcolor1, _downcolor2);
+            MainStock.UpStroke = new LinearGradientPaint(_upcolor1, _upcolor2)
                 { StrokeThickness = 2, StrokeCap = SKStrokeCap.Round };
-            Stocks[0].DownStroke = new LinearGradientPaint(_downcolor1, _downcolor2)
+            MainStock.DownStroke = new LinearGradientPaint(_downcolor1, _downcolor2)
                 { StrokeThickness = 2, StrokeCap = SKStrokeCap.Round };
-            Series.Add(Stocks[0]);
+            Series.Add(MainStock);
             // Trend line
             Series.Add(new LineSeries<ObservablePoint>
             {
@@ -140,21 +155,21 @@ namespace SoftwareProject.ViewModels
                 GeometryStroke = new SolidColorPaint(SKColors.Empty),
                 Fill = new SolidColorPaint(SKColors.Orange.WithAlpha(20)),
             });
-            Stocks[0].ObservableForProperty(x => x.Values).Subscribe(_ =>
+            MainStock.ObservableForProperty(x => x.Values).Subscribe(_ =>
             {
-                if (Stocks[0].Values == null) return;
-                if (Stocks[0].Values!.Any())
+                if (MainStock.Values == null) return;
+                if (MainStock.Values!.Any())
                 {
                     Series[1].Values = new[]
                     {
                         new ObservablePoint
                         {
-                            X = (double)Stocks[0].Values!.First().Date.Ticks, Y = Stocks[0].Values!.First().Open
+                            X = (double)MainStock.Values!.First().Date.Ticks, Y = MainStock.Values!.First().Open
                         },
                         new ObservablePoint
-                            { X = (double)Stocks[0].Values!.Last().Date.Ticks, Y = Stocks[0].Values!.Last().Close }
+                            { X = (double)MainStock.Values!.Last().Date.Ticks, Y = MainStock.Values!.Last().Close }
                     };
-                    Series[2].Values = Stocks[0].Values!.Select(x => new ObservablePoint
+                    Series[2].Values = MainStock.Values!.Select(x => new ObservablePoint
                         { X = (double)x.Date.Ticks, Y = (x.Open + x.Close) / 2 }).ToArray();
                 }
             });
@@ -181,29 +196,53 @@ namespace SoftwareProject.ViewModels
 
         public void ViewPreviousDay()
         {
-            SelectedViewDate = SelectedViewDate.AddDays(-1);
-            FollowTicker = false;
             DayByDayMode = true;
+            SelectedViewDate = SelectedViewDate.AddDays(-1);
         }
 
         public void ViewNextDay()
         {
-            SelectedViewDate = SelectedViewDate.AddDays(1);
-            FollowTicker = false;
             DayByDayMode = true;
+            SelectedViewDate = SelectedViewDate.AddDays(1);
         }
 
-        public DateTimeOffset MaxSelectableViewDay => Timekeeping.CurrentTime;
-        public DateTimeOffset MinSelectableViewDay => Timekeeping.CurrentTime.AddYears(-100);
+        public IObservable<DateTimeOffset> MinSelectableViewDay =>
+            MainStock.WhenAny(x => x, x => x.Values, (_, s) =>
+            {
+                if (s.Value == null) return DateTimeOffset.UnixEpoch;
+                SelectedViewDate = s.Value!.First().Date;
+                return SelectedViewDate;
+            });
+
+        public IObservable<DateTimeOffset> MaxSelectableViewDay =>
+            MainStock.WhenAny(x => x, x => x.Values, (_, s) =>
+            {
+                if (s.Value == null) return DateTimeOffset.Now;
+                SelectedViewDate = s.Value!.Last().Date;
+                return SelectedViewDate.AddDays(1);
+            });
 
         [Reactive] public DateTimeOffset SelectedViewDate { get; set; } = Timekeeping.CurrentTime;
 
-        [Reactive] public bool DayByDayMode { get; set; }
+        private bool _dayByDayMode;
+
+        public bool DayByDayMode
+        {
+            get => _dayByDayMode;
+            set
+            {
+                // Stop following the ticker when day by day mode is started
+                if (value) FollowTicker = false;
+                this.RaiseAndSetIfChanged(ref _dayByDayMode, value);
+            }
+        }
+
+        public IObservable<ZoomAndPanMode> ChartZoomMode => this.WhenAny(x => x.DayByDayMode,
+            s => s.Value ? ZoomAndPanMode.None : ZoomAndPanMode.X);
 
         public void ResetChartMode()
         {
             FollowTicker = true;
-            DayByDayMode = false;
             SelectedViewDate = Timekeeping.CurrentTime;
         }
     }

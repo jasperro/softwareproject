@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
              xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SoftwareProject.Pages.HomePage">
     <Design.DataContext>
@@ -49,8 +50,10 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button i:Attached.Icon="mdi-arrow-left" Command="{Binding ViewPreviousDay}" FontSize="24"
                             Background="transparent" />
-                    <DatePicker SelectedDate="{Binding SelectedViewDate}" MinYear="{Binding MinSelectableViewDay}"
-                                MaxYear="{Binding MaxSelectableViewDay}" SelectedDateChanged="DatePicker_OnSelectedDateChanged" />
+                    <DatePicker SelectedDate="{Binding SelectedViewDate}"
+                                MinYear="{Binding MinSelectableViewDay^, FallbackValue={x:Static system:DateTimeOffset.MinValue}}"
+                                MaxYear="{Binding MaxSelectableViewDay^, FallbackValue={x:Static system:DateTimeOffset.MaxValue}}"
+                                SelectedDateChanged="DatePicker_OnSelectedDateChanged" />
                     <Button i:Attached.Icon="mdi-arrow-right" Command="{Binding ViewNextDay}" FontSize="24"
                             Background="transparent" />
                     <Button Command="{Binding ResetChartMode}"
@@ -59,7 +62,7 @@
                 </StackPanel>
             </StackPanel>
 
-            <lvc:CartesianChart Grid.Row="1" ZoomMode="X"
+            <lvc:CartesianChart Grid.Row="1" ZoomMode="{Binding ChartZoomMode^}"
                                 PointerWheelChanged="InputElement_OnPointerWheelChanged"
                                 Series="{Binding Series}" XAxes="{Binding XAxes}" />
         </Grid>

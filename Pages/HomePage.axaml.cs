@@ -29,7 +29,6 @@ namespace SoftwareProject.Pages
             // The action was not initiated by the user, so we want to keep the ticker following
             if (!((DatePicker)sender).IsFocused) return;
 
-            MainWindowViewModel.HomePage.FollowTicker = false;
             MainWindowViewModel.HomePage.DayByDayMode = true;
         }
     }
