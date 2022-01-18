@@ -40,12 +40,23 @@
                     </ToggleButton.Template>
                 </ToggleButton>
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox Content="Follow stock ticker" IsChecked="{Binding FollowTicker}" />
                     <CheckBox Content="Candlesticks graph" IsChecked="{Binding ShowCandleSticks}" />
                     <CheckBox Content="Line graph" IsChecked="{Binding ShowLineGraph}" />
                     <CheckBox Content="Trend line" IsChecked="{Binding ShowTrendLine}" />
                 </StackPanel>
                 <TextBlock Text="{Binding CurrentDateString^}" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button i:Attached.Icon="mdi-arrow-left" Command="{Binding ViewPreviousDay}" FontSize="24"
+                            Background="transparent" />
+                    <DatePicker SelectedDate="{Binding SelectedViewDate}" MinYear="{Binding MinSelectableViewDay}"
+                                MaxYear="{Binding MaxSelectableViewDay}" SelectedDateChanged="DatePicker_OnSelectedDateChanged" />
+                    <Button i:Attached.Icon="mdi-arrow-right" Command="{Binding ViewNextDay}" FontSize="24"
+                            Background="transparent" />
+                    <Button Command="{Binding ResetChartMode}"
+                            IsVisible="{Binding !FollowTicker}"
+                            Content="Follow current day again" />
+                </StackPanel>
             </StackPanel>
 
             <lvc:CartesianChart Grid.Row="1" ZoomMode="X"

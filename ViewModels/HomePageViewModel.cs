@@ -39,6 +39,7 @@ namespace SoftwareProject.ViewModels
             Timekeeping.ObservableTimer.Subscribe(_ =>
             {
                 if (FollowTicker) ResetGraphPosition();
+                if (!DayByDayMode) SelectedViewDate = Timekeeping.CurrentTime;
             });
 
             this.ObservableForProperty(x => x.ShowCandleSticks).Subscribe(_ =>
@@ -175,6 +176,35 @@ namespace SoftwareProject.ViewModels
             {
                 algorithmApplicator.ShowDialog(desktop.MainWindow);
             }
+        }
+
+
+        public void ViewPreviousDay()
+        {
+            SelectedViewDate = SelectedViewDate.AddDays(-1);
+            FollowTicker = false;
+            DayByDayMode = true;
+        }
+
+        public void ViewNextDay()
+        {
+            SelectedViewDate = SelectedViewDate.AddDays(1);
+            FollowTicker = false;
+            DayByDayMode = true;
+        }
+
+        public DateTimeOffset MaxSelectableViewDay => Timekeeping.CurrentTime;
+        public DateTimeOffset MinSelectableViewDay => Timekeeping.CurrentTime.AddYears(-100);
+
+        [Reactive] public DateTimeOffset SelectedViewDate { get; set; } = Timekeeping.CurrentTime;
+
+        [Reactive] public bool DayByDayMode { get; set; }
+
+        public void ResetChartMode()
+        {
+            FollowTicker = true;
+            DayByDayMode = false;
+            SelectedViewDate = Timekeeping.CurrentTime;
         }
     }
 }
