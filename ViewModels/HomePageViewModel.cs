@@ -207,22 +207,33 @@ namespace SoftwareProject.ViewModels
         }
 
         public IObservable<DateTimeOffset> MinSelectableViewDay =>
-            MainStock.WhenAny(x => x, x => x.Values, (_, s) =>
+            this.WhenAny(x => x.MainStock, x => x.MainStock.Values, (_, s) =>
             {
                 if (s.Value == null) return DateTimeOffset.UnixEpoch;
-                SelectedViewDate = s.Value!.First().Date;
-                return SelectedViewDate;
+                _minSelectableViewDate = s.Value!.First().Date;
+                return _minSelectableViewDate;
             });
 
         public IObservable<DateTimeOffset> MaxSelectableViewDay =>
-            MainStock.WhenAny(x => x, x => x.Values, (_, s) =>
+            this.WhenAny(x => x.MainStock, x => x.MainStock.Values, (_, s) =>
             {
                 if (s.Value == null) return DateTimeOffset.Now;
-                SelectedViewDate = s.Value!.Last().Date;
-                return SelectedViewDate.AddDays(1);
+                _maxSelectableViewDate = s.Value!.Last().Date;
+                return _maxSelectableViewDate.AddDays(1);
             });
 
-        [Reactive] public DateTimeOffset SelectedViewDate { get; set; } = Timekeeping.CurrentTime;
+        private DateTimeOffset _maxSelectableViewDate;
+        private DateTimeOffset _minSelectableViewDate;
+
+        private DateTimeOffset _selectedViewDate = Timekeeping.CurrentTime;
+
+        public DateTimeOffset SelectedViewDate
+        {
+            get => _selectedViewDate >= _minSelectableViewDate && _selectedViewDate <= _maxSelectableViewDate
+                ? _selectedViewDate
+                : _maxSelectableViewDate;
+            set => this.RaiseAndSetIfChanged(ref _selectedViewDate, value);
+        }
 
         private bool _dayByDayMode;
 
