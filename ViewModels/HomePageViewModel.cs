@@ -97,6 +97,11 @@ namespace SoftwareProject.ViewModels
         [Reactive] public bool ShowLineGraph { get; set; }
         [Reactive] public bool ShowSettings { get; set; } = true;
 
+        private SKColor _downcolor1 = SKColors.OrangeRed;
+        private SKColor _downcolor2 = new(159, 18, 57);
+        private SKColor _upcolor1 = new(16, 185, 129);
+        private SKColor _upcolor2 = new(22, 163, 74);
+
         public void ViewStock(Stock? stock = null)
         {
             Stocks.Clear();
@@ -105,6 +110,12 @@ namespace SoftwareProject.ViewModels
             // Candle graph
             Stocks[0].IsVisible = ShowCandleSticks;
             Stocks[0].MaxBarWidth = 4;
+            Stocks[0].UpFill = new LinearGradientPaint(_upcolor1, _upcolor2);
+            Stocks[0].DownFill = new LinearGradientPaint(_downcolor1, _downcolor2);
+            Stocks[0].UpStroke = new LinearGradientPaint(_upcolor1, _upcolor2)
+                { StrokeThickness = 2, StrokeCap = SKStrokeCap.Round };
+            Stocks[0].DownStroke = new LinearGradientPaint(_downcolor1, _downcolor2)
+                { StrokeThickness = 2, StrokeCap = SKStrokeCap.Round };
             Series.Add(Stocks[0]);
             // Trend line
             Series.Add(new LineSeries<ObservablePoint>
@@ -123,7 +134,8 @@ namespace SoftwareProject.ViewModels
                 Name = $"{NewStockName} Line",
                 LineSmoothness = 200,
                 GeometrySize = 0,
-                Stroke = new SolidColorPaint(SKColors.Orange, 2),
+                Stroke = new LinearGradientPaint(SKColors.Orange, SKColors.OrangeRed)
+                    { StrokeThickness = 2, StrokeCap = SKStrokeCap.Round },
                 GeometryStroke = new SolidColorPaint(SKColors.Empty),
                 Fill = new SolidColorPaint(SKColors.Orange.WithAlpha(20)),
             });
