@@ -35,11 +35,15 @@
         <TextBlock Classes="header" Text="Import Data from Api" />
         <TextBlock Text="Ticker shortname (eg. AAPL/IBM/TSLA)" />
         <TextBox Watermark="Ticker" Name="TickerTextBox" Text="{Binding Ticker, Mode=TwoWay}" />
-        <TextBlock Text="Date" />
-        <DatePicker Name="ApiImportDate" SelectedDate="{Binding ImportDatum}" />
         <TextBlock Text="Interval" />
         <ComboBox Name="ApiInterval" SelectedItem="{Binding Interval, Mode=TwoWay}"
                   Items="{Binding ApiIntervalList, Mode=OneWay}" />
+        <StackPanel IsVisible="{Binding !DailySelected^}">
+            <TextBlock Text="How many months?" />
+            <NumericUpDown Minimum="1" Maximum="24" Value="{Binding IntradayMonthAmount}" />
+            <TextBlock Text="Starting date" />
+            <DatePicker Name="ApiImportDate" SelectedDate="{Binding ImportDatum}" />
+        </StackPanel>
         <Button Width="160" Command="{Binding ApiImportButton}" Content="Import Data" />
     </StackPanel>
 </UserControl>
