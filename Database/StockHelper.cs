@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using LiveChartsCore.Defaults;
 using Microsoft.Data.Sqlite;
 using SoftwareProject.Types;
@@ -32,30 +33,38 @@ namespace SoftwareProject
         {
             var command = DatabaseConnection.CreateCommand();
             ObservableCollection<FinancialPoint> stockPoints = new();
-            // Get every first item of every month from database
-            command.CommandText = @"
-SELECT strftime('%Y-%m-%d %H:%M', max(DateTime) / 1000, 'unixepoch', 'localtime') as DateTime,
-       (SELECT Open
-        FROM StockData AS T
-        WHERE T.DateTime = min(StockData.DateTime)
-        GROUP BY strftime('%Y-%m-%d %H:%M', T.DateTime / 1000, 'unixepoch', 'localtime')
-       ) AS day_open,
-       max(High) AS day_high,
-       min(Low) AS day_low,
-       (SELECT Close
-        FROM StockData AS T
-        WHERE T.DateTime = max(StockData.DateTime)
-        GROUP BY strftime('%Y-%m-%d %H:%M', T.DateTime / 1000, 'unixepoch', 'localtime')
-       ) AS day_close
-FROM StockData
-WHERE StockShortName = $shortname
-GROUP BY strftime('%Y-%m-%d %H:%M', DateTime / 1000, 'unixepoch', 'localtime')
-ORDER BY DateTime DESC;
-            ";
-            command.CommandText = @"
-			    SELECT * FROM StockData WHERE StockShortName = $shortname;	
-				";
             command.Parameters.AddWithValue("$shortname", shortname);
+            // Get daily data from intraday
+            if (day == null)
+                command.CommandText = @"
+                SELECT max(High) as High,
+                       min(Low) as Low,
+                       (SELECT Open
+                        FROM StockData AS T
+                        WHERE T.DateTime = min(StockData.DateTime) AND T.StockShortName = $shortname
+                        GROUP BY T.DateTime
+                       ) AS Open,
+                       (SELECT Close
+                        FROM StockData AS T
+                        WHERE T.DateTime = max(StockData.DateTime) AND T.StockShortName = $shortname
+                        GROUP BY T.DateTime
+                       ) AS Close,
+                       max(DateTime) as DateTime
+                FROM StockData
+                WHERE StockShortName = $shortname
+                GROUP BY strftime('%Y-%m-%d', DateTime);
+                ";
+            else
+            {
+                // Get intraday data
+                command.CommandText = @"
+			    SELECT * FROM StockData
+			    WHERE StockShortName = $shortname
+                AND strftime('%Y-%m-%d', DateTime) = $day;
+			    ";
+                command.Parameters.AddWithValue("$day", day.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            }
+
             SqliteDataReader reader = command.ExecuteReader();
             if (reader.HasRows)
             {
