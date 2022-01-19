@@ -22,14 +22,20 @@ namespace SoftwareProject.ViewModels
 {
     public class HomePageViewModel : ViewModelBase
     {
-        [Reactive] public Stock MainStock { get; set; }
+        /// <summary>
+        /// The main stock that is viewed, is DailyStock by default, but can be changed to a IntradayStock
+        /// </summary>
+        [Reactive]
+        public Stock MainStock { get; set; }
+
+        [Reactive] public Stock? DailyStock { get; set; }
 
         /// <summary>
         /// Extra stocks that are viewed in the graph, for example in the case of a stock comparison.
         /// </summary>
         public ObservableCollection<Stock> ExtraStocks { get; }
 
-        /// <summary>Stocks that are visible in the chart</summary>
+        /// <summary>Lines/points that are visible in the chart</summary>
         public ObservableCollection<ISeries> Series { get; set; }
 
         public HomePageViewModel()
@@ -119,7 +125,7 @@ namespace SoftwareProject.ViewModels
         private SKColor _upcolor1 = new(16, 185, 129);
         private SKColor _upcolor2 = new(22, 163, 74);
 
-        public void ViewStock(Stock? stock = null)
+        public void ViewStock(Stock? stock = null, bool daily = true)
         {
             Series.Clear();
             MainStock = stock ?? GetStock(NewStockName);
@@ -173,6 +179,10 @@ namespace SoftwareProject.ViewModels
                         { X = (double)x.Date.Ticks, Y = (x.Open + x.Close) / 2 }).ToArray();
                 }
             });
+            
+            if (!daily) return;
+            // Cache if daily stock
+            DailyStock = MainStock;
             // Reset the view to make the whole graph visible, and start tracking the ticker
             ResetGraphPosition();
             FollowTicker = true;
@@ -196,18 +206,18 @@ namespace SoftwareProject.ViewModels
 
         public void ViewPreviousDay()
         {
-            DayByDayMode = true;
             SelectedViewDate = SelectedViewDate.AddDays(-1);
+            DayByDayMode = true;
         }
 
         public void ViewNextDay()
         {
-            DayByDayMode = true;
             SelectedViewDate = SelectedViewDate.AddDays(1);
+            DayByDayMode = true;
         }
 
         public IObservable<DateTimeOffset> MinSelectableViewDay =>
-            this.WhenAny(x => x.MainStock, x => x.MainStock.Values, (_, s) =>
+            this.WhenAny(x => x.DailyStock, x => x.DailyStock.Values, (_, s) =>
             {
                 if (s.Value == null) return DateTimeOffset.UnixEpoch;
                 _minSelectableViewDate = s.Value!.First().Date;
@@ -215,7 +225,7 @@ namespace SoftwareProject.ViewModels
             });
 
         public IObservable<DateTimeOffset> MaxSelectableViewDay =>
-            this.WhenAny(x => x.MainStock, x => x.MainStock.Values, (_, s) =>
+            this.WhenAny(x => x.DailyStock, x => x.DailyStock.Values, (_, s) =>
             {
                 if (s.Value == null) return DateTimeOffset.Now;
                 _maxSelectableViewDate = s.Value!.Last().Date;
@@ -242,8 +252,14 @@ namespace SoftwareProject.ViewModels
             get => _dayByDayMode;
             set
             {
-                // Stop following the ticker when day by day mode is started
-                if (value) FollowTicker = false;
+                if (value)
+                {
+                    // Stop following the ticker when day by day mode is started
+                    FollowTicker = false;
+                    // Load the intraday data
+                    ViewStock(CurrentDatabase.GetStockFromDb(MainStock.ShortName, SelectedViewDate), false);
+                }
+
                 this.RaiseAndSetIfChanged(ref _dayByDayMode, value);
             }
         }
@@ -251,8 +267,14 @@ namespace SoftwareProject.ViewModels
         public IObservable<ZoomAndPanMode> ChartZoomMode => this.WhenAny(x => x.DayByDayMode,
             s => s.Value ? ZoomAndPanMode.None : ZoomAndPanMode.X);
 
+        public void PreviewStock()
+        {
+            ViewStock();
+        }
+
         public void ResetChartMode()
         {
+            PreviewStock();
             FollowTicker = true;
             SelectedViewDate = Timekeeping.CurrentTime;
         }
