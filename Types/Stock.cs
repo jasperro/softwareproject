@@ -45,17 +45,13 @@ namespace SoftwareProject.Types
         {
             // Set default values if stock has no data yet.
             AllValues = defaultData ?? new ObservableCollection<FinancialPoint>();
-            
+
             ShortName = shortName;
 
             MainWindowViewModel.Timekeeping.ObservableTimer.Subscribe(_ =>
             {
-                var valuesBeforeDate = AllValues.Where(financialPoint =>
+                Values = AllValues.Where(financialPoint =>
                     financialPoint.Date.CompareTo(MainWindowViewModel.Timekeeping.CurrentTime.DateTime) < 0);
-                if (valuesBeforeDate.Any())
-                {
-                    Values = valuesBeforeDate;
-                }
             });
         }
 
