@@ -28,7 +28,7 @@ namespace SoftwareProject.Models
 
         [Reactive] public string Username { get; set; }
         public InvestmentPortfolio UserInvestmentPortfolio { get; }
-        public string ApiKey { get; set; } = "VRUNKSO09I7IAXN4";
+        public string ApiKey { get; set; } = "79D95RFJBZUF150U";
 
         public bool AutoRefresh = false;
         public Usersettings UserSettings { get; set; }
@@ -64,7 +64,7 @@ namespace SoftwareProject.Models
         public void Download()
         {
             LastDownload = DateTimeOffset.Now;
-            DataImport(Ticker, DateTimeOffset.Now, ApiInterval,
+            DataImport(Ticker, ApiInterval,
                 Type);
         }
 

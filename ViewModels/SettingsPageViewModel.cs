@@ -11,12 +11,6 @@ namespace SoftwareProject.ViewModels
 {
     public class SettingsPageViewModel : ViewModelBase
     {
-        public SettingsPageViewModel()
-        {
-            this.ObservableForProperty(x => x.IntradayMonthAmount).Subscribe(_ =>
-                ImportDatum = DateTimeOffset.Now.AddMonths(-IntradayMonthAmount));
-        }
-
         private UserModel _userModel => User;
 
         public string Username
@@ -28,8 +22,6 @@ namespace SoftwareProject.ViewModels
         public string Ticker { set; get; } = "";
 
         [Reactive] public string Interval { get; set; } = ApiIntervalList[0];
-
-        [Reactive] public DateTimeOffset ImportDatum { get; set; } = DateTimeOffset.Now;
 
         public static string[] ApiIntervalList => new[]
         {
@@ -43,9 +35,11 @@ namespace SoftwareProject.ViewModels
 
         public void ApiImportButton()
         {
-            ApiModel.DataImport(Ticker, ImportDatum, Interval);
+            ApiModel.DataImport(Ticker, Interval, DataImportType, IntradayMonthAmount, IntradayStartMonthsAgo);
             CurrentDatabase.ImportTestData();
         }
+
+        [Reactive] public ApiModel.ImportType DataImportType { get; set; } = ApiModel.ImportType.Stock;
 
         // Time settings
         public IObservable<string> CurrentDateString =>
@@ -56,8 +50,12 @@ namespace SoftwareProject.ViewModels
         [Reactive] public bool TimerRunning { get; set; } = Timekeeping.Timer.Enabled;
         [Reactive] public string NewTimeStep1Second { get; set; } = Timekeeping.TimeStep1Second.ToString();
         [Reactive] public int IntradayMonthAmount { get; set; }
+        [Reactive] public int IntradayStartMonthsAgo { get; set; }
 
-        public IObservable<bool> DailySelected => this.WhenAny(x => x.Interval, s => s.Value == "daily");
+        public IObservable<bool> DailySelected => this.WhenAny(x => x.Interval, x => x.DataImportType,
+            (i, t) => i.Value == "daily" || t.Value == ApiModel.ImportType.Crypto);
+
+        [Reactive] public bool DownloadRange { get; set; } = true;
 
         public void ChangeDateToSelected()
         {

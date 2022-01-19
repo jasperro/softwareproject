@@ -24,49 +24,54 @@ namespace SoftwareProject.Models
         /// String interval must be: daily for daily data, or
         /// 1min, 5min, 15min or 60min for intra-day.
         /// </example>
-        public static string DataImport(string ticker, DateTimeOffset date, string interval = "daily",
-            ImportType type = ImportType.Crypto)
+        public static void DataImport(string ticker, string interval = "daily",
+            ImportType type = ImportType.Stock, int downloadMonths = 1, int startDownloadMonthsAgo = 23)
         {
-            string parameters = "";
+            string intervalParameters = "";
+            string sliceParameters = "";
 
             string function = type == ImportType.Stock ? "TIME_SERIES_DAILY" : "DIGITAL_CURRENCY_DAILY";
             string market = type == ImportType.Crypto ? "&market=USD" : "";
             string datatype = "&datatype=csv";
             string apikey = User.ApiKey;
 
-            TimeSpan difference = DateTimeOffset.Now.Subtract(date);
-            TimeSpan maxDifference = new TimeSpan(720, 0, 0, 0, 0);
-
-            if (difference < maxDifference)
+            if (interval != "daily")
             {
                 function = type == ImportType.Stock ? "TIME_SERIES_INTRADAY_EXTENDED" : "CRYPTO_INTRADAY";
-                int year, month;
-                if (difference.Days <= 360)
-                {
-                    year = 1;
-                    month = difference.Days / 12;
-                }
-                else
-                {
-                    year = 2;
-                    month = (difference.Days - 360) / 12;
-                }
+                intervalParameters = $"&interval={interval}";
+            }
+            
+            int counter = 0;
 
-                parameters = $"&interval={interval}";
+            void SetSliceParameters()
+            {
+                int year = (startDownloadMonthsAgo - counter)/12 + 1;
+                int month = (startDownloadMonthsAgo - counter)%12 + 1;
+
                 if (type == ImportType.Stock)
                 {
-                    parameters += $"&slice=year{year}month{month}";
+                    sliceParameters = $"&slice=year{year}month{month}";
                 }
             }
+            
+            do
+            {
+                if (interval != "daily")
+                {
+                    SetSliceParameters();
+                }
 
-            string url =
-                $"https://www.alphavantage.co/query?function={function}&symbol={ticker}&apikey={apikey}{datatype}{parameters}{market}";
-            string filename =
-                $@"../../../TestData/{ticker}/{ticker}{date.Day}-{date.Month}-{date.Year}-{interval}-{DateTime.Now.ToShortTimeString()}.csv";
-            MakeDirectory(ticker);
-            WebClient client = new();
-            client.DownloadFile(url, filename);
-            return filename;
+                if (startDownloadMonthsAgo < downloadMonths) return;
+                string url =
+                    $"https://www.alphavantage.co/query?function={function}&symbol={ticker}&apikey={apikey}{datatype}{intervalParameters}{sliceParameters}{market}";
+                string filename =
+                    $@"../../../TestData/{ticker}/{ticker}-{interval}-{24 - startDownloadMonthsAgo + counter}.csv";
+                MakeDirectory(ticker);
+                WebClient client = new();
+                client.DownloadFile(url, filename);
+                Console.WriteLine($"Downloaded {filename}");
+                counter++;
+            } while (counter < downloadMonths);
         }
 
         private static void MakeDirectory(string name)

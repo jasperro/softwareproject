@@ -39,10 +39,11 @@
         <ComboBox Name="ApiInterval" SelectedItem="{Binding Interval, Mode=TwoWay}"
                   Items="{Binding ApiIntervalList, Mode=OneWay}" />
         <StackPanel IsVisible="{Binding !DailySelected^}">
-            <TextBlock Text="How many months?" />
-            <NumericUpDown Minimum="1" Maximum="24" Value="{Binding IntradayMonthAmount}" />
-            <TextBlock Text="Starting date" />
-            <DatePicker Name="ApiImportDate" SelectedDate="{Binding ImportDatum}" />
+            <TextBlock Text="From how many months (back)?" />
+            <NumericUpDown Minimum="0" Maximum="23" Value="{Binding IntradayStartMonthsAgo}" />
+            <TextBlock Text="Download month amount (max 5 per minute)" />
+            <NumericUpDown Minimum="1" Maximum="5" Value="{Binding IntradayMonthAmount}" />
+            <CheckBox Content="Download range instead of only this month" IsChecked="{Binding DownloadRange}"/>
         </StackPanel>
         <Button Width="160" Command="{Binding ApiImportButton}" Content="Import Data" />
     </StackPanel>
