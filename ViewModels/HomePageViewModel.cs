@@ -14,7 +14,6 @@ using ReactiveUI.Fody.Helpers;
 using SkiaSharp;
 using SoftwareProject.Types;
 using SoftwareProject.Views;
-using Splat;
 using static SoftwareProject.Globals;
 using static SoftwareProject.ViewModels.MainWindowViewModel;
 
@@ -164,7 +163,7 @@ namespace SoftwareProject.ViewModels
             MainStock.ObservableForProperty(x => x.Values).Subscribe(_ =>
             {
                 if (MainStock.Values == null) return;
-                if (MainStock.Values!.Any())
+                if (MainStock.Values!.Any() && Series.Any())
                 {
                     Series[1].Values = new[]
                     {
@@ -179,7 +178,7 @@ namespace SoftwareProject.ViewModels
                         { X = (double)x.Date.Ticks, Y = (x.Open + x.Close) / 2 }).ToArray();
                 }
             });
-            
+
             if (!daily) return;
             // Cache if daily stock
             DailyStock = MainStock;
@@ -254,6 +253,8 @@ namespace SoftwareProject.ViewModels
             {
                 if (value)
                 {
+                    // Reset series for the case where there is no data
+                    Series.Clear();
                     // Stop following the ticker when day by day mode is started
                     FollowTicker = false;
                     // Load the intraday data
