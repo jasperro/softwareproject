@@ -265,6 +265,19 @@ namespace SoftwareProject.ViewModels
                     FollowTicker = false;
                     // Load the intraday data
                     ViewStock(CurrentDatabase.GetStockFromDb(MainStock.ShortName, SelectedViewDate), false);
+                    XAxes[0].UnitWidth = TimeSpan.FromMinutes(1).Ticks;
+                    XAxes[0].Labeler = value => new DateTime((long)value).ToString("HH:mm");
+                    XAxes[0].LabelsRotation = 90;
+                    XAxes[0].MinStep = TimeSpan.FromMinutes(15).Ticks;
+                    XAxes[0].ForceStepToMin = true;
+                }
+                else
+                {
+                    XAxes[0].UnitWidth = TimeSpan.FromDays(1).Ticks;
+                    XAxes[0].Labeler = value => new DateTime((long)value).ToString("yyyy MMM dd");
+                    XAxes[0].LabelsRotation = 15;
+                    XAxes[0].MinStep = Double.NaN;
+                    XAxes[0].ForceStepToMin = false;
                 }
 
                 this.RaiseAndSetIfChanged(ref _dayByDayMode, value);
