@@ -29,7 +29,7 @@ namespace SoftwareProject
             command.ExecuteNonQuery();
         }
 
-        public Stock GetStockFromDb(string shortname, DateTimeOffset? day = null)
+        public Stock? GetStockFromDb(string shortname, DateTimeOffset? day = null)
         {
             var command = DatabaseConnection.CreateCommand();
             ObservableCollection<FinancialPoint> stockPoints = new();
@@ -79,14 +79,14 @@ namespace SoftwareProject
                         )
                     ));
                 }
-            }
-            else
-            {
-                Console.WriteLine("No rows found.");
+
+                reader.Close();
+                return new Stock(shortname, stockPoints);
             }
 
             reader.Close();
-            return new Stock(shortname, stockPoints);
+            Console.WriteLine("No rows found.");
+            return null;
         }
 
 

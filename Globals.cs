@@ -14,7 +14,7 @@ namespace SoftwareProject
         public static ObservableCollection<Stock> CachedStocks { get; } = new();
         public static MainWindowViewModel MainWindow { get; } = new();
 
-        public static Stock GetStock(string shortName)
+        public static Stock? GetStock(string shortName)
         {
             var stock = CachedStocks.FirstOrDefault(s =>
                 s.ShortName == shortName);
@@ -22,6 +22,7 @@ namespace SoftwareProject
             if (stock == null)
             {
                 stock = CurrentDatabase.GetStockFromDb(shortName);
+                if (stock == null) return null;
                 CachedStocks.Add(stock);
             }
 
