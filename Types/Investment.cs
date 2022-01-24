@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ReactiveUI;
+using DynamicData;
+using DynamicData.Binding;
 using SoftwareProject.Algorithms;
 using SoftwareProject.ViewModels;
 using static SoftwareProject.Globals;
@@ -34,6 +37,7 @@ namespace SoftwareProject.Types
         public double MoneyInvested { get; set; }
         public double MoneyReturn { get; set; }
     }
+
     public class InvestmentPortfolio : ObservableCollection<Investment>
     {
         public int StockAmt => Count;
@@ -53,8 +57,16 @@ namespace SoftwareProject.Types
             }
         }
 
-        public double TotalProfits => this.Sum(investment => investment.Profit);
-        public double TotalInvested => this.Sum(investment => investment.MoneyInvested);
-        public double TotalReturn => this.Sum(investment => investment.MoneyReturn);
+        public IObservable<double> TotalProfits => this.ToObservableChangeSet().QueryWhenChanged(i =>
+            i.Sum(investment => investment.Profit)
+        );
+
+        public IObservable<double> TotalInvested => this.ToObservableChangeSet().QueryWhenChanged(i =>
+            i.Sum(investment => investment.MoneyInvested)
+        );
+
+        public IObservable<double> TotalReturn => this.ToObservableChangeSet().QueryWhenChanged(i =>
+            i.Sum(investment => investment.MoneyReturn)
+        );
     }
 }

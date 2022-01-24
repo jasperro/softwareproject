@@ -86,7 +86,7 @@
                         <i:Icon Value="mdi-cash" Classes="header" />
                         <TextBlock Classes="header" Text="Profits" />
                     </StackPanel>
-                    <TextBlock FontSize="60" Text="{Binding Investments.TotalProfits}" />
+                    <TextBlock FontSize="60" Text="{Binding Investments.TotalProfits^}" />
                 </StackPanel>
             </styles:Card>
             <styles:Card Grid.Column="2" Margin="4">
@@ -95,7 +95,7 @@
                         <i:Icon Value="mdi-piggy-bank" Classes="header" />
                         <TextBlock Classes="header" Text="Amount invested" />
                     </StackPanel>
-                    <TextBlock FontSize="60" Text="{Binding Investments.TotalInvested}" />
+                    <TextBlock FontSize="60" Text="{Binding Investments.TotalInvested^}" />
                 </StackPanel>
             </styles:Card>
         </Grid>
