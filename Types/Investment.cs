@@ -19,7 +19,7 @@ namespace SoftwareProject.Types
         public Investment(string shortName, DateTime? startOfInvestment = null, double moneyInvested = 0)
         {
             Stock = GetStock(shortName) ?? throw new InvalidOperationException();
-            StartOfInvestment = startOfInvestment ?? DateTime.Now;
+            StartOfInvestment = startOfInvestment ?? MainWindowViewModel.Timekeeping.CurrentTime;
             MoneyInvested = moneyInvested;
         }
 
@@ -29,7 +29,7 @@ namespace SoftwareProject.Types
             set => Stock.ShortName = value;
         }
 
-        public DateTime StartOfInvestment { get; }
+        public DateTimeOffset StartOfInvestment { get; }
         public double Profit => MoneyReturn - MoneyInvested;
         public double MoneyInvested { get; set; }
         public double MoneyReturn { get; set; }
