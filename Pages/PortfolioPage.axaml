@@ -100,7 +100,7 @@
             </styles:Card>
         </Grid>
 
-        <TextBlock Classes="header" Text="Invested stocks" />
+        <!--TextBlock Classes="header" Text="Invested stocks" />
 
         <lvc:PieChart HorizontalAlignment="Left" Height="300" Width="300" Series="{Binding SharePieChart}" />
 
@@ -113,7 +113,7 @@
                     Background="transparent" />
             <Button i:Attached.Icon="mdi-refresh" Command="{Binding SelectCurrentWeek}" FontSize="32"
                     Background="transparent" />
-        </StackPanel>
+        </StackPanel-->
 
         <StackPanel>
             <!-- Total info -->
@@ -129,5 +129,6 @@
             </TextBlock>
             <!-- Specific info for the total investment weekly change -->
         </StackPanel>
+        
     </StackPanel>
 </UserControl>
