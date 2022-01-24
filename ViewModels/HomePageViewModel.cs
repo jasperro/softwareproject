@@ -68,7 +68,11 @@ namespace SoftwareProject.ViewModels
             });
             this.ObservableForProperty(x => x.ShowTrendLine).Subscribe(_ =>
             {
-                if (Series.ElementAtOrDefault(1) != null) Series[1].IsVisible = ShowTrendLine;
+                if (Series.ElementAtOrDefault(1) != null)
+                {
+                    Series[1].IsVisible = ShowTrendLine;
+                    ResetGraphPosition();
+                }
             });
             this.ObservableForProperty(x => x.ShowLineGraph).Subscribe(_ =>
             {
@@ -142,10 +146,11 @@ namespace SoftwareProject.ViewModels
             Series.Add(new LineSeries<ObservablePoint>
             {
                 IsVisible = ShowTrendLine,
-                GeometrySize = 0,
+                GeometrySize = 1,
                 Name = $"{NewStockName} Trend",
                 Stroke = new SolidColorPaint(SKColors.Aquamarine, 5),
                 GeometryStroke = new SolidColorPaint(SKColors.Empty),
+                GeometryFill = new SolidColorPaint(SKColors.Empty),
                 Fill = new SolidColorPaint(SKColor.Empty)
             });
             // Line graph
@@ -154,10 +159,11 @@ namespace SoftwareProject.ViewModels
                 IsVisible = ShowLineGraph,
                 Name = $"{NewStockName} Line",
                 LineSmoothness = 200,
-                GeometrySize = 0,
+                GeometrySize = 1,
                 Stroke = new LinearGradientPaint(SKColors.Orange, SKColors.OrangeRed)
                     { StrokeThickness = 2, StrokeCap = SKStrokeCap.Round },
                 GeometryStroke = new SolidColorPaint(SKColors.Empty),
+                GeometryFill = new SolidColorPaint(SKColors.Empty),
                 Fill = new SolidColorPaint(SKColors.Orange.WithAlpha(20)),
             });
             MainStock.ObservableForProperty(x => x.Values).Subscribe(_ =>
@@ -273,6 +279,9 @@ namespace SoftwareProject.ViewModels
             ViewStock();
         }
 
+        /// <summary>
+        /// Reset chart back to the default daily view
+        /// </summary>
         public void ResetChartMode()
         {
             PreviewStock();
