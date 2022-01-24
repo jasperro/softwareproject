@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using Microsoft.Data.Sqlite;
 using SoftwareProject.Models;
@@ -22,6 +23,7 @@ namespace SoftwareProject
             command.Parameters.AddWithValue("$startOfInvestment", investment.StartOfInvestment);
             command.ExecuteNonQuery();
         }
+
         public InvestmentPortfolio GetInvestmentPortfolioFromDb(int userId, string? shortName = null)
         {
             var command = DatabaseConnection.CreateCommand();
@@ -47,11 +49,19 @@ namespace SoftwareProject
             {
                 while (reader.Read())
                 {
-                    investments.Add(new Investment(
-                            reader.GetString(reader.GetOrdinal("ShortName")),
-                            reader.GetDateTime(reader.GetOrdinal("StartOfInvestment"))
-                        )
-                    );
+                    try
+                    {
+                        investments.Add(new Investment(
+                                reader.GetString(reader.GetOrdinal("ShortName")),
+                                reader.GetDateTime(reader.GetOrdinal("StartOfInvestment")),
+                                reader.GetDouble(reader.GetOrdinal("MoneyInvested"))
+                            )
+                        );
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // Stock is not in the database
+                    }
                 }
             }
 

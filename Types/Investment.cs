@@ -16,16 +16,11 @@ namespace SoftwareProject.Types
 
         public Stock Stock { get; }
 
-        public Investment(Stock stock, DateTime? startOfInvestment = null)
+        public Investment(string shortName, DateTime? startOfInvestment = null, double moneyInvested = 0)
         {
-            Stock = stock;
+            Stock = GetStock(shortName) ?? throw new InvalidOperationException();
             StartOfInvestment = startOfInvestment ?? DateTime.Now;
-        }
-
-        public Investment(string shortName, DateTime? startOfInvestment = null)
-        {
-            Stock = GetStock(shortName);
-            StartOfInvestment = startOfInvestment ?? DateTime.Now;
+            MoneyInvested = moneyInvested;
         }
 
         public string ShortName

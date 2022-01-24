@@ -23,7 +23,6 @@ namespace SoftwareProject.ViewModels
                 SelectedStock = SelectedStockListItem;
                 StockToInvest = SelectedStock!.ShortName;
             });
-            
         }
 
         [Reactive]
@@ -98,10 +97,17 @@ namespace SoftwareProject.ViewModels
 
         public void AddInvestment()
         {
-            if (SelectedStock == null) return;
-            Investment newInvestment = new(SelectedStock) { MoneyInvested = AmountToInvest };
-            Investments.Add(newInvestment);
-            CurrentDatabase.AddInvestmentToDb(User.UserId, newInvestment);
+            try
+            {
+                if (SelectedStock == null) return;
+                Investment newInvestment = new(SelectedStock.ShortName) { MoneyInvested = AmountToInvest };
+                Investments.Add(newInvestment);
+                CurrentDatabase.AddInvestmentToDb(User.UserId, newInvestment);
+            }
+            catch (InvalidOperationException)
+            {
+                // Stock did not exist in database
+            }
         }
 
         public void SelectStock()
