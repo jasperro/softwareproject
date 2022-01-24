@@ -37,7 +37,7 @@ namespace SoftwareProject.Types
             set => Name = value;
         }
 
-        public DateTime LastUpdate => Values != null ? Values.Last().Date : DateTime.Now;
+        public DateTime LastUpdate => Values != null && Values!.Any() ? Values.Last().Date : DateTime.Now;
 
         public double TrendPercentage => 0;
 

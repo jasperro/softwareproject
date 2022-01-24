@@ -63,7 +63,7 @@ namespace SoftwareProject
         {
             var command = DatabaseConnection.CreateCommand();
 
-            int? tijd = (int)DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(50)).ToUnixTimeSeconds();
+            int? tijd = null;
             
             command.CommandText = @"
 			    SELECT * FROM UserSettings WHERE UserId = $userid;	
