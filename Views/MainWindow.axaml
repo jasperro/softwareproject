@@ -32,7 +32,7 @@
                 <TabItem.Header>
                     <StackPanel>
                         <i:Icon Value="mdi-home" />
-                        <TextBlock Text="Hoofdscherm" />
+                        <TextBlock Text="Home" />
                     </StackPanel>
                 </TabItem.Header>
                 <pages:HomePage />
@@ -50,7 +50,7 @@
                 <TabItem.Header>
                     <StackPanel>
                         <i:Icon Value="mdi-cog" />
-                        <TextBlock Text="Instellingen" />
+                        <TextBlock Text="Options" />
                     </StackPanel>
                 </TabItem.Header>
                 <pages:SettingsPage />
