@@ -1,9 +1,6 @@
 using System;
-using System.Collections.ObjectModel;
 using Microsoft.Data.Sqlite;
-using SoftwareProject.Models;
 using SoftwareProject.Types;
-using SoftwareProject.ViewModels;
 
 namespace SoftwareProject
 {

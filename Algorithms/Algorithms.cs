@@ -20,8 +20,8 @@ namespace SoftwareProject.Algorithms
     }
     public interface IStockAlgorithm : IAlgorithm
     {
-        public IStock Apply(string shortName) => Apply(GetStock(shortName));
-        public IStock Apply(IStock stock);
+        public IStock? Apply(string shortName) => Apply(GetStock(shortName));
+        public IStock? Apply(IStock? stock);
     }
 
     public class AverageClosingPrice : IStockAlgorithm
@@ -29,14 +29,14 @@ namespace SoftwareProject.Algorithms
         public string AlgorithmId => "avgclosing";
         public string AlgorithmName => "Average Closing Price";
 
-        public IStock Apply(string shortName)
+        public IStock? Apply(string shortName)
         {
             return GetStock(shortName);
         }
 
-        public IStock Apply(IStock stock)
+        public IStock? Apply(IStock? stock)
         {
-            return Apply(stock.ShortName);
+            return (stock?.ShortName) == null ? null:Apply(stock.ShortName);
         }
     }
 
@@ -51,13 +51,14 @@ namespace SoftwareProject.Algorithms
         [Reactive] public double FirstBetween { get; set; } = 100;
         [Reactive] public double SecondBetween { get; set; } = 200;
 
-        private double generateRndNum()
+        private double GenerateRndNum()
         {
             return (double)_rnd.Next((int)(FirstBetween * 100), (int)(SecondBetween * 100)) / 100;
         }
 
-        public IStock Apply(IStock stock)
+        public IStock? Apply(IStock? stock)
         {
+            if (stock?.ShortName == null) return null;
              Stock predictedStock = new($"{stock.ShortName} (prediction)")
              {
                  Values = new ObservableCollection<FinancialPoint>(),
@@ -71,9 +72,9 @@ namespace SoftwareProject.Algorithms
  
              for (int i = 0; i < 100; i++)
              {
-                 predictedStock.Values = new ObservableCollection<FinancialPoint>(predictedStock.Values.Append(new FinancialPoint(date, generateRndNum(),
-                     generateRndNum(),
-                     generateRndNum(), generateRndNum())));
+                 predictedStock.Values = new ObservableCollection<FinancialPoint>(predictedStock.Values.Append(new FinancialPoint(date, GenerateRndNum(),
+                     GenerateRndNum(),
+                     GenerateRndNum(), GenerateRndNum())));
                  date = date.AddHours(4);
              }
 
@@ -88,16 +89,17 @@ namespace SoftwareProject.Algorithms
         /// <returns>
         /// Average closing price of a StockPoints collection
         /// </returns>
-        public static double AverageClosingPrice(IEnumerable<FinancialPoint> stockPoints)
+        public static double AverageClosingPrice(IEnumerable<StockPoint> stockPoints)
         {
             double sum = 0;
             double average;
-            foreach (StockPoint stockPoint in stockPoints)
+            var enumerable = stockPoints as StockPoint[] ?? stockPoints.ToArray();
+            foreach (StockPoint stockPoint in enumerable)
             {
                 sum += stockPoint.Close;
             }
 
-            average = sum / stockPoints.Count();
+            average = sum / enumerable.Count();
             return average;
         }
 

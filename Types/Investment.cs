@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using ReactiveUI;
 using DynamicData;
 using DynamicData.Binding;
 using SoftwareProject.Algorithms;

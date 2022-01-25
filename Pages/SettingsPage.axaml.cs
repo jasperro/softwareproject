@@ -1,10 +1,5 @@
-using System;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using SoftwareProject.Models;
-using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Pages
 {

@@ -1,5 +1,4 @@
 using Microsoft.Data.Sqlite;
-using System;
 using SoftwareProject.Types;
 
 namespace SoftwareProject

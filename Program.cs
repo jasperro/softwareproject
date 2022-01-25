@@ -1,10 +1,8 @@
 ﻿using System;
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.MaterialDesign;
-using SoftwareProject.ViewModels;
 
 namespace SoftwareProject
 {

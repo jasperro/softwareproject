@@ -1,17 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive.Linq;
-using DynamicData;
-using DynamicData.Binding;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
-using LiveChartsCore.Kernel;
 using LiveChartsCore.SkiaSharpView;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SoftwareProject.Algorithms;
 using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Types
@@ -39,7 +33,7 @@ namespace SoftwareProject.Types
             set => Name = value;
         }
 
-        public DateTime LastUpdate => Values != null && Values!.Any() ? Values.Last().Date : DateTime.Now;
+        public DateTime LastUpdate => Values?.Any() == true ? Values.Last().Date : DateTime.Now;
 
         public double TrendPercentage => 0;
 
