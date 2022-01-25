@@ -25,7 +25,7 @@ namespace SoftwareProject.ViewModels
         /// The main stock that is viewed, is DailyStock by default, but can be changed to a IntradayStock
         /// </summary>
         [Reactive]
-        public Stock MainStock { get; set; }
+        public Stock? MainStock { get; set; }
 
         [Reactive] public Stock? DailyStock { get; set; }
 
@@ -48,10 +48,14 @@ namespace SoftwareProject.ViewModels
                 if (FollowTicker) ResetGraphPosition();
                 if (!DayByDayMode)
                 {
-                    if (MainStock != null)
-                        SelectedViewDate = MainStock.Values == null
-                            ? Timekeeping.CurrentTime
-                            : MainStock.Values!.Last().Date;
+                    try
+                    {
+                        if (MainStock != null)
+                            SelectedViewDate = MainStock.Values == null
+                                ? Timekeeping.CurrentTime
+                                : MainStock.Values!.Last().Date;
+                    }
+                    catch(Exception e) {}
                 }
             });
 
@@ -132,6 +136,7 @@ namespace SoftwareProject.ViewModels
         {
             Series.Clear();
             MainStock = stock ?? GetStock(NewStockName);
+            if (MainStock == null) return;
             // Candle graph
             MainStock.IsVisible = ShowCandleSticks;
             MainStock.MaxBarWidth = 4;
@@ -221,34 +226,7 @@ namespace SoftwareProject.ViewModels
             DayByDayMode = true;
         }
 
-        public IObservable<DateTimeOffset> MinSelectableViewDay =>
-            this.WhenAny(x => x.DailyStock, x => x.DailyStock.Values, (_, s) =>
-            {
-                if (s.Value == null) return DateTimeOffset.UnixEpoch;
-                _minSelectableViewDate = s.Value!.First().Date;
-                return _minSelectableViewDate;
-            });
-
-        public IObservable<DateTimeOffset> MaxSelectableViewDay =>
-            this.WhenAny(x => x.DailyStock, x => x.DailyStock.Values, (_, s) =>
-            {
-                if (s.Value == null) return DateTimeOffset.Now;
-                _maxSelectableViewDate = s.Value!.Last().Date;
-                return _maxSelectableViewDate.AddDays(1);
-            });
-
-        private DateTimeOffset _maxSelectableViewDate;
-        private DateTimeOffset _minSelectableViewDate;
-
-        private DateTimeOffset _selectedViewDate = Timekeeping.CurrentTime;
-
-        public DateTimeOffset SelectedViewDate
-        {
-            get => _selectedViewDate >= _minSelectableViewDate && _selectedViewDate <= _maxSelectableViewDate
-                ? _selectedViewDate
-                : _maxSelectableViewDate;
-            set => this.RaiseAndSetIfChanged(ref _selectedViewDate, value);
-        }
+        [Reactive] public DateTimeOffset SelectedViewDate { get; set; } = Timekeeping.CurrentTime;
 
         private bool _dayByDayMode;
 

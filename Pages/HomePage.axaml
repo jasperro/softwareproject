@@ -51,8 +51,6 @@
                     <Button i:Attached.Icon="mdi-arrow-left" Command="{Binding ViewPreviousDay}" FontSize="24"
                             Background="transparent" />
                     <DatePicker SelectedDate="{Binding SelectedViewDate}"
-                                MinYear="{Binding MinSelectableViewDay^, FallbackValue={x:Static system:DateTimeOffset.MinValue}}"
-                                MaxYear="{Binding MaxSelectableViewDay^, FallbackValue={x:Static system:DateTimeOffset.MaxValue}}"
                                 SelectedDateChanged="DatePicker_OnSelectedDateChanged" />
                     <Button i:Attached.Icon="mdi-arrow-right" Command="{Binding ViewNextDay}" FontSize="24"
                             Background="transparent" />
