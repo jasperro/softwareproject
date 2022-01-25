@@ -169,7 +169,7 @@ namespace SoftwareProject.ViewModels
             });
             MainStock.ObservableForProperty(x => x.Values).Subscribe(_ =>
             {
-                if (MainStock.Values == null) return;
+                if (MainStock?.Values == null) return;
                 if (MainStock.Values!.Any() && Series.Any())
                 {
                     Series[1].Values = new[]
