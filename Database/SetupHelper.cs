@@ -125,6 +125,7 @@ namespace SoftwareProject
 			UserId               integer NOT NULL    ,
 			ShortName            varchar(100) NOT NULL    ,
 			AmountInvested        int NOT NULL    ,
+			MoneyInvested        double NOT NULL    ,
 			MoneyReturn			 double		,
 			StartOfInvestment	 datetime NOT NULL ,
 			FOREIGN KEY ( UserId ) REFERENCES Users( UserId )  ,

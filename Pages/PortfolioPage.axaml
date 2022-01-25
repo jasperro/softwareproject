@@ -47,13 +47,13 @@
                                     Binding="{Binding ShortName}" />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Money Invested"
-                                    Binding="{Binding MoneyInvested}" />
+                                    Binding="{Binding MoneyInvested, StringFormat={}{0:F2}, Mode=OneWay}" />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Last update"
                                     Binding="{Binding Stock.LastUpdate}" />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Profit"
-                                    Binding="{Binding Profit}" />
+                                    Binding="{Binding Profit, StringFormat={}{0:F2}, Mode=OneWay}" />
                 <DataGridTemplateColumn d:DataContext="{Binding Investments}" Header="Action">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -85,7 +85,7 @@
                         <i:Icon Value="mdi-cash" Classes="header" />
                         <TextBlock Classes="header" Text="Profits" />
                     </StackPanel>
-                    <TextBlock FontSize="60" Text="{Binding Investments.TotalProfits^}" />
+                    <TextBlock FontSize="60" Text="{Binding Investments.TotalProfits^, StringFormat={}{0:F2}, Mode=OneWay}" />
                 </StackPanel>
             </styles:Card>
             <styles:Card Grid.Column="2" Margin="4">
@@ -94,7 +94,7 @@
                         <i:Icon Value="mdi-piggy-bank" Classes="header" />
                         <TextBlock Classes="header" Text="Amount invested" />
                     </StackPanel>
-                    <TextBlock FontSize="60" Text="{Binding Investments.TotalInvested^}" />
+                    <TextBlock FontSize="60" Text="{Binding Investments.TotalInvested^, StringFormat={}{0:F2}, Mode=OneWay}" />
                 </StackPanel>
             </styles:Card>
         </Grid>

@@ -22,16 +22,17 @@ namespace SoftwareProject.Types
 
         public Stock Stock { get; }
 
-        public Investment(string shortName, DateTime? startOfInvestment = null, int amountInvested = 1)
+        public Investment(string shortName,
+            double? moneyInvested = null, int amountInvested = 1, DateTime? startOfInvestment = null)
         {
             Stock = GetStock(shortName) ?? throw new InvalidOperationException();
             StartOfInvestment = startOfInvestment ?? MainWindowViewModel.Timekeeping.CurrentTime;
-            AmountInvested = amountInvested;
-            MoneyInvested = amountInvested * Stock.Values?.Last()?.Close;
             moneyReturn = 
             this.WhenAnyValue(x => x.Stock.Values).Select(x => AmountInvested * x?.Last()?.Close).ToProperty(this, x => x.MoneyReturn);
             profit =
             this.WhenAnyValue(x => x.MoneyReturn).Select(x => x - MoneyInvested).ToProperty(this, x => x.Profit);
+            AmountInvested = amountInvested;
+            MoneyInvested = moneyInvested ?? amountInvested * Stock.Values?.Last()?.Close;
         }
 
         public string ShortName
@@ -69,13 +70,13 @@ namespace SoftwareProject.Types
             }
         }
 
-        public IObservable<double?> TotalProfits => this.ToObservableChangeSet().QueryWhenChanged(i =>
-            i.Sum(investment => investment.Profit)
+        public IObservable<double?> TotalProfits => MainWindowViewModel.Timekeeping.WhenAnyObservable(x => x.ObservableTimer, x => x.ObservableTimer, (_,_) =>
+            this.Sum(investment => investment.Profit)
         );
 
-        public IObservable<double?> TotalInvested => this.ToObservableChangeSet().QueryWhenChanged(i =>
-            i.Sum(investment => investment.MoneyInvested)
-        );
+        public IObservable<double?> TotalInvested => MainWindowViewModel.Timekeeping.WhenAnyObservable(
+            x => x.ObservableTimer, x => x.ObservableTimer, (_, _) =>
+                this.Sum(investment => investment.MoneyInvested));
 
         public IObservable<double?> TotalReturn => this.ToObservableChangeSet().QueryWhenChanged(i =>
             i.Sum(investment => investment.MoneyReturn)

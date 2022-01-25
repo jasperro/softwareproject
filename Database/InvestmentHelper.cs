@@ -11,11 +11,12 @@ namespace SoftwareProject
             var command = DatabaseConnection.CreateCommand();
             command.CommandText = @"
 				INSERT OR IGNORE INTO Investments
-				VALUES ($userId, $shortName, $moneyInvested, 0, $startOfInvestment);
+				VALUES ($userId, $shortName, $amountInvested, $moneyInvested, 0, $startOfInvestment);
 				";
 
             command.Parameters.AddWithValue("$userId", userId);
             command.Parameters.AddWithValue("$shortName", investment.ShortName);
+            command.Parameters.AddWithValue("$amountInvested", investment.AmountInvested);
             command.Parameters.AddWithValue("$moneyInvested", investment.MoneyInvested);
             command.Parameters.AddWithValue("$startOfInvestment", investment.StartOfInvestment);
             command.ExecuteNonQuery();
@@ -49,10 +50,10 @@ namespace SoftwareProject
                     try
                     {
                         investments.Add(new Investment(
-                                reader.GetString(reader.GetOrdinal("ShortName")),
-                                reader.GetDateTime(reader.GetOrdinal("StartOfInvestment")),
-                                (int)reader.GetInt64(reader.GetOrdinal("AmountInvested"))
-                            )
+                            reader.GetString(reader.GetOrdinal("ShortName")),
+                            reader.GetDouble(reader.GetOrdinal("MoneyInvested")), 
+                            (int)reader.GetInt64(reader.GetOrdinal("AmountInvested")),
+                            reader.GetDateTime(reader.GetOrdinal("StartOfInvestment")))
                         );
                     }
                     catch (InvalidOperationException)

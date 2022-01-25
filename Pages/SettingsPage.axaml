@@ -30,7 +30,7 @@
         </StackPanel>
         <TextBlock Classes="header" Text="User settings" />
         <TextBox Text="{Binding Username, Mode=TwoWay}" Name="UsernameTextBox" />
-        <Button Content="Apply (not implemented)" Command="{Binding ApplyUserSettings}" />
+        <Button Content="Apply" Command="{Binding ApplyUserSettings}" />
 
         <TextBlock Classes="header" Text="Import Data from Api" />
         <TextBlock Text="Ticker shortname (eg. AAPL/IBM/TSLA)" />
