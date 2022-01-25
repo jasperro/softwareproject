@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Binding;
+using LiveChartsCore.Defaults;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Algorithms;
 using SoftwareProject.ViewModels;
@@ -11,7 +14,7 @@ using static SoftwareProject.Globals;
 
 namespace SoftwareProject.Types
 {
-    public class Investment
+    public class Investment : ReactiveObject
     {
         /// <summary>This list contains the predictive algorithms that will be applied after each other</summary>
         /// <example>This allows us to take for example the average, and apply a smoothing factor after this.</example>
@@ -25,6 +28,10 @@ namespace SoftwareProject.Types
             StartOfInvestment = startOfInvestment ?? MainWindowViewModel.Timekeeping.CurrentTime;
             AmountInvested = amountInvested;
             MoneyInvested = amountInvested * Stock.Values?.Last()?.Close;
+            moneyReturn = 
+            this.WhenAnyValue(x => x.Stock.Values).Select(x => AmountInvested * x?.Last()?.Close).ToProperty(this, x => x.MoneyReturn);
+            profit =
+            this.WhenAnyValue(x => x.MoneyReturn).Select(x => x - MoneyInvested).ToProperty(this, x => x.Profit);
         }
 
         public string ShortName
@@ -34,11 +41,13 @@ namespace SoftwareProject.Types
         }
 
         public DateTimeOffset StartOfInvestment { get; }
-        public IObservable<double?> Profit => this.WhenAnyObservable(x => x.MoneyReturn, x => x.MoneyReturn, (d, arg2) => d - MoneyInvested);
+        public double? Profit => profit.Value;
+        readonly ObservableAsPropertyHelper<double?> profit;
         public int AmountInvested { get; set; }
         public double? MoneyInvested { get; set; }
 
-        public IObservable<double?> MoneyReturn => this.WhenAny(x => x.Stock.Values, s => s.Value?.Last()?.Close);
+        public double? MoneyReturn => moneyReturn.Value;
+        readonly ObservableAsPropertyHelper<double?> moneyReturn;
     }
 
     public class InvestmentPortfolio : ObservableCollection<Investment>
@@ -68,7 +77,7 @@ namespace SoftwareProject.Types
             i.Sum(investment => investment.MoneyInvested)
         );
 
-        public IObservable<double> TotalReturn => this.ToObservableChangeSet().QueryWhenChanged(i =>
+        public IObservable<double?> TotalReturn => this.ToObservableChangeSet().QueryWhenChanged(i =>
             i.Sum(investment => investment.MoneyReturn)
         );
     }
