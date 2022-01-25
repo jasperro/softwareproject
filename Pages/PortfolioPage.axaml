@@ -47,6 +47,9 @@
                                     Header="Stock Name"
                                     Binding="{Binding ShortName}" />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"
+                                    Header="Money Invested"
+                                    Binding="{Binding MoneyInvested}" />
+                <DataGridTextColumn d:DataContext="{Binding Investments}"
                                     Header="Last update"
                                     Binding="{Binding Stock.LastUpdate}" />
                 <DataGridTextColumn d:DataContext="{Binding Investments}"

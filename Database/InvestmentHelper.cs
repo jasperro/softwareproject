@@ -54,7 +54,7 @@ namespace SoftwareProject
                         investments.Add(new Investment(
                                 reader.GetString(reader.GetOrdinal("ShortName")),
                                 reader.GetDateTime(reader.GetOrdinal("StartOfInvestment")),
-                                reader.GetDouble(reader.GetOrdinal("MoneyInvested"))
+                                (int)reader.GetInt64(reader.GetOrdinal("AmountInvested"))
                             )
                         );
                     }

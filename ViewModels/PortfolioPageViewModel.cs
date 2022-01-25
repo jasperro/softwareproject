@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
@@ -66,7 +67,7 @@ namespace SoftwareProject.ViewModels
 
         [Reactive] public Stock? SelectedStock { get; set; }
 
-        [Reactive] public double AmountToInvest { get; set; }
+        [Reactive] public int AmountToInvest { get; set; } = 1;
 
         [Reactive] public Stock? SelectedStockListItem { get; set; }
 
@@ -100,7 +101,7 @@ namespace SoftwareProject.ViewModels
             try
             {
                 if (SelectedStock == null) return;
-                Investment newInvestment = new(SelectedStock.ShortName) { MoneyInvested = AmountToInvest };
+                Investment newInvestment = new(SelectedStock.ShortName, amountInvested: AmountToInvest);
                 Investments.Add(newInvestment);
                 CurrentDatabase.AddInvestmentToDb(User.UserId, newInvestment);
             }
