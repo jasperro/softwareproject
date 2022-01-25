@@ -4,7 +4,6 @@ using System.Globalization;
 using LiveChartsCore.Defaults;
 using Microsoft.Data.Sqlite;
 using SoftwareProject.Types;
-using SoftwareProject.ViewModels;
 
 namespace SoftwareProject
 {

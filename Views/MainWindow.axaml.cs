@@ -1,8 +1,6 @@
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
-using ReactiveUI;
 using SoftwareProject.ViewModels;
 
 namespace SoftwareProject.Views

@@ -48,14 +48,10 @@ namespace SoftwareProject.ViewModels
                 if (FollowTicker) ResetGraphPosition();
                 if (!DayByDayMode)
                 {
-                    try
-                    {
-                        if (MainStock != null)
-                            SelectedViewDate = MainStock.Values == null
-                                ? Timekeeping.CurrentTime
-                                : MainStock.Values!.Last().Date;
-                    }
-                    catch(Exception e) {}
+                    if (MainStock != null && MainStock.Values?.Any() == true)
+                        SelectedViewDate 
+                            = MainStock.Values.Last().Date;
+                    else {SelectedViewDate = Timekeeping.CurrentTime;}
                 }
             });
 
@@ -237,6 +233,7 @@ namespace SoftwareProject.ViewModels
             {
                 if (value)
                 {
+                    if (MainStock == null) return;
                     // Reset series for the case where there is no data
                     Series.Clear();
                     // Stop following the ticker when day by day mode is started

@@ -22,7 +22,7 @@ namespace SoftwareProject.ViewModels
             this.ObservableForProperty(x => x.SelectedStockListItem).Subscribe(_ =>
             {
                 SelectedStock = SelectedStockListItem;
-                StockToInvest = SelectedStock!.ShortName;
+                StockToInvest = SelectedStock?.ShortName;
             });
         }
 
@@ -63,7 +63,7 @@ namespace SoftwareProject.ViewModels
             new PieSeries<ObservableValue> { Values = new[] { new ObservableValue(2) }, Name = "GOOGL" }
         };
 
-        [Reactive] public string StockToInvest { get; set; }
+        [Reactive] public string? StockToInvest { get; set; }
 
         [Reactive] public Stock? SelectedStock { get; set; }
 
@@ -113,7 +113,7 @@ namespace SoftwareProject.ViewModels
 
         public void SelectStock()
         {
-            SelectedStock = GetStock(StockToInvest);
+            if (StockToInvest != null) SelectedStock ??= GetStock(StockToInvest);
         }
     }
 }

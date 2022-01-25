@@ -1,12 +1,9 @@
 using System;
-using System.Collections.ObjectModel;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Timers;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SoftwareProject.Types;
-using Splat;
 using static SoftwareProject.Globals;
 using static SoftwareProject.ViewModels.MainWindowViewModel;
 
