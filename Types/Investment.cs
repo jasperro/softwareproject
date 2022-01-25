@@ -26,7 +26,7 @@ namespace SoftwareProject.Types
             double? moneyInvested = null, int amountInvested = 1, DateTime? startOfInvestment = null)
         {
             Stock = GetStock(shortName) ?? throw new InvalidOperationException();
-            StartOfInvestment = startOfInvestment ?? MainWindowViewModel.Timekeeping.CurrentTime;
+            StartOfInvestment = startOfInvestment ?? DateTimeOffset.Now;
             moneyReturn = 
             this.WhenAnyValue(x => x.Stock.Values).Select(x => AmountInvested * x?.Last()?.Close).ToProperty(this, x => x.MoneyReturn);
             profit =

@@ -6,6 +6,18 @@ namespace SoftwareProject
 {
     public partial class Database
     {
+        public void SellInvestment(int userId, Investment investment)
+        {
+            var command = DatabaseConnection.CreateCommand();
+            command.CommandText = @"
+				DELETE FROM Investments WHERE StartOfInvestment = $startOfInvestment
+				";
+
+            command.Parameters.AddWithValue("$startOfInvestment", investment.StartOfInvestment);
+            command.ExecuteNonQuery();
+        }
+        
+        
         public void AddInvestmentToDb(int userId, Investment investment)
         {
             var command = DatabaseConnection.CreateCommand();

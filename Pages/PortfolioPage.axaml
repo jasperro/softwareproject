@@ -3,6 +3,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
              xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              xmlns:styles="clr-namespace:SoftwareProject.Styles"
+             xmlns:softwareProject="clr-namespace:SoftwareProject"
              Name="PortfolioPage"
              d:DesignWidth="800" d:DesignHeight="450" x:Class="SoftwareProject.Pages.PortfolioPage">
     <Design.DataContext>
@@ -66,6 +67,10 @@
                                     CommandParameter="{Binding Stock}"
                                     Command="{Binding Source={x:Static vm:MainWindowViewModel.PortfolioPage }, Path=PreviewStock}"
                                     Content="{Binding ShortName, StringFormat=Preview {0}}" />
+                                <Button
+                                    CommandParameter="{Binding Path=.}"
+                                    Command="{Binding Source={x:Static vm:MainWindowViewModel.PortfolioPage }, Path=SellInvestment}"
+                                    Content="Sell" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

@@ -73,6 +73,12 @@ namespace SoftwareProject.ViewModels
 
         public static IEnumerable<IStock> StockList => CachedStocks;
 
+        public void SellInvestment(Investment investment)
+        {
+            CurrentDatabase.SellInvestment(User.UserId, investment);
+            User.UserInvestmentPortfolio.Remove(investment);
+        }
+
         public void SelectPreviousWeek()
         {
             SelectedWeek--;
