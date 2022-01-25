@@ -26,11 +26,15 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='No stock selected'}" />
-            <TextBlock Text="{Binding Path=SelectedStock.LastPoint^.Close, FallbackValue='Unknown price'}" />
             <Button
-                Content="{Binding SelectedStock.ShortName, StringFormat=Invest in {0}, FallbackValue='Select and invest in stock'}"
-                Name="AddInvest" Command="{Binding AddInvestment}" />
+                Name="AddInvest" Command="{Binding AddInvestment}">
+                <Button.Content>
+                   <MultiBinding StringFormat="{}Invest ${0} in {1}" FallbackValue="Select and invest in stock"> 
+                        <Binding Path="SelectedStock.LastPoint^.Close" />
+                        <Binding Path="SelectedStock.ShortName" />
+                   </MultiBinding>
+                </Button.Content>
+            </Button>
         </StackPanel>
         <!-- List with current investments, their last update, profit and trend -->
 
