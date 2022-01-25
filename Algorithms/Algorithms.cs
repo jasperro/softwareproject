@@ -71,9 +71,9 @@ namespace SoftwareProject.Algorithms
  
              for (int i = 0; i < 100; i++)
              {
-                 predictedStock.Values = predictedStock.Values.Append(new FinancialPoint(date, generateRndNum(),
+                 predictedStock.Values = new ObservableCollection<FinancialPoint>(predictedStock.Values.Append(new FinancialPoint(date, generateRndNum(),
                      generateRndNum(),
-                     generateRndNum(), generateRndNum()));
+                     generateRndNum(), generateRndNum())));
                  date = date.AddHours(4);
              }
 

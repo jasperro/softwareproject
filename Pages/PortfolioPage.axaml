@@ -28,7 +28,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='No stock selected'}" />
-            <TextBlock Text="{Binding Path=SelectedStock.ShortName, FallbackValue='Unknown price'}" />
+            <TextBlock Text="{Binding Path=SelectedStock.LastPoint^.Close, FallbackValue='Unknown price'}" />
             <Button
                 Content="{Binding SelectedStock.ShortName, StringFormat=Invest in {0}, FallbackValue='Select and invest in stock'}"
                 Name="AddInvest" Command="{Binding AddInvestment}" />

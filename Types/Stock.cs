@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using DynamicData;
+using DynamicData.Binding;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel;
@@ -41,6 +43,18 @@ namespace SoftwareProject.Types
 
         public double TrendPercentage => 0;
 
+        public IObservable<FinancialPoint?> LastPoint
+        {
+            get
+            {
+                return this.WhenAny(x => x.Values, s =>
+                {
+                    if (s.Value?.Any() == true) return s.Value.Last();
+                    return null;
+                });
+            }
+        }
+
         public Stock(string shortName = "ABCD", ObservableCollection<FinancialPoint>? defaultData = null)
         {
             // Set default values if stock has no data yet.
@@ -50,8 +64,8 @@ namespace SoftwareProject.Types
 
             MainWindowViewModel.Timekeeping.ObservableTimer.Subscribe(_ =>
             {
-                Values = AllValues.Where(financialPoint =>
-                    financialPoint.Date.CompareTo(MainWindowViewModel.Timekeeping.CurrentTime.DateTime) < 0);
+                Values = new ObservableCollection<FinancialPoint>(AllValues.Where(financialPoint =>
+                    financialPoint.Date.CompareTo(MainWindowViewModel.Timekeeping.CurrentTime.DateTime) < 0));
             });
         }
 
