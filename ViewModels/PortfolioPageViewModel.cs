@@ -119,7 +119,7 @@ namespace SoftwareProject.ViewModels
 
         public void SelectStock()
         {
-            if (StockToInvest != null) SelectedStock ??= GetStock(StockToInvest);
+            if (StockToInvest != null) SelectedStock = GetStock(StockToInvest);
         }
     }
 }

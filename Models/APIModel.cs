@@ -26,7 +26,7 @@ namespace SoftwareProject.Models
         public static void DataImport(string ticker, string interval = "daily",
             ImportType type = ImportType.Stock, int downloadMonths = 1, int startDownloadMonthsAgo = 23)
         {
-            string intervalParameters = "";
+            string intervalParameters = "&interval=daily";
             string sliceParameters = "";
 
             string function = type == ImportType.Stock ? "TIME_SERIES_DAILY" : "DIGITAL_CURRENCY_DAILY";
@@ -62,7 +62,7 @@ namespace SoftwareProject.Models
 
                 if (startDownloadMonthsAgo < downloadMonths) return;
                 string url =
-                    $"https://www.alphavantage.co/query?function={function}&symbol={ticker}&apikey={apikey}{datatype}{intervalParameters}{sliceParameters}{market}";
+                    $"https://www.alphavantage.co/query?function={function}&symbol={ticker}&apikey={apikey}{datatype}{intervalParameters}{sliceParameters}{market}&outputsize=full";
                 string filename =
                     $@"../../../TestData/{ticker}/{ticker}-{interval}-{24 - startDownloadMonthsAgo + counter}.csv";
                 MakeDirectory(ticker);

@@ -27,10 +27,16 @@ namespace SoftwareProject.Types
         {
             Stock = GetStock(shortName) ?? throw new InvalidOperationException();
             StartOfInvestment = startOfInvestment ?? DateTimeOffset.Now;
-            moneyReturn = 
-            this.WhenAnyValue(x => x.Stock.Values).Select(x => AmountInvested * x?.Last()?.Close).ToProperty(this, x => x.MoneyReturn);
+            moneyReturn =
+                this.WhenAnyValue(x => x.Stock.Values).Select(x =>
+                    {
+                        if (x?.Any() == true)
+                            return AmountInvested * x?.Last().Close;
+                        return null;
+                    })
+                    .ToProperty(this, x => x.MoneyReturn);
             profit =
-            this.WhenAnyValue(x => x.MoneyReturn).Select(x => x - MoneyInvested).ToProperty(this, x => x.Profit);
+                this.WhenAnyValue(x => x.MoneyReturn).Select(x => x - MoneyInvested).ToProperty(this, x => x.Profit);
             AmountInvested = amountInvested;
             MoneyInvested = moneyInvested ?? amountInvested * Stock.Values?.Last()?.Close;
         }
@@ -43,7 +49,7 @@ namespace SoftwareProject.Types
 
         public DateTimeOffset StartOfInvestment { get; }
         public double? Profit => profit.Value;
-        readonly ObservableAsPropertyHelper<double?> profit;
+        public readonly ObservableAsPropertyHelper<double?> profit;
         public int AmountInvested { get; set; }
         public double? MoneyInvested { get; set; }
 
@@ -70,8 +76,9 @@ namespace SoftwareProject.Types
             }
         }
 
-        public IObservable<double?> TotalProfits => MainWindowViewModel.Timekeeping.WhenAnyObservable(x => x.ObservableTimer, x => x.ObservableTimer, (_,_) =>
-            this.Sum(investment => investment.Profit)
+        public IObservable<double?> TotalProfits => MainWindowViewModel.Timekeeping.WhenAnyObservable(
+            x => x.ObservableTimer, x => x.ObservableTimer, (_, _) =>
+                this.Sum(investment => investment.Profit)
         );
 
         public IObservable<double?> TotalInvested => MainWindowViewModel.Timekeeping.WhenAnyObservable(
